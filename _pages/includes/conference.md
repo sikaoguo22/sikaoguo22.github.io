@@ -1,6 +1,6 @@
 
 # Conference Presentations
-- Defects Within the HIV-1 Immature Lattice Support Dynamic Remodeling and Protease Dimerization, **Cell Bio 2022-An ASCB|EMBO meeting**, Washington, DC, USA, December 4, 2022.
+- Defects Within the HIV-1 Immature Lattice Support Dynamic Remodeling and Protease Dimerization, **Cell Bio 2022**, Washington, DC, USA, December 4, 2022.
 - Large Self-assembled Clathrin Lattices Spontaneously Disassemble Without Sufficient Adaptor Proteins, **Biophysical Society 66th Annual Meeting**, San Francisco, CA, USA, February 19, 2022.
 - Self-assembled clathrin lattices spontaneously disassemble without sufficient links to the plasma membrane, **Stochastic Physics in Biology (Gordon Research Conference)**, Ventura, CA, USA, October 10, 2021.
 - Modeling Nucleation and Kinetics of Clathrin Assembly by Membrane Localization, **Biophysical Society 65th Annual Meeting**, Virtual, February 22, 2021.
