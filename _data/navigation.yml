@@ -10,19 +10,19 @@ main:
     url: "/#-publications"
 
   - title: "Professional Experience"
-    url: "/#-professional-experience"
+    url: "/#professional-experience"
 
   - title: "Educations"
-    url: "/#-educations"
+    url: "/#educations"
 
   - title: "Conference Presentations"
-    url: "/#-conference-presentations"
+    url: "/#conference-presentations"
 
   - title: "Academic Service"
-    url: "/#-academic-service"
+    url: "/#academic-service"
 
   - title: "Open-source Software"
-    url: "/#-open-source-software"
+    url: "/#open-source-software"
 
   - title: "Contact Me"
-    url: "/#-contact-me"
+    url: "/#contact-me"
