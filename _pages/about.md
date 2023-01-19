@@ -24,5 +24,5 @@ redirect_from:
 {% include_relative includes/service.md %}
 <span class='anchor' id='-open-source-software'></span>
 {% include_relative includes/software.md %}
-<span class='anchor' id='contact-me'></span>
+<span class='anchor' id='-contact-me'></span>
 {% include_relative includes/contact.md %}
