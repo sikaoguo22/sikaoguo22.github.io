@@ -11,6 +11,8 @@
 
 [**Poster**](../../docs/gagPoster.pdf)
 
+ *For the immature Gag lattice to become mature, a pair of protease within the lattice need to form a dimer. We studied the mechanism of protease dimerization within the immature lattice.*
+
 </div>
 </div>
 
@@ -21,6 +23,8 @@
 **Si-Kao Guo**, Alexander J Sodt, Margaret E Johnson, *PLOS Computational Biology*. 18, e1009969 (2022).
 
 [**Poster**](../../docs/clathrinPoster.pdf)
+
+*Stochastic self-assembly of clathrin-coated structures on the membrane is essential for transport into cells. These structures can grow large, yet they often fail to form productive versicles, instead disassembling. We studied the mechanisms of stable vs unstable clathrin assembly on membranes.*
 
 </div>
 </div>
