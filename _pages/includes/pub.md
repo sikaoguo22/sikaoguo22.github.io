@@ -7,7 +7,7 @@
 <div class='paper-box-text' markdown="1">
 
 [Structure of the HIV immature lattice allows for essential lattice remodeling within budded virions](https://elifesciences.org/articles/84881) \\
-**Si-Kao Guo**, Ipsita Saha, Saveez Saffarian, Margaret E Johnson, *eLife*. 12:e84881 (2023).
+**Sikao Guo**, Ipsita Saha, Saveez Saffarian, Margaret E Johnson, *eLife*. 12:e84881 (2023).
 
 [**Poster**](../../docs/gagPoster.pdf)
 
@@ -29,7 +29,9 @@
 </div>
 </div>
 
-- [Temporal control by cofactors prevents kinetic trapping in retroviral Gag lattice assembly](https://www.cell.com/biophysj/pdf/S0006-3495(23)00409-5.pdf), Yian Qian, Daniel Evans, Bhavya Mishra, Yiben Fu, Zixiu Hugh Liu, **Si-Kao Guo**, Margaret E Johnson, *Biophysical Journal* DOI:https://doi.org/10.1016/j.bpj.2023.06.021 (2023).
+- [Temporal control by cofactors prevents kinetic trapping in retroviral Gag lattice assembly](https://www.cell.com/biophysj/pdf/S0006-3495(23)00409-5.pdf), Yian Qian, Daniel Evans, Bhavya Mishra, Yiben Fu, Zixiu Hugh Liu, **Sikao Guo**, Margaret E Johnson, *Biophysical Journal* DOI:https://doi.org/10.1016/j.bpj.2023.06.021 (2023).
+
+- [Secretion-Catalyzed Assembly of Protein Biomaterials on a Bacterial Membrane Surface](https://onlinelibrary.wiley.com/doi/10.1002/ange.202305178), Qi Xie, Sea On Lee, Nitya Vissamsetti, **Sikao Guo**, Margaret E. Johnson, Stephen D. Fried, *Angewandte Chemie* DOI:https://doi.org/10.1002/ange.202305178 (2023).
 
 ## Molecular motor: Kinesin
 - [A common chemomechanical coupling model for orphan and conventional kinesin molecular motors](https://www.sciencedirect.com/science/article/pii/S0301462220301356), **Si-Kao Guo**, Ping Xie, *Biophysical Chemistry* 264, 106427 (2020).
