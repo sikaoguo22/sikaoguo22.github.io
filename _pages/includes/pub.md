@@ -29,6 +29,8 @@
 </div>
 </div>
 
+- [Dynamin1 long- and short-tail isoforms exploit distinct recruitment and spatial patterns to form endocytic nanoclusters](https://www.nature.com/articles/s41467-024-47677-8), 1.	Jiang A., Kudo, K., Gormal R. S., Ellis S., **Sikao Guo**, Wallis T. P., Longfield S. F., Robinson P. J., Johnson M. E., Joensuu M., Meunier F. A., *Nature Communications*, 15: 4060, DOI: https://doi.org/10.1038/s41467-024-47677-8 (2024).
+
 - [Temporal control by cofactors prevents kinetic trapping in retroviral Gag lattice assembly](https://www.cell.com/biophysj/pdf/S0006-3495(23)00409-5.pdf), Yian Qian, Daniel Evans, Bhavya Mishra, Yiben Fu, Zixiu Hugh Liu, **Sikao Guo**, Margaret E Johnson, *Biophysical Journal* DOI:https://doi.org/10.1016/j.bpj.2023.06.021 (2023).
 
 - [Secretion-Catalyzed Assembly of Protein Biomaterials on a Bacterial Membrane Surface](https://onlinelibrary.wiley.com/doi/10.1002/ange.202305178), Qi Xie, Sea On Lee, Nitya Vissamsetti, **Sikao Guo**, Margaret E. Johnson, Stephen D. Fried, *Angewandte Chemie* DOI:https://doi.org/10.1002/ange.202305178 (2023).
