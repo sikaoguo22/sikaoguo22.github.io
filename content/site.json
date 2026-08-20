@@ -1,0 +1,200 @@
+{
+  "site": {
+    "name": "Sikao Guo, Ph.D.",
+    "shortName": "Sikao Guo",
+    "title": "Computational Biophysicist & Scientific Software Engineer",
+    "description": "Sikao Guo develops reusable scientific software and computational methods for protein conformational sampling, biomolecular self-assembly, structural bioinformatics, and high-performance simulation.",
+    "email": "sikaoguo@gmail.com",
+    "phone": "(443) 449-9912",
+    "location": "",
+    "affiliation": "",
+    "availability": "",
+    "social": {
+      "github": "https://github.com/sikaoguo22",
+      "linkedin": "https://www.linkedin.com/in/sikaoguo/",
+      "scholar": "https://scholar.google.com/citations?hl=en&user=SVybCcwAAAAJ",
+      "orcid": "https://orcid.org/0000-0002-7680-8060"
+    }
+  },
+  "navigation": [
+    {
+      "label": "Projects",
+      "href": "/projects/"
+    },
+    {
+      "label": "Publications",
+      "href": "/publications/"
+    },
+    {
+      "label": "CV",
+      "href": "/cv/"
+    }
+  ],
+  "capabilities": [
+    {
+      "number": "01",
+      "title": "Molecular modeling algorithms",
+      "description": "Inverse kinematics, ensemble sampling, stochastic reaction-diffusion, geometric constraints, and quantitative model validation."
+    },
+    {
+      "number": "02",
+      "title": "Scalable scientific systems",
+      "description": "C++ and Python infrastructure spanning MPI parallelization, reproducible workflows, structural data processing, and automated validation."
+    },
+    {
+      "number": "03",
+      "title": "Scientist-facing software",
+      "description": "Command-line tools, desktop plugins, web interfaces, molecular visualization, and code-generation systems built for maintainability."
+    }
+  ],
+  "impactStats": [
+  {
+    "value": "9",
+    "suffix": " applications",
+    "label": "Structural bioinformatics tools developed"
+  },
+  {
+    "value": "3",
+    "suffix": " deployment targets",
+    "label": "VMD, PyMOL, and web from a single GUI specification"
+  },
+  {
+    "value": "~1,000",
+    "suffix": " structures",
+    "label": "Sampled across protein-backbone and IDR ensembles"
+  },
+  {
+    "value": "~3,000",
+    "suffix": " molecules",
+    "label": "Minute-scale virus self-assembly trajectories"
+  }
+  ],
+  "experience": [
+    {
+      "organization": "Inria",
+      "role": "Research Engineer",
+      "period": "Jul. 2025 – Present",
+      "location": "Sophia Antipolis, France",
+      "highlights": [
+        "Developed a cross-platform GUI code-generation framework that automated interface generation for 9+ computational biology applications across VMD, PyMOL, and web platforms.",
+        "Engineered a C++ protein backbone sampler that generalized inverse-kinematics loop sampling to backbone and intrinsically disordered region conformational sampling using SE(3)-based rigid-body moves.",
+        "Built an automated structural validation pipeline integrating AttnPacker, OpenMM, and PhiSiCal for reproducible evaluation and benchmarking of sampled protein conformations."
+      ],
+      "technologies": [
+        "C++",
+        "Python",
+        "Panel",
+        "Qt",
+        "OpenMM",
+        "VMD",
+        "PyMOL"
+      ]
+    },
+    {
+      "organization": "Johns Hopkins University",
+      "role": "Postdoctoral Researcher, Assistant Research Scientist",
+      "period": "Jan. 2020 – Jun. 2025",
+      "location": "Baltimore, MD",
+      "highlights": [
+        "Parallelized the C++ NERDSS reaction-diffusion simulator using MPI domain decomposition, achieving near-linear strong scaling to 96 CPU cores for large-scale biomolecular self-assembly simulations.",
+        "Developed structure-resolved computational models of clathrin-mediated endocytosis and HIV-1 assembly, revealing mechanisms governing critical nucleus formation, adaptor stoichiometry, and Gag-Pol dimerization.",
+        "Developed ioNERDSS, a Python toolkit that automates conversion of PDB/mmCIF structures into simulation-ready coarse-grained reaction-diffusion models, substantially reducing manual model preparation.",
+        "Implemented computational geometry and machine-learning algorithms for interface detection, reaction-network generation, and binding-affinity estimation to automate simulation parameterization."
+      ],
+      "technologies": [
+        "C++",
+        "Python",
+        "MPI",
+        "PDB/mmCIF",
+        "Coarse-graining",
+        "Reaction-diffusion",
+        "Stochastic simulation",
+        "HPC"
+      ]
+    }
+  ],
+  "education": [
+    {
+      "degree": "Ph.D. Physics",
+      "institution": "Institute of Physics, Chinese Academy of Sciences",
+      "period": "Sept. 2014 – Dec. 2019",
+      "location": "Beijing, China"
+    },
+    {
+      "degree": "B.S. Physics",
+      "institution": "Nankai University",
+      "period": "Sept. 2010 – Jun. 2014",
+      "location": "Tianjin, China"
+    }
+  ],
+  "skillGroups": [
+    {
+      "title": "Software engineering",
+      "skills": [
+        "Python",
+        "C++",
+        "Scientific software development",
+        "Algorithm development"
+      ]
+    },
+    {
+      "title": "High-performance computing",
+      "skills": [
+        "MPI",
+        "Parallel computing"
+      ]
+    },
+    {
+      "title": "Computational science",
+      "skills": [
+        "Computational biophysics",
+        "Structural bioinformatics",
+        "Protein modeling"
+      ]
+    }
+  ],
+  "openSourceSoftware": [
+    {
+      "name": "Scientific GUI Framework",
+      "description": "Cross-platform scientific GUI generation framework.",
+      "links": [
+        {
+          "label": "GitHub",
+          "href": "https://github.com/Structural-Bioinformatics-Library/sbl/tree/master/Applications/Plugin_manager"
+        },
+        {
+          "label": "Documentation",
+          "href": "https://sbl.inria.fr/doc/sbl-plugins-guide.html"
+        }
+      ]
+    },
+    {
+      "name": "NERDSS-MPI",
+      "description": "Parallel C++ protein assembly simulator using MPI.",
+      "links": [
+        {
+          "label": "GitHub",
+          "href": "https://github.com/JohnsonBiophysicsLab/NERDSS/tree/mpi"
+        },
+        {
+          "label": "Documentation",
+          "href": "https://github.com/JohnsonBiophysicsLab/NERDSS/blob/mpi/doc/NERDSS_Parallel_Developer_Guide.pdf"
+        }
+      ]
+    },
+    {
+      "name": "ioNERDSS",
+      "description": "Automated construction of coarse-grained reaction-diffusion models.",
+      "links": [
+        {
+          "label": "GitHub",
+          "href": "https://github.com/johnsonbiophysicslab/ioNERDSS"
+        },
+        {
+          "label": "Documentation",
+          "href": "https://johnsonbiophysicslab.github.io/ionerdss/"
+        }
+      ]
+    }
+  ]
+}

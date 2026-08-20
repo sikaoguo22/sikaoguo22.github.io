@@ -1,0 +1,147 @@
+[
+  {
+    "id": "gui-framework-2026",
+    "year": 2026,
+    "title": "A Unified, Cross-Platform Framework for Automatic GUI and Plugin Generation in Structural Bioinformatics and Beyond",
+    "authors": "Sikao Guo, Edoardo Sarti, and Frédéric Cazals",
+    "venue": "arXiv",
+    "citation": "arXiv:2602.16047",
+    "url": "https://arxiv.org/abs/2602.16047",
+    "type": "Preprint",
+    "featured": true,
+    "cvFeatured": true,
+    "cvOrder": 1,
+    "topics": [
+      "Scientific software",
+      "GUI generation",
+      "Structural bioinformatics"
+    ],
+    "contribution": "Design, implementation, platform generators, examples, and writing manuscript."
+  },
+  {
+    "id": "ionerdss-2026",
+    "year": 2026,
+    "title": "Transforming Macromolecular Structures into Simulations of Self-Assembly",
+    "authors": "Yue Moon Ying, Mankun Sang, Gabriel Au, Smriti Chhibber, Yufeng Du, Sikao Guo, et al.",
+    "venue": "bioRxiv",
+    "citation": "2026.01.27.702082",
+    "url": "https://doi.org/10.64898/2026.01.27.702082",
+    "doi": "10.64898/2026.01.27.702082",
+    "type": "Preprint",
+    "featured": true,
+    "cvFeatured": true,
+    "cvOrder": 3,
+    "topics": [
+      "ioNERDSS",
+      "Structure-to-simulation",
+      "Coarse-graining"
+    ],
+    "contribution": "Structure-processing workflows, software development, and validation."
+  },
+  {
+    "id": "parallel-nerdss-2025",
+    "year": 2025,
+    "title": "Parallelization of Particle-Based Reaction–Diffusion Simulations Using MPI",
+    "authors": "Sikao Guo, Nenad Korolija, Kent Milfeld, and Margaret E. Johnson",
+    "venue": "Journal of Computational Chemistry",
+    "url": "https://doi.org/10.1002/jcc.70132",
+    "doi": "10.1002/jcc.70132",
+    "type": "Journal article",
+    "featured": true,
+    "cvFeatured": true,
+    "cvOrder": 2,
+    "topics": [
+      "MPI",
+      "Reaction-diffusion simulation",
+      "High-performance computing"
+    ],
+    "contribution": "Lead software development, parallel algorithm design, validation, benchmarking, analysis, and writing."
+  },
+  {
+    "id": "dynamin-2024",
+    "year": 2024,
+    "title": "Dynamin1 Long- and Short-Tail Isoforms Exploit Distinct Recruitment and Spatial Patterns to Form Endocytic Nanoclusters",
+    "authors": "Anmin Jiang, Kye Kudo, Rachel S. Gormal, Sevannah Ellis, Sikao Guo, et al.",
+    "venue": "Nature Communications",
+    "citation": "15, 4060",
+    "url": "https://doi.org/10.1038/s41467-024-47677-8",
+    "doi": "10.1038/s41467-024-47677-8",
+    "type": "Journal article",
+    "featured": true,
+    "topics": [
+      "Endocytosis",
+      "Spatiotemporal modeling",
+      "Single-molecule data"
+    ],
+    "contribution": "Mathematical modeling, simulation, quantitative analysis, and interpretation."
+  },
+  {
+    "id": "hiv-2023",
+    "year": 2023,
+    "title": "Structure of the HIV Immature Lattice Allows for Essential Lattice Remodeling within Budded Virions",
+    "authors": "Sikao Guo, Ipsita Saha, Saveez Saffarian, and Margaret E. Johnson",
+    "venue": "eLife",
+    "citation": "12:e84881",
+    "url": "https://doi.org/10.7554/eLife.84881",
+    "doi": "10.7554/eLife.84881",
+    "type": "Journal article",
+    "featured": true,
+    "topics": [
+      "HIV-1",
+      "Self-assembly",
+      "Stochastic simulation"
+    ],
+    "contribution": "Modeling, simulation, formal analysis, investigation, visualization, methodology, and writing."
+  },
+  {
+    "id": "gag-cofactors-2023",
+    "year": 2023,
+    "title": "Temporal Control by Cofactors Prevents Kinetic Trapping in Retroviral Gag Lattice Assembly",
+    "authors": "Yue Qian, Daniel Evans, Bhaswati Mishra, Yiben Fu, Zixiu H. Liu, Sikao Guo, and Margaret E. Johnson",
+    "venue": "Biophysical Journal",
+    "citation": "122, 3173–3190",
+    "url": "https://doi.org/10.1016/j.bpj.2023.06.021",
+    "doi": "10.1016/j.bpj.2023.06.021",
+    "type": "Journal article",
+    "featured": false,
+    "topics": [
+      "Retroviral assembly",
+      "Kinetic control",
+      "Reaction-diffusion simulation"
+    ]
+  },
+  {
+    "id": "biomaterial-2023",
+    "year": 2023,
+    "title": "Secretion-Catalyzed Assembly of Protein Biomaterials on a Bacterial Membrane Surface",
+    "authors": "Qi Xie, Sea On Lee, Nitya Vissamsetti, Sikao Guo, Margaret E. Johnson, and Stephen D. Fried",
+    "venue": "Angewandte Chemie International Edition",
+    "url": "https://doi.org/10.1002/anie.202305178",
+    "doi": "10.1002/anie.202305178",
+    "type": "Journal article",
+    "featured": false,
+    "topics": [
+      "Protein biomaterials",
+      "Membrane assembly",
+      "Simulation"
+    ]
+  },
+  {
+    "id": "clathrin-2022",
+    "year": 2022,
+    "title": "Large Self-Assembled Clathrin Lattices Spontaneously Disassemble without Sufficient Adaptor Proteins",
+    "authors": "Si-Kao Guo, Alexander J. Sodt, and Margaret E. Johnson",
+    "venue": "PLOS Computational Biology",
+    "citation": "18:e1009969",
+    "url": "https://doi.org/10.1371/journal.pcbi.1009969",
+    "doi": "10.1371/journal.pcbi.1009969",
+    "type": "Journal article",
+    "featured": true,
+    "topics": [
+      "Clathrin",
+      "Membrane assembly",
+      "Nucleation"
+    ],
+    "contribution": "Conceptualization, modeling, simulation, formal analysis, validation, visualization, and writing."
+  }
+]
