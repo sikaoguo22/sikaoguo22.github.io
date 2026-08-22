@@ -5,11 +5,14 @@
     "shortTitle": "Cross-platform GUI generation",
     "subtitle": "Automatic plugin generation for VMD, PyMOL, and the web",
     "summary": "A Python framework that converts a designed interface and CLI metadata into a validated, platform-independent JSON specification, then generates consistent scientific applications for desktop molecular viewers and web environments.",
+    "heroResult": "Generated native VMD, PyMOL, and web interfaces from a single platform-independent specification.",
+    "roleSummary": "Designed the framework architecture and implemented the specification, validation, and platform generators.",
     "period": "2025 – 2026",
     "status": "Open source",
     "category": "Research software",
     "featured": true,
-    "visual": "/images/gui-codegen.svg",
+    "visual": "/images/gui-codegen-1600.webp",
+    "visualSmall": "/images/gui-codegen-800.webp",
     "visualAlt": "Diagram showing a Qt interface and CLI metadata transformed into JSON and then into VMD, PyMOL, and web applications.",
     "tags": [
       "Python",
@@ -27,15 +30,15 @@
     ],
     "steps": [
       {
-        "title": "User Design",
-        "text": "User lay out the input, output, and optional update areas in Qt Designer, then select the CLI and post-analysis parameters that should be exposed."
+        "title": "Design the interface",
+        "text": "Users lay out the input, output, and optional update areas in Qt Designer, then select the CLI and post-analysis parameters that should be exposed."
       },
       {
-        "title": "Auto Formalize",
+        "title": "Generate the specification",
         "text": "Automatically convert the layout and metadata into a validated JSON representation containing widget types, geometry, CLI semantics, outputs, and update behavior."
       },
       {
-        "title": "Auto Generate",
+        "title": "Generate the applications",
         "text": "Use platform adapters to synthesize native applications for Tkinter/VMD, pymol.Qt/PyMOL, and Panel with NGL or Three.js."
       }
     ],
@@ -47,13 +50,13 @@
     ],
     "outcomes": [
       "Reduces the development structure from application × platform implementations to one specification per application plus one reusable generator per platform.",
-      "Provides a single source of truth for interface changes and keeps desktop and web versions synchronized.",
+      "Provides a single source of truth for interface changes and helps keep desktop and web versions synchronized.",
       "Makes structural-bioinformatics CLI tools accessible without coupling scientific logic to a particular GUI toolkit."
     ],
     "metrics": [
       {
         "value": "9",
-        "label": "bioinformatics application"
+        "label": "bioinformatics applications"
       },
       {
         "value": "1",
@@ -66,16 +69,20 @@
     ],
     "links": [
       {
-        "label": "Read the arXiv paper",
+        "label": "View code",
+        "href": "https://github.com/Structural-Bioinformatics-Library/sbl/tree/master/Applications/Plugin_manager"
+      },
+      {
+        "label": "Read paper",
         "href": "https://arxiv.org/abs/2602.16047"
       },
       {
-        "label": "Plugin manager documentation",
+        "label": "Documentation",
         "href": "https://sbl.inria.fr/doc/Plugin_manager-user-manual.html"
       },
       {
-        "label": "YouTube channel",
-        "href": "https://www.youtube.com//@SBL-plugins"
+        "label": "Watch demos",
+        "href": "https://www.youtube.com/@SBL-plugins"
       }
     ],
     "relatedPublications": [
@@ -88,11 +95,14 @@
     "shortTitle": "Protein backbone sampling",
     "subtitle": "A geometric sampler for loops, protein fragments, and intrinsically disordered regions",
     "summary": "An extension of tripeptide loop-closure sampling that releases terminal constraints, introduces SE(3) motions and shifted sampling frames, and couples broad backbone geometric exploration to all-atom structural validation.",
+    "heroResult": "Extended inverse-kinematics loop sampling to free-endpoint backbone and IDR conformational sampling.",
+    "roleSummary": "Extended and optimized the C++ sampler and built its all-atom validation workflow.",
     "period": "2026 – Present",
     "status": "Ongoing work",
     "category": "Molecular modeling",
     "featured": true,
-    "visual": "/images/backbone-sampling.svg",
+    "visual": "/images/backbone-sampling-1600.webp",
+    "visualSmall": "/images/backbone-sampling-800.webp",
     "visualAlt": "Sampled protein backbone conformations.",
     "tags": [
       "C++",
@@ -121,13 +131,13 @@
       },
       {
         "title": "Filter and validate",
-        "text": "Use spatial-hash clash detection, side-chain completion, restrained minimization, torsional validation, clustering, and representative selection."
+        "text": "Use spatial-hash clash detection, side-chain completion, OpenMM minimization, torsional validation, clustering, and representative selection."
       }
     ],
     "contributions": [
       "Optimized the C++ protein loop sampler and extended it to support fixed or independently released termini.",
-      "Implemented released-anchor SE(3) proposals, boundary reconditioning, multi-frame resampling, and geometric-hash collision checks.",
-      "Built the full-atom validation stack using AttnPacker, OpenMM, PhiSiCal-Checkup, MDS, and medoid-aware clustering.",
+      "Implemented released-anchor SE(3) proposals, boundary reconditioning, multi-frame resampling, and spatial-hash collision checks.",
+      "Built the all-atom validation stack using AttnPacker, OpenMM, PhiSiCal-Checkup, MDS, and medoid-aware clustering.",
       "Designed controlled comparisons against BBFlow for short loops and idpGAN-derived ensembles for an intrinsically disordered region."
     ],
     "outcomes": [
@@ -150,6 +160,7 @@
       }
     ],
     "links": [],
+    "note": "This is ongoing work.",
     "relatedPublications": []
   },
   {
@@ -158,12 +169,15 @@
     "shortTitle": "NERDSS + ioNERDSS infrastructure",
     "subtitle": "Structure processing, coarse-grained model construction, and MPI reaction-diffusion",
     "summary": "A connected software stack that transforms PDB or mmCIF structures into simulation-ready coarse-grained models and runs explicit particle-based reaction-diffusion and self-assembly at larger spatial and computational scales.",
+    "heroResult": "Built a structure-to-simulation workflow and scaled particle-based reaction–diffusion to 96 MPI processes.",
+    "roleSummary": "Co-developed ioNERDSS and led the MPI design, implementation, validation, and benchmarking for NERDSS.",
     "period": "2022 – 2025",
     "status": "Open source",
     "category": "Scientific infrastructure",
     "featured": true,
-    "visual": "/images/nerdss-infrastructure.svg",
-    "visualAlt": "Workflow from an atomic protein complex through a coarse-grained model and reaction network to a domain-decomposed parallel simulation.",
+    "visual": "/images/nerdss-infrastructure-1600.webp",
+    "visualSmall": "/images/nerdss-infrastructure-800.webp",
+    "visualAlt": "Conceptual path from particle-based reaction–diffusion models to parallel NERDSS simulation.",
     "tags": [
       "C++",
       "Python",
@@ -202,18 +216,18 @@
       "Validated parallel behavior across reversible reactions and higher-order self-assembly in both 2D and 3D."
     ],
     "outcomes": [
-      "Validated structure-processing workflows across more than 44,000 PDB structures.",
+      "Benchmarked structure-processing workflows across more than 40,000 PDB structures.",
       "Achieved close-to-linear scaling to 96 CPUs for suitable simulation regimes while preserving reaction-diffusion accuracy.",
       "Connected model construction, simulation, and analysis in a workflow usable by both developers and domain scientists."
     ],
     "metrics": [
       {
-        "value": "44k+",
-        "label": "structures evaluated"
+        "value": "40k+",
+        "label": "PDB structures benchmarked"
       },
       {
         "value": "96",
-        "label": "CPU scaling target"
+        "label": "MPI processes benchmarked"
       },
       {
         "value": "2D + 3D",
@@ -249,12 +263,15 @@
     "shortTitle": "Biomolecular assembly models",
     "subtitle": "Connecting molecular interactions to nucleation, remodeling, and organization",
     "summary": "Structure-resolved stochastic and kinetic models of clathrin lattices, HIV-1 Gag assembly, and dynamin recruitment that integrate experimental constraints and produce testable system-level predictions.",
+    "heroResult": "Connected molecular interaction rules to quantitative predictions for nucleation, remodeling, and membrane organization.",
+    "roleSummary": "Designed and analyzed the clathrin and HIV-1 models and contributed quantitative modeling to collaborative studies.",
     "period": "2020 – 2024",
     "status": "Published",
     "category": "Computational biophysics",
     "featured": true,
-    "visual": "/images/assembly-modeling.svg",
-    "visualAlt": "Abstract membrane with assembling clathrin-like lattice, a budding viral lattice, and dynamin molecules concentrating into clusters.",
+    "visual": "/images/assembly-modeling-1600.webp",
+    "visualSmall": "/images/assembly-modeling-800.webp",
+    "visualAlt": "Eight simulation snapshots showing membrane-associated assemblies growing as molecular concentration increases, above a stylized membrane.",
     "tags": [
       "NERDSS",
       "Stochastic simulation",
@@ -294,7 +311,7 @@
     ],
     "metrics": [
       {
-        "value": "> 1:1",
+        "value": ">1:1",
         "label": "adaptor-to-clathrin threshold"
       },
       {

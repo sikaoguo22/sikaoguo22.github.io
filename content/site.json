@@ -48,26 +48,21 @@
     }
   ],
   "impactStats": [
-  {
-    "value": "9",
-    "suffix": " applications",
-    "label": "Structural bioinformatics tools developed"
-  },
-  {
-    "value": "3",
-    "suffix": " deployment targets",
-    "label": "VMD, PyMOL, and web from a single GUI specification"
-  },
-  {
-    "value": "~1,000",
-    "suffix": " structures",
-    "label": "Sampled across protein-backbone and IDR ensembles"
-  },
-  {
-    "value": "~3,000",
-    "suffix": " molecules",
-    "label": "Minute-scale virus self-assembly trajectories"
-  }
+    {
+      "value": "1 → 3",
+      "suffix": " targets",
+      "label": "One specification to VMD, PyMOL, and web across 9 SBL applications"
+    },
+    {
+      "value": "40k+",
+      "suffix": " PDB structures",
+      "label": "Benchmarking reported for ioNERDSS"
+    },
+    {
+      "value": "96",
+      "suffix": " MPI processes",
+      "label": "Parallel NERDSS scaling benchmark"
+    }
   ],
   "experience": [
     {
@@ -76,7 +71,7 @@
       "period": "Jul. 2025 – Present",
       "location": "Sophia Antipolis, France",
       "highlights": [
-        "Developed a cross-platform GUI code-generation framework that automated interface generation for 9+ computational biology applications across VMD, PyMOL, and web platforms.",
+        "Developed a cross-platform GUI code-generation framework that automated interface generation for 9 computational biology applications across VMD, PyMOL, and web platforms.",
         "Engineered a C++ protein backbone sampler that generalized inverse-kinematics loop sampling to backbone and intrinsically disordered region conformational sampling using SE(3)-based rigid-body moves.",
         "Built an automated structural validation pipeline integrating AttnPacker, OpenMM, and PhiSiCal for reproducible evaluation and benchmarking of sampled protein conformations."
       ],
@@ -98,8 +93,8 @@
       "highlights": [
         "Parallelized the C++ NERDSS reaction-diffusion simulator using MPI domain decomposition, achieving near-linear strong scaling to 96 CPU cores for large-scale biomolecular self-assembly simulations.",
         "Developed structure-resolved computational models of clathrin-mediated endocytosis and HIV-1 assembly, revealing mechanisms governing critical nucleus formation, adaptor stoichiometry, and Gag-Pol dimerization.",
-        "Developed ioNERDSS, a Python toolkit that automates conversion of PDB/mmCIF structures into simulation-ready coarse-grained reaction-diffusion models, substantially reducing manual model preparation.",
-        "Implemented computational geometry and machine-learning algorithms for interface detection, reaction-network generation, and binding-affinity estimation to automate simulation parameterization."
+        "Developed ioNERDSS, a Python toolkit that automates conversion of PDB/mmCIF structures into simulation-ready coarse-grained reaction-diffusion models, reducing manual model preparation.",
+        "Implemented computational-geometry methods for interface detection and reaction-network generation, and integrated machine-learned predictors for binding-affinity initialization."
       ],
       "technologies": [
         "C++",
@@ -115,13 +110,13 @@
   ],
   "education": [
     {
-      "degree": "Ph.D. Physics",
+      "degree": "Ph.D. in Physics",
       "institution": "Institute of Physics, Chinese Academy of Sciences",
       "period": "Sept. 2014 – Dec. 2019",
       "location": "Beijing, China"
     },
     {
-      "degree": "B.S. Physics",
+      "degree": "B.S. in Physics",
       "institution": "Nankai University",
       "period": "Sept. 2010 – Jun. 2014",
       "location": "Tianjin, China"
@@ -170,7 +165,7 @@
     },
     {
       "name": "NERDSS-MPI",
-      "description": "Parallel C++ protein assembly simulator using MPI.",
+      "description": "Parallel C++ biomolecular reaction–diffusion simulator using MPI.",
       "links": [
         {
           "label": "GitHub",

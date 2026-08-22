@@ -15,11 +15,13 @@ import shutil
 from datetime import datetime
 from pathlib import Path
 from typing import Any
+from urllib.parse import urlparse
 
 ROOT = Path(__file__).resolve().parents[1]
 CONTENT = ROOT / "content"
 OUT = ROOT / "site"
 SITE_URL = os.environ.get("SITE_URL", "https://sikaoguo22.github.io").rstrip("/")
+SITE_PATH_PREFIX = urlparse(SITE_URL).path.rstrip("/")
 
 site_data = json.loads((CONTENT / "site.json").read_text(encoding="utf-8"))
 projects: list[dict[str, Any]] = json.loads((CONTENT / "projects.json").read_text(encoding="utf-8"))
@@ -38,10 +40,10 @@ def e(value: Any) -> str:
     return html.escape(str(value), quote=True)
 
 
-def rel(depth: int, path: str) -> str:
-    if path.startswith(("http://", "https://", "mailto:", "#")):
+def rel(_depth: int, path: str) -> str:
+    if path.startswith(("http://", "https://", "mailto:", "tel:", "#")):
         return path
-    return ("../" * depth) + path.lstrip("/")
+    return f"{SITE_PATH_PREFIX}/{path.lstrip('/')}"
 
 
 def icon(name: str, size: int = 20) -> str:
@@ -67,6 +69,23 @@ def tags(items: list[str], compact: bool = False) -> str:
     return f'<ul class="{cls}">' + "".join(f"<li>{e(x)}</li>" for x in items) + "</ul>"
 
 
+def project_image(
+    project: dict[str, Any],
+    depth: int,
+    *,
+    loading: str,
+    sizes: str,
+    fetch_priority: bool = False,
+) -> str:
+    priority = ' fetchpriority="high"' if fetch_priority else ""
+    return (
+        f'<img src="{rel(depth, project["visual"])}" '
+        f'srcset="{rel(depth, project["visualSmall"])} 800w, {rel(depth, project["visual"])} 1600w" '
+        f'sizes="{e(sizes)}" alt="{e(project["visualAlt"])}" width="1600" height="1000" '
+        f'loading="{loading}" decoding="async"{priority}>'
+    )
+
+
 def publication_item(pub: dict[str, Any], contribution: bool = False) -> str:
     citation = f" · {e(pub['citation'])}" if pub.get("citation") else ""
     contribution_html = ""
@@ -82,7 +101,13 @@ def publication_item(pub: dict[str, Any], contribution: bool = False) -> str:
 def project_card(project: dict[str, Any], depth: int, index: int) -> str:
     href = rel(depth, f"projects/{project['slug']}/")
     status_cls = project["status"].lower().replace(" ", "-")
-    return f'''<article class="project-card reveal" style="--delay:{index*80}ms"><a class="project-card-visual" href="{href}"><img src="{rel(depth,project['visual'])}" alt="{e(project['visualAlt'])}" loading="lazy"><span class="status-chip status-{status_cls}">{e(project['status'])}</span></a><div class="project-card-content"><div class="project-card-meta"><span>{e(project['category'])}</span><span>{e(project['period'])}</span></div><h3><a href="{href}">{e(project['shortTitle'])}</a></h3><p>{e(project['summary'])}</p>{tags(project['tags'][:4],True)}<a class="text-link" href="{href}">Read case study {icon('arrow',18)}</a></div></article>'''
+    image = project_image(
+        project,
+        depth,
+        loading="lazy",
+        sizes="(max-width: 840px) calc(100vw - 34px), 560px",
+    )
+    return f'''<article class="project-card reveal" style="--delay:{index*80}ms"><a class="project-card-visual" href="{href}">{image}<span class="status-chip status-{status_cls}">{e(project['status'])}</span></a><div class="project-card-content"><div class="project-card-meta"><span>{e(project['category'])}</span><span>{e(project['period'])}</span></div><h3><a href="{href}">{e(project['shortTitle'])}</a></h3><p>{e(project['summary'])}</p><p class="project-card-role"><strong>My role</strong>{e(project['roleSummary'])}</p>{tags(project['tags'][:4],True)}<a class="text-link" href="{href}">Read case study {icon('arrow',18)}</a></div></article>'''
 
 
 def section_header(eyebrow: str, title: str, description: str) -> str:
@@ -90,46 +115,182 @@ def section_header(eyebrow: str, title: str, description: str) -> str:
 
 
 def header(depth: int, active: str) -> str:
-    desktop = "".join(f'<a class="{"active" if x["label"].lower()==active else ""}" href="{rel(depth,x["href"])}">{e(x["label"])}</a>' for x in navigation)
-    mobile = "".join(f'<a class="{"active" if x["label"].lower()==active else ""}" href="{rel(depth,x["href"])}"><span>{e(x["label"])}</span>{icon("arrow")}</a>' for x in navigation)
-    return f'''<header class="site-header" data-header><div class="header-inner container-wide"><a class="brand" href="{rel(depth,'/')}"><span class="brand-mark">SG</span><span class="brand-name">Sikao Guo</span></a><nav class="desktop-nav" aria-label="Primary navigation">{desktop}</nav><div class="header-actions"><button class="icon-button theme-toggle" type="button" aria-label="Switch color theme" data-theme-toggle><span class="theme-icon theme-icon-sun">{icon('sun',18)}</span><span class="theme-icon theme-icon-moon">{icon('moon',18)}</span></button><a class="button button-small button-primary header-contact" href="mailto:{e(site['email'])}">Contact</a><button class="icon-button menu-toggle" type="button" aria-label="Open navigation menu" aria-expanded="false" data-menu-toggle><span class="menu-open-icon">{icon('menu')}</span><span class="menu-close-icon">{icon('close')}</span></button></div></div><nav class="mobile-nav" aria-label="Mobile navigation" data-mobile-nav><div class="container-wide mobile-nav-inner">{mobile}<a href="mailto:{e(site['email'])}"><span>Contact</span>{icon('mail')}</a></div></nav></header>'''
+    def nav_link(item: dict[str, str], mobile: bool = False) -> str:
+        current = item["label"].lower() == active
+        cls = ' class="active"' if current else ""
+        aria = ' aria-current="page"' if current else ""
+        content = f'<span>{e(item["label"])}</span>{icon("arrow")}' if mobile else e(item["label"])
+        return f'<a{cls}{aria} href="{rel(depth, item["href"])}">{content}</a>'
+
+    desktop = "".join(nav_link(x) for x in navigation)
+    mobile = "".join(nav_link(x, True) for x in navigation)
+    return f'''<header class="site-header" data-header><div class="header-inner container-wide"><a class="brand" href="{rel(depth,'/')}" aria-label="Sikao Guo, home"><span class="brand-mark">SG</span><span class="brand-name">Sikao Guo</span></a><nav class="desktop-nav" aria-label="Primary navigation">{desktop}</nav><div class="header-actions"><button class="icon-button theme-toggle" type="button" aria-label="Switch color theme" data-theme-toggle><span class="theme-icon theme-icon-sun">{icon('sun',18)}</span><span class="theme-icon theme-icon-moon">{icon('moon',18)}</span></button><a class="button button-small button-primary header-contact" href="mailto:{e(site['email'])}">Contact</a><button class="icon-button menu-toggle" type="button" aria-label="Open navigation menu" aria-expanded="false" aria-controls="mobile-navigation" data-menu-toggle><span class="menu-open-icon">{icon('menu')}</span><span class="menu-close-icon">{icon('close')}</span></button></div></div><nav class="mobile-nav" id="mobile-navigation" aria-label="Mobile navigation" data-mobile-nav><div class="container-wide mobile-nav-inner">{mobile}<a href="mailto:{e(site['email'])}"><span>Contact</span>{icon('mail')}</a></div></nav></header>'''
 
 
 def footer(depth: int) -> str:
     s = site["social"]
-    return f'''<footer class="site-footer"><div class="container-wide footer-grid"><div class="footer-intro"><a class="footer-brand" href="{rel(depth,'/')}">Sikao Guo</a><p>Computational biophysics, molecular modeling, and reusable scientific software.</p></div><div class="footer-contact"><p class="footer-label">Contact</p><a href="mailto:{e(site['email'])}">{e(site['email'])}</a><span>{e(site['location'])}</span></div><div class="footer-social"><p class="footer-label">Profiles</p><div class="social-links"><a href="{e(s['github'])}" target="_blank" rel="noreferrer" aria-label="GitHub">{icon('github')}</a><a href="{e(s['linkedin'])}" target="_blank" rel="noreferrer" aria-label="LinkedIn">{icon('linkedin')}</a><a href="{e(s['scholar'])}" target="_blank" rel="noreferrer" aria-label="Google Scholar">{icon('scholar')}</a><a href="{e(s['orcid'])}" target="_blank" rel="noreferrer" aria-label="ORCID">{icon('orcid')}</a></div></div></div><div class="container-wide footer-bottom"><span>© {datetime.now().year} Sikao Guo</span><span>Built for clarity, reproducibility, and scientific impact.</span></div></footer>'''
+    location = f'<span>{e(site["location"])}</span>' if site["location"] else ""
+    return f'''<footer class="site-footer"><div class="container-wide footer-grid"><div class="footer-intro"><a class="footer-brand" href="{rel(depth,'/')}">Sikao Guo</a><p>Computational biophysics, molecular modeling, and reusable scientific software.</p></div><div class="footer-contact"><p class="footer-label">Contact</p><a href="mailto:{e(site['email'])}">{e(site['email'])}</a>{location}</div><div class="footer-social"><p class="footer-label">Profiles</p><div class="social-links"><a href="{e(s['github'])}" target="_blank" rel="noreferrer" aria-label="GitHub">{icon('github')}</a><a href="{e(s['linkedin'])}" target="_blank" rel="noreferrer" aria-label="LinkedIn">{icon('linkedin')}</a><a href="{e(s['scholar'])}" target="_blank" rel="noreferrer" aria-label="Google Scholar">{icon('scholar')}</a><a href="{e(s['orcid'])}" target="_blank" rel="noreferrer" aria-label="ORCID">{icon('orcid')}</a></div></div></div><div class="container-wide footer-bottom"><span>© {datetime.now().year} Sikao Guo</span><span>Built for clarity, reproducibility, and scientific impact.</span></div></footer>'''
 
 
-GENERAL_SCRIPT = r'''<script>(()=>{const r=document.documentElement,t=document.querySelector('[data-theme-toggle]'),m=document.querySelector('[data-menu-toggle]'),n=document.querySelector('[data-mobile-nav]'),h=document.querySelector('[data-header]');t?.addEventListener('click',()=>{const x=r.dataset.theme==='dark'?'light':'dark';r.dataset.theme=x;localStorage.setItem('theme',x)});m?.addEventListener('click',()=>{const x=h?.classList.toggle('menu-open')??false;m.setAttribute('aria-expanded',String(x));document.body.classList.toggle('nav-open',x)});n?.querySelectorAll('a').forEach(a=>a.addEventListener('click',()=>{h?.classList.remove('menu-open');m?.setAttribute('aria-expanded','false');document.body.classList.remove('nav-open')}));const o='IntersectionObserver'in window?new IntersectionObserver(es=>es.forEach(en=>{if(en.isIntersecting){en.target.classList.add('is-visible');o.unobserve(en.target)}}),{threshold:.12}):null;document.querySelectorAll('.reveal').forEach(x=>o?o.observe(x):x.classList.add('is-visible'));const u=()=>h?.classList.toggle('scrolled',scrollY>12);u();addEventListener('scroll',u,{passive:true})})();</script>'''
+GENERAL_SCRIPT = r'''<script>
+(() => {
+  const root = document.documentElement;
+  const themeToggle = document.querySelector('[data-theme-toggle]');
+  const menuToggle = document.querySelector('[data-menu-toggle]');
+  const mobileNav = document.querySelector('[data-mobile-nav]');
+  const header = document.querySelector('[data-header]');
+
+  const updateThemeLabel = () => {
+    const nextTheme = root.dataset.theme === 'dark' ? 'light' : 'dark';
+    themeToggle?.setAttribute('aria-label', `Switch to ${nextTheme} theme`);
+  };
+  updateThemeLabel();
+  themeToggle?.addEventListener('click', () => {
+    const nextTheme = root.dataset.theme === 'dark' ? 'light' : 'dark';
+    root.dataset.theme = nextTheme;
+    try { localStorage.setItem('theme', nextTheme); } catch {}
+    updateThemeLabel();
+  });
+
+  const closeMenu = (restoreFocus = false) => {
+    header?.classList.remove('menu-open');
+    menuToggle?.setAttribute('aria-expanded', 'false');
+    menuToggle?.setAttribute('aria-label', 'Open navigation menu');
+    document.body.classList.remove('nav-open');
+    if (restoreFocus) menuToggle?.focus();
+  };
+  menuToggle?.addEventListener('click', () => {
+    const isOpen = header?.classList.toggle('menu-open') ?? false;
+    menuToggle.setAttribute('aria-expanded', String(isOpen));
+    menuToggle.setAttribute('aria-label', `${isOpen ? 'Close' : 'Open'} navigation menu`);
+    document.body.classList.toggle('nav-open', isOpen);
+    if (isOpen) mobileNav?.querySelector('a')?.focus();
+  });
+  mobileNav?.querySelectorAll('a').forEach(link => link.addEventListener('click', () => closeMenu()));
+  document.addEventListener('keydown', event => {
+    if (event.key === 'Escape' && header?.classList.contains('menu-open')) closeMenu(true);
+    if (event.key !== 'Tab' || !header?.classList.contains('menu-open')) return;
+    const focusable = [menuToggle, ...(mobileNav?.querySelectorAll('a') ?? [])].filter(Boolean);
+    const first = focusable[0];
+    const last = focusable[focusable.length - 1];
+    if (event.shiftKey && document.activeElement === first) {
+      event.preventDefault();
+      last?.focus();
+    } else if (!event.shiftKey && document.activeElement === last) {
+      event.preventDefault();
+      first?.focus();
+    }
+  });
+  matchMedia('(min-width: 841px)').addEventListener?.('change', event => {
+    if (event.matches) closeMenu();
+  });
+
+  const observer = 'IntersectionObserver' in window
+    ? new IntersectionObserver(entries => entries.forEach(entry => {
+        if (entry.isIntersecting) {
+          entry.target.classList.add('is-visible');
+          observer.unobserve(entry.target);
+        }
+      }), { threshold: .12 })
+    : null;
+  document.querySelectorAll('.reveal').forEach(element =>
+    observer ? observer.observe(element) : element.classList.add('is-visible')
+  );
+
+  const updateHeader = () => header?.classList.toggle('scrolled', scrollY > 12);
+  updateHeader();
+  addEventListener('scroll', updateHeader, { passive: true });
+})();
+</script>'''
 
 
-def layout(title: str, description: str, body: str, depth: int, active: str = "", path: str = "", image: str = "/images/og-image.svg", extra_script: str = "", noindex: bool = False) -> str:
+def layout(
+    title: str,
+    description: str,
+    body: str,
+    depth: int,
+    active: str = "",
+    path: str = "",
+    image: str = "/images/og-image.png",
+    image_alt: str = "Sikao Guo — computational biophysics and scientific software",
+    extra_script: str = "",
+    noindex: bool = False,
+    structured_data: dict[str, Any] | None = None,
+) -> str:
     full = f"{title} | Sikao Guo" if title else f"Sikao Guo | {site['title']}"
     canonical = f"{SITE_URL}/{path.lstrip('/')}"
     robots = '<meta name="robots" content="noindex">' if noindex else ""
-    return f'''<!doctype html><html lang="en" data-theme="light"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1"><meta name="description" content="{e(description)}"><meta name="author" content="Sikao Guo"><meta name="theme-color" content="#f4f2eb">{robots}<link rel="canonical" href="{canonical}"><link rel="icon" type="image/svg+xml" href="{rel(depth,'images/favicon.svg')}"><link rel="stylesheet" href="{rel(depth,'assets/styles.css')}"><meta property="og:type" content="website"><meta property="og:title" content="{e(full)}"><meta property="og:description" content="{e(description)}"><meta property="og:url" content="{canonical}"><meta property="og:image" content="{SITE_URL}/{image.lstrip('/')}"><meta name="twitter:card" content="summary_large_image"><title>{e(full)}</title><script>(()=>{{const s=localStorage.getItem('theme');const p=matchMedia('(prefers-color-scheme:dark)').matches?'dark':'light';document.documentElement.dataset.theme=s||p}})()</script></head><body><a class="skip-link" href="#main-content">Skip to content</a>{header(depth,active)}<main id="main-content">{body}</main>{footer(depth)}{extra_script}{GENERAL_SCRIPT}</body></html>'''
+    schema = ""
+    if structured_data:
+        payload = json.dumps(structured_data, ensure_ascii=False, separators=(",", ":")).replace("</", "<\\/")
+        schema = f'<script type="application/ld+json">{payload}</script>'
+    image_url = f"{SITE_URL}/{image.lstrip('/')}"
+    return f'''<!doctype html><html lang="en" data-theme="light"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1"><meta name="description" content="{e(description)}"><meta name="author" content="Sikao Guo"><meta name="theme-color" content="#f4f2eb">{robots}<link rel="canonical" href="{canonical}"><link rel="icon" type="image/svg+xml" href="{rel(depth,'images/favicon.svg')}"><script>(()=>{{try{{const s=localStorage.getItem('theme');const p=matchMedia('(prefers-color-scheme:dark)').matches?'dark':'light';document.documentElement.dataset.theme=s||p}}catch{{}}}})()</script><link rel="stylesheet" href="{rel(depth,'assets/styles.css')}"><meta property="og:type" content="website"><meta property="og:site_name" content="Sikao Guo"><meta property="og:locale" content="en_US"><meta property="og:title" content="{e(full)}"><meta property="og:description" content="{e(description)}"><meta property="og:url" content="{canonical}"><meta property="og:image" content="{image_url}"><meta property="og:image:type" content="image/png"><meta property="og:image:width" content="1200"><meta property="og:image:height" content="630"><meta property="og:image:alt" content="{e(image_alt)}"><meta name="twitter:card" content="summary_large_image"><meta name="twitter:title" content="{e(full)}"><meta name="twitter:description" content="{e(description)}"><meta name="twitter:image" content="{image_url}"><meta name="twitter:image:alt" content="{e(image_alt)}"><title>{e(full)}</title>{schema}<noscript><style>.reveal{{opacity:1;transform:none}}</style></noscript></head><body><a class="skip-link" href="#main-content">Skip to content</a>{header(depth,active)}<main id="main-content" tabindex="-1">{body}</main>{footer(depth)}{extra_script}{GENERAL_SCRIPT}</body></html>'''
 
 
 def home() -> str:
     ps = "".join(project_card(p,0,i) for i,p in enumerate(projects))
-    pubs = "".join(publication_item(p) for p in [p for p in publications if p["featured"]][:5])
+    home_publications = sorted((p for p in publications if p.get("homeOrder")), key=lambda p: p["homeOrder"])
+    pubs = "".join(publication_item(p) for p in home_publications)
     caps = "".join(f'<article class="capability-card reveal" style="--delay:{i*90}ms"><span class="capability-number">{e(x["number"])}</span><h3>{e(x["title"])}</h3><p>{e(x["description"])}</p></article>' for i,x in enumerate(capabilities))
     stats = "".join(f'<div class="impact-item"><div class="impact-value">{e(x["value"])}<span>{e(x["suffix"])}</span></div><p class="impact-label">{e(x["label"])}</p></div>' for x in impact_stats)
-    body = f'''<section class="home-hero"><div class="container-wide hero-grid"><div class="hero-copy reveal is-visible"><p class="hero-kicker">Computational biophysics × scientific software</p><h1>I build reusable tools for <span class="hero-accent">molecular structure</span> and <span class="hero-accent">dynamic</span> research.</h1><p class="hero-lead">C++ and Python systems for protein conformational sampling, biomolecular self-assembly, structural bioinformatics, and high-performance scientific computing.</p><div class="hero-actions"><a class="button button-primary" href="projects/">View selected work {icon('arrow')}</a><a class="button button-secondary" href="documents/Sikao_Guo_PhD_resume.pdf" target="_blank">Download résumé {icon('download')}</a></div><div class="hero-meta"><span>{e(site['affiliation'])}</span><span>{e(site['availability'])}</span><span>{e(site['location'])}</span></div></div><div class="hero-graphic"><img src="images/hero-visual.svg" alt="Abstract diagram connecting molecular structure, simulation, and scientist-facing software"><div class="hero-graphic-caption hero-caption-top"><span class="caption-dot"></span><span>structure → dynamic</span></div><div class="hero-graphic-caption hero-caption-bottom"><span class="caption-dot"></span><span>method → software</span></div></div></div></section>
-<section class="section section-muted"><div class="container">{section_header('What I work on','Methods that survive contact with real scientific workflows.','My work spans algorithm design, scientific validation, scalable implementation, and the interfaces researchers use to for research.')}<div class="capability-grid">{caps}</div></div></section>
+    by_slug = {p["slug"]: p for p in projects}
+    evidence_specs = [
+        ("inverse-kinematics-backbone-sampling", "Protein conformations", "hero-evidence-main"),
+        ("cross-platform-gui-generation", "Scientific interfaces", ""),
+        ("mechanistic-assembly-models", "Mechanistic assembly", ""),
+    ]
+    evidence_cards = []
+    for index, (slug, label, class_name) in enumerate(evidence_specs):
+        project = by_slug[slug]
+        image = project_image(
+            project,
+            0,
+            loading="eager",
+            sizes="(max-width: 1050px) calc(100vw - 34px), 520px" if class_name else "(max-width: 1050px) calc((100vw - 46px) / 2), 250px",
+            fetch_priority=index == 0,
+        )
+        evidence_cards.append(f'<a class="hero-evidence-card {class_name}" href="{rel(0, f"projects/{slug}/")}">{image}<span class="hero-evidence-label"><small>0{index + 1}</small>{e(label)}</span></a>')
+    hero_meta_values = [site["affiliation"], site["availability"], site["location"]]
+    hero_meta = ""
+    if any(hero_meta_values):
+        hero_meta = '<div class="hero-meta">' + "".join(f'<span>{e(value)}</span>' for value in hero_meta_values if value) + "</div>"
+    body = f'''<section class="home-hero"><div class="container-wide hero-grid"><div class="hero-copy reveal is-visible"><p class="hero-kicker">Computational biophysics × scientific software</p><h1>I turn molecular modeling methods into <span class="hero-accent">reliable scientific software.</span></h1><p class="hero-lead">Computational biophysicist and research engineer developing reusable C++ and Python systems for protein conformational sampling, biomolecular self-assembly, structural bioinformatics, and high-performance simulation.</p><div class="hero-actions"><a class="button button-primary" href="{rel(0,'projects/')}">View case studies {icon('arrow')}</a><a class="button button-secondary" href="{rel(0,'cv/')}">View CV</a><a class="button button-secondary" href="{e(site['social']['github'])}" target="_blank" rel="noreferrer">GitHub {icon('external',18)}</a></div>{hero_meta}</div><div class="hero-evidence" role="group" aria-label="Selected project evidence">{''.join(evidence_cards)}</div></div></section>
+<section class="section section-muted"><div class="container">{section_header('What I work on','Methods that survive contact with real scientific workflows.','My work spans algorithm design, scientific validation, scalable implementation, and the interfaces researchers use for research.')}<div class="capability-grid">{caps}</div></div></section>
 <section class="section section-dark grid-noise"><div class="container"><div class="impact-strip reveal">{stats}</div></div></section>
 <section class="section"><div class="container">{section_header('Selected work','Research methods developed as reusable infrastructure.','Each case study separates the scientific problem, the algorithm or architecture, my contribution, and the evidence used to validate the result.')}<div class="projects-grid">{ps}</div><div class="projects-footer"><a class="button button-secondary" href="projects/">Explore all case studies {icon('arrow')}</a></div></div></section>
-<section class="section section-muted"><div class="container">{section_header('Selected publications','Mechanistic modeling, molecular structure and dynamic, and scientific computing.','A focused selection of work in protein assembly, structural workflows, high-performance simulation, and research software.')}<div class="publication-list reveal">{pubs}</div><div class="projects-footer"><a class="button button-secondary" href="publications/">View publication list {icon('arrow')}</a></div></div></section>
+<section class="section section-muted"><div class="container">{section_header('Selected publications','Mechanistic modeling, molecular structure and dynamics, and scientific computing.','A focused selection of work in protein assembly, structural workflows, high-performance simulation, and research software.')}<div class="publication-list reveal">{pubs}</div><div class="projects-footer"><a class="button button-secondary" href="publications/">View publication list {icon('arrow')}</a></div></div></section>
 <section class="section"><div class="container about-grid"><div class="about-statement"><p class="eyebrow">Background</p><h2>Physics training, biological questions, engineering execution.</h2><p>I work where molecular modeling and software engineering meet: turning research algorithms into maintainable systems that scientists can validate, scale, and reuse.</p></div><div class="about-details"><div class="about-block reveal"><div class="about-block-label">Current</div><div><h3>Research Engineer · Inria</h3><p>Developing inverse-kinematics protein-backbone samplers and a cross-platform framework for automatically generating VMD, PyMOL, and web applications.</p></div></div><div class="about-block reveal"><div class="about-block-label">Previously</div><div><h3>Johns Hopkins University · Biophysics</h3><p>Built NERDSS and ioNERDSS infrastructure and led computational studies of clathrin, retroviral Gag, and membrane-associated assembly.</p></div></div><div class="about-block reveal"><div class="about-block-label">Training</div><div><h3>Ph.D. in Condensed Matter Physics</h3><p>Developed quantitative models connecting molecular conformational changes and chemical transitions to the emergent mechanics of kinesin motors.</p></div></div><div class="about-block reveal"><div class="about-block-label">Interests</div><div><h3>Reusable research infrastructure</h3><p>Scientific software, protein conformational search, hybrid physics/ML workflows, simulation platforms, and agent-usable tools for molecular discovery.</p></div></div></div></div></section>
 <section class="section-compact"><div class="container"><div class="contact-panel reveal"><div class="contact-panel-copy"><p class="eyebrow">Contact</p><h2>Building a molecular-modeling method or scientific platform?</h2><p>I am interested in research and engineering roles that connect computational methods to reliable, scalable software used by scientists.</p></div><a class="button button-primary" href="mailto:{e(site['email'])}">Email me {icon('mail')}</a></div></div></section>'''
-    return layout("",site["description"],body,0)
+    profile_schema = {
+        "@context": "https://schema.org",
+        "@type": "ProfilePage",
+        "url": f"{SITE_URL}/",
+        "mainEntity": {
+            "@type": "Person",
+            "name": site["name"],
+            "url": f"{SITE_URL}/",
+            "jobTitle": site["title"],
+            "description": site["description"],
+            "sameAs": list(site["social"].values()),
+        },
+    }
+    return layout("",site["description"],body,0,structured_data=profile_schema)
 
 
 def projects_index() -> str:
     items=[]
     for i,p in enumerate(projects):
         status=p["status"].lower().replace(" ","-")
-        items.append(f'''<article class="project-index-item reveal" style="--delay:{i*70}ms"><a class="project-index-visual" href="{p['slug']}/"><img src="../{p['visual'].lstrip('/')}" alt="{e(p['visualAlt'])}"><span class="status-chip status-{status}">{e(p['status'])}</span></a><div class="project-index-copy"><div class="project-index-meta"><span>{e(p['category'])}</span><span>{e(p['period'])}</span></div><h2><a href="{p['slug']}/">{e(p['title'])}</a></h2><p>{e(p['summary'])}</p>{tags(p['tags'][:6],True)}<a class="text-link" href="{p['slug']}/">Read case study {icon('arrow',18)}</a></div></article>''')
+        image = project_image(
+            p,
+            1,
+            loading="eager" if i == 0 else "lazy",
+            sizes="(max-width: 840px) calc(100vw - 34px), 520px",
+            fetch_priority=i == 0,
+        )
+        items.append(f'''<article class="project-index-item reveal" style="--delay:{i*70}ms"><a class="project-index-visual" href="{p['slug']}/">{image}<span class="status-chip status-{status}">{e(p['status'])}</span></a><div class="project-index-copy"><div class="project-index-meta"><span>{e(p['category'])}</span><span>{e(p['period'])}</span></div><h2><a href="{p['slug']}/">{e(p['title'])}</a></h2><p>{e(p['summary'])}</p><p class="project-index-role"><strong>My role</strong>{e(p['roleSummary'])}</p>{tags(p['tags'][:6],True)}<a class="text-link" href="{p['slug']}/">Read case study {icon('arrow',18)}</a></div></article>''')
     body=f'''<section class="page-hero"><div class="container page-hero-inner"><p class="eyebrow">Projects</p><h1>Scientific questions translated into algorithms and software.</h1><p class="page-hero-lead">These case studies show the complete path from problem definition and method design to implementation, validation, and reusable research infrastructure.</p></div></section><section class="section"><div class="container project-index-grid">{''.join(items)}</div></section>'''
     return layout("Projects","Case studies in protein conformational sampling, scientific GUI generation, reaction-diffusion infrastructure, and mechanistic biomolecular modeling.",body,1,"projects","projects/")
 
@@ -149,16 +310,45 @@ def project_page(p: dict[str,Any], index: int) -> str:
         links="".join(f'<a class="project-link-card" href="{e(x["href"])}" target="_blank" rel="noreferrer"><span>{e(x["label"])}</span>{icon("external")}</a>' for x in p["links"])
         resources=f'<section class="case-section" id="resources"><p class="eyebrow">Resources</p><h2>Papers, code, and documentation</h2><div class="project-links-grid">{links}</div></section>'
     related_html=f'<section class="case-section" id="publications"><p class="eyebrow">Related work</p><h2>Publications</h2><div class="publication-list">{"".join(publication_item(x,True) for x in related)}</div></section>' if related else ""
-    body=f'''<section class="project-hero"><div class="container-wide"><a class="project-breadcrumb" href="../">{icon('arrow',16)} All projects</a><div class="project-hero-grid"><div class="project-hero-copy"><p class="eyebrow">{e(p['category'])}</p><h1>{e(p['title'])}</h1><p class="project-subtitle">{e(p['subtitle'])}</p><div class="project-hero-meta"><span>{e(p['status'])}</span><span>{e(p['period'])}</span></div>{tags(p['tags'])}</div><div class="project-hero-visual reveal is-visible"><img src="../../{p['visual'].lstrip('/')}" alt="{e(p['visualAlt'])}"></div></div></div></section><div class="project-summary-strip"><div class="container-wide project-summary-inner">{metric}</div></div><section class="section"><div class="container case-study-grid"><aside class="case-study-nav"><p>On this page</p><a href="#context">Context</a><a href="#approach">Approach</a><a href="#contribution">My contribution</a><a href="#outcomes">Outcomes</a>{resource_nav}{pub_nav}</aside><div class="case-study-content"><section class="case-section" id="context"><p class="eyebrow">Context</p><h2>The problem</h2><div class="case-section-text">{''.join(f'<p>{e(x)}</p>' for x in p['context'])}</div></section><section class="case-section" id="approach"><p class="eyebrow">Method</p><h2>How the system works</h2><div class="process-grid">{steps}</div></section><section class="case-section" id="contribution"><p class="eyebrow">Role</p><h2>My contribution</h2><ul class="detail-list">{contributions}</ul></section><section class="case-section" id="outcomes"><p class="eyebrow">Result</p><h2>Outcomes and scientific value</h2><div class="outcome-grid">{outcomes}</div>{note}</section>{resources}{related_html}</div></div></section><section class="section-compact"><div class="container"><a class="next-project" href="../{e(nxt['slug'])}/"><div><p>Next case study</p><h2>{e(nxt['title'])}</h2></div>{icon('arrow',34)}</a></div></section>'''
-    return layout(p["shortTitle"],p["summary"],body,2,"projects",f"projects/{p['slug']}/",p["visual"])
+    hero_links = ""
+    if p["links"]:
+        hero_links = '<div class="project-hero-links">' + "".join(f'<a href="{e(x["href"])}" target="_blank" rel="noreferrer">{e(x["label"])}{icon("external",14)}</a>' for x in p["links"][:3]) + "</div>"
+    hero_image = project_image(
+        p,
+        2,
+        loading="eager",
+        sizes="(max-width: 1050px) calc(100vw - 48px), 620px",
+        fetch_priority=True,
+    )
+    body=f'''<section class="project-hero"><div class="container-wide"><a class="project-breadcrumb" href="../">{icon('arrow',16)} All projects</a><div class="project-hero-grid"><div class="project-hero-copy"><p class="eyebrow">{e(p['category'])}</p><h1>{e(p['title'])}</h1><p class="project-subtitle">{e(p['subtitle'])}</p><p class="project-hero-result"><strong>Outcome</strong>{e(p['heroResult'])}</p><div class="project-role-summary"><span>My role</span><p>{e(p['roleSummary'])}</p></div><div class="project-hero-meta"><span>{e(p['status'])}</span><span>{e(p['period'])}</span></div>{tags(p['tags'])}{hero_links}</div><div class="project-hero-visual reveal is-visible">{hero_image}</div></div></div></section><div class="project-summary-strip"><div class="container-wide project-summary-inner">{metric}</div></div><section class="section"><div class="container case-study-grid"><aside class="case-study-nav"><p>On this page</p><a href="#context">Context</a><a href="#approach">Approach</a><a href="#contribution">My contribution</a><a href="#outcomes">Outcomes</a>{resource_nav}{pub_nav}</aside><div class="case-study-content"><section class="case-section" id="context"><p class="eyebrow">Context</p><h2>The problem</h2><div class="case-section-text">{''.join(f'<p>{e(x)}</p>' for x in p['context'])}</div></section><section class="case-section" id="approach"><p class="eyebrow">Method</p><h2>How the system works</h2><div class="process-grid">{steps}</div></section><section class="case-section" id="contribution"><p class="eyebrow">Role</p><h2>My contribution</h2><ul class="detail-list">{contributions}</ul></section><section class="case-section" id="outcomes"><p class="eyebrow">Result</p><h2>Outcomes and scientific value</h2><div class="outcome-grid">{outcomes}</div>{note}</section>{resources}{related_html}</div></div></section><section class="section-compact"><div class="container"><a class="next-project" href="../{e(nxt['slug'])}/"><div><p>Next case study</p><h2>{e(nxt['title'])}</h2></div>{icon('arrow',34)}</a></div></section>'''
+    return layout(p["shortTitle"],p["summary"],body,2,"projects",f"projects/{p['slug']}/")
 
 
 def publications_page() -> str:
     years=sorted({x["year"] for x in publications},reverse=True)
-    buttons='<button class="filter-button active" type="button" data-filter="all">All</button>'+"".join(f'<button class="filter-button" type="button" data-filter="{y}">{y}</button>' for y in years)
-    script=r'''<script>const bs=[...document.querySelectorAll('[data-filter]')],is=[...document.querySelectorAll('[data-publication]')],c=document.querySelector('[data-publication-count]');bs.forEach(b=>b.addEventListener('click',()=>{const f=b.dataset.filter;bs.forEach(x=>x.classList.toggle('active',x===b));let n=0;is.forEach(x=>{const s=f==='all'||x.dataset.year===f;x.hidden=!s;if(s)n++});c.textContent=`${n} publication${n===1?'':'s'} shown`}));</script>'''
-    body=f'''<section class="page-hero"><div class="container page-hero-inner"><p class="eyebrow">Publications</p><h1>Computational models and software for molecular systems.</h1><p class="page-hero-lead">Selected work spanning protein conformational modeling, biomolecular self-assembly, particle-based reaction-diffusion, and reusable scientific interfaces.</p></div></section><section class="section"><div class="container"><div class="publications-toolbar"><div class="filter-group">{buttons}</div><div class="publication-count" data-publication-count>{len(publications)} publications shown</div></div><div class="publication-list">{"".join(publication_item(x,True) for x in publications)}</div><div class="projects-footer"><a class="button button-secondary" href="{e(site['social']['scholar'])}" target="_blank" rel="noreferrer">Complete profile on Google Scholar {icon('external')}</a></div></div></section>'''
-    return layout("Publications","Selected publications by Sikao Guo in computational biophysics, molecular self-assembly, scientific software, and structural bioinformatics.",body,1,"publications","publications/",extra_script=script)
+    buttons='<button class="filter-button active" type="button" data-filter="all" aria-pressed="true">All</button>'+"".join(f'<button class="filter-button" type="button" data-filter="{y}" aria-pressed="false">{y}</button>' for y in years)
+    script=r'''<script>
+const filterButtons = [...document.querySelectorAll('[data-filter]')];
+const publicationItems = [...document.querySelectorAll('[data-publication]')];
+const publicationCount = document.querySelector('[data-publication-count]');
+filterButtons.forEach(button => button.addEventListener('click', () => {
+  const filter = button.dataset.filter;
+  filterButtons.forEach(candidate => {
+    const selected = candidate === button;
+    candidate.classList.toggle('active', selected);
+    candidate.setAttribute('aria-pressed', String(selected));
+  });
+  let visibleCount = 0;
+  publicationItems.forEach(item => {
+    const visible = filter === 'all' || item.dataset.year === filter;
+    item.hidden = !visible;
+    if (visible) visibleCount += 1;
+  });
+  publicationCount.textContent = `${visibleCount} publication${visibleCount === 1 ? '' : 's'} shown`;
+}));
+</script>'''
+    body=f'''<section class="page-hero"><div class="container page-hero-inner"><p class="eyebrow">Selected publications</p><h1>Computational models and software for molecular systems.</h1><p class="page-hero-lead">Selected work spanning protein conformational modeling, biomolecular self-assembly, particle-based reaction-diffusion, and reusable scientific interfaces.</p></div></section><section class="section"><div class="container"><div class="publications-toolbar"><div class="filter-group" role="group" aria-label="Filter publications by year">{buttons}</div><div class="publication-count" role="status" aria-live="polite" aria-atomic="true" data-publication-count>{len(publications)} publications shown</div></div><h2 class="visually-hidden">Publication list</h2><div class="publication-list">{"".join(publication_item(x,True) for x in publications)}</div><div class="projects-footer"><a class="button button-secondary" href="{e(site['social']['scholar'])}" target="_blank" rel="noreferrer">Complete profile on Google Scholar {icon('external')}</a></div></div></section>'''
+    return layout("Selected Publications","Selected publications by Sikao Guo in computational biophysics, molecular self-assembly, scientific software, and structural bioinformatics.",body,1,"publications","publications/",extra_script=script)
 
 
 def cv_page() -> str:
@@ -185,7 +375,13 @@ def main() -> None:
     if OUT.exists(): shutil.rmtree(OUT)
     (OUT/"assets").mkdir(parents=True)
     shutil.copy2(ROOT/"src"/"styles.css",OUT/"assets"/"styles.css")
-    shutil.copytree(ROOT/"src"/"images",OUT/"images")
+    (OUT/"images").mkdir()
+    runtime_images = {"favicon.svg", "og-image.png"}
+    for project in projects:
+        runtime_images.add(Path(project["visual"]).name)
+        runtime_images.add(Path(project["visualSmall"]).name)
+    for image_name in sorted(runtime_images):
+        shutil.copy2(ROOT/"src"/"images"/image_name,OUT/"images"/image_name)
     (OUT/"documents").mkdir()
     shutil.copy2(ROOT/"resume"/"Sikao_Guo_PhD_resume.pdf",OUT/"documents"/"Sikao_Guo_PhD_resume.pdf")
     write(OUT/"index.html",home())
@@ -193,7 +389,7 @@ def main() -> None:
     for i,p in enumerate(projects): write(OUT/"projects"/p["slug"]/"index.html",project_page(p,i))
     write(OUT/"publications"/"index.html",publications_page())
     write(OUT/"cv"/"index.html",cv_page())
-    notfound=f'<section class="not-found"><div class="container"><p class="not-found-code">404</p><h1>This page is outside the sampled conformational space.</h1><p>The requested path does not exist.</p><a class="button button-primary" href="./">Return home {icon("arrow")}</a></div></section>'
+    notfound=f'<section class="not-found"><div class="container"><p class="not-found-code">404</p><h1>This page is outside the sampled conformational space.</h1><p>The requested path does not exist.</p><a class="button button-primary" href="{rel(0, "/")}">Return home {icon("arrow")}</a></div></section>'
     write(OUT/"404.html",layout("Page not found","Page not found",notfound,0,path="404.html",noindex=True))
     write(OUT/".nojekyll","")
     write(OUT/"robots.txt",f"User-agent: *\nAllow: /\nSitemap: {SITE_URL}/sitemap.xml\n")

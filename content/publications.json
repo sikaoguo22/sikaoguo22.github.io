@@ -9,6 +9,7 @@
     "url": "https://arxiv.org/abs/2602.16047",
     "type": "Preprint",
     "featured": true,
+    "homeOrder": 1,
     "cvFeatured": true,
     "cvOrder": 1,
     "topics": [
@@ -16,19 +17,20 @@
       "GUI generation",
       "Structural bioinformatics"
     ],
-    "contribution": "Design, implementation, platform generators, examples, and writing manuscript."
+    "contribution": "Framework design, implementation, platform-generator development, examples, and manuscript writing."
   },
   {
     "id": "ionerdss-2026",
     "year": 2026,
-    "title": "Transforming Macromolecular Structures into Simulations of Self-Assembly",
-    "authors": "Yue Moon Ying, Mankun Sang, Gabriel Au, Smriti Chhibber, Yufeng Du, Sikao Guo, et al.",
+    "title": "Transforming Macromolecular Structures into Simulations of Self-Assembly with ioNERDSS",
+    "authors": "Yue Moon Ying, Mankun Sang, Gabriel Au, Smriti Chhibber, Yufeng Du, Jonathan A. Fischer, Samuel L. Foley, Sikao Guo, Ian Herzog-Pohl, Zixiu Liu, Hannah Roscom, Hassan Sohail, Sho S. Takeshita, and Margaret E. Johnson",
     "venue": "bioRxiv",
     "citation": "2026.01.27.702082",
     "url": "https://doi.org/10.64898/2026.01.27.702082",
     "doi": "10.64898/2026.01.27.702082",
     "type": "Preprint",
     "featured": true,
+    "homeOrder": 5,
     "cvFeatured": true,
     "cvOrder": 3,
     "topics": [
@@ -42,12 +44,14 @@
     "id": "parallel-nerdss-2025",
     "year": 2025,
     "title": "Parallelization of Particle-Based Reaction–Diffusion Simulations Using MPI",
-    "authors": "Sikao Guo, Nenad Korolija, Kent Milfeld, and Margaret E. Johnson",
+    "authors": "Sikao Guo, Nenad Korolija, Kent Milfeld, Adip Jhaveri, Mankun Sang, Yue Moon Ying, and Margaret E. Johnson",
     "venue": "Journal of Computational Chemistry",
+    "citation": "46(14), e70132",
     "url": "https://doi.org/10.1002/jcc.70132",
     "doi": "10.1002/jcc.70132",
     "type": "Journal article",
     "featured": true,
+    "homeOrder": 2,
     "cvFeatured": true,
     "cvOrder": 2,
     "topics": [
@@ -86,6 +90,7 @@
     "doi": "10.7554/eLife.84881",
     "type": "Journal article",
     "featured": true,
+    "homeOrder": 3,
     "topics": [
       "HIV-1",
       "Self-assembly",
@@ -97,7 +102,7 @@
     "id": "gag-cofactors-2023",
     "year": 2023,
     "title": "Temporal Control by Cofactors Prevents Kinetic Trapping in Retroviral Gag Lattice Assembly",
-    "authors": "Yue Qian, Daniel Evans, Bhaswati Mishra, Yiben Fu, Zixiu H. Liu, Sikao Guo, and Margaret E. Johnson",
+    "authors": "Yian Qian, Daniel Evans, Bhavya Mishra, Yiben Fu, Zixiu H. Liu, Sikao Guo, and Margaret E. Johnson",
     "venue": "Biophysical Journal",
     "citation": "122, 3173–3190",
     "url": "https://doi.org/10.1016/j.bpj.2023.06.021",
@@ -116,6 +121,7 @@
     "title": "Secretion-Catalyzed Assembly of Protein Biomaterials on a Bacterial Membrane Surface",
     "authors": "Qi Xie, Sea On Lee, Nitya Vissamsetti, Sikao Guo, Margaret E. Johnson, and Stephen D. Fried",
     "venue": "Angewandte Chemie International Edition",
+    "citation": "62(37), e202305178",
     "url": "https://doi.org/10.1002/anie.202305178",
     "doi": "10.1002/anie.202305178",
     "type": "Journal article",
@@ -137,6 +143,7 @@
     "doi": "10.1371/journal.pcbi.1009969",
     "type": "Journal article",
     "featured": true,
+    "homeOrder": 4,
     "topics": [
       "Clathrin",
       "Membrane assembly",

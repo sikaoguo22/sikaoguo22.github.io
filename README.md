@@ -21,7 +21,7 @@ A dependency-free static portfolio focused on computational biophysics, molecula
 .
 ├── content/                 # Site, project, and publication data
 ├── src/
-│   ├── images/              # Original SVG artwork
+│   ├── images/              # Editable SVG artwork and optimized runtime exports
 │   └── styles.css           # Global responsive design
 ├── scripts/build.py         # Dependency-free static-site generator
 ├── resume/                  # Editable résumé HTML and generated PDF
@@ -44,8 +44,8 @@ The ongoing protein-backbone project is deliberately labeled **Ongoing work** an
 Python 3.10 or newer is sufficient. The website build uses only the Python standard library.
 
 ```bash
-python scripts/build.py
-python -m http.server 8000 --directory site
+python3 scripts/build.py
+python3 -m http.server 8000 --directory site
 ```
 
 Then open `http://localhost:8000`.
@@ -53,7 +53,7 @@ Then open `http://localhost:8000`.
 To change canonical URLs and sitemap entries:
 
 ```bash
-SITE_URL=https://example.com python scripts/build.py
+SITE_URL=https://example.com python3 scripts/build.py
 ```
 
 `SITE_URL` may include a repository path, such as `https://username.github.io/repository`.
@@ -78,7 +78,7 @@ The workflow rebuilds the site, uploads the `site/` directory, and deploys it as
 
 ## Before publishing
 
-- Confirm the current position dates, location, and immigration-status wording.
+- Confirm the current position dates, location, and availability wording.
 - Confirm that all ongoing-work descriptions are approved for public use.
 - Replace the default GitHub Pages URL with the final custom domain when selected.
 - Review email, GitHub, LinkedIn, Google Scholar, ORCID, DOI, and repository links.
@@ -86,4 +86,4 @@ The workflow rebuilds the site, uploads the `site/` directory, and deploys it as
 
 ## Design notes
 
-The site uses original SVG artwork rather than stock imagery or third-party fonts. No analytics, cookies, external JavaScript, or runtime dependencies are included.
+The site uses project-specific scientific artwork rather than stock imagery or third-party fonts. Editable project composites remain as SVG sources; the deployed pages use responsive 800 px and 1600 px lossless WebP exports, plus a 1200 × 630 PNG social card. No analytics, cookies, external JavaScript, or runtime dependencies are included.
