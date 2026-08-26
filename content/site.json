@@ -155,11 +155,11 @@
       "links": [
         {
           "label": "GitHub",
-          "href": "https://github.com/Structural-Bioinformatics-Library/sbl/tree/master/Applications/Plugin_manager"
+          "href": "https://github.com/Structural-Bioinformatics-Library/sbl/tree/master/Applications/AutoCLIP"
         },
         {
           "label": "Documentation",
-          "href": "https://sbl.inria.fr/doc/sbl-plugins-guide.html"
+          "href": "https://sbl.inria.fr/doc/AutoCLIP-user-manual.html"
         }
       ]
     },

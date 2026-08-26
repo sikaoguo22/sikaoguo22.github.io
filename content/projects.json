@@ -70,7 +70,7 @@
     "links": [
       {
         "label": "View code",
-        "href": "https://github.com/Structural-Bioinformatics-Library/sbl/tree/master/Applications/Plugin_manager"
+        "href": "https://github.com/Structural-Bioinformatics-Library/sbl/tree/master/Applications/AutoCLIP"
       },
       {
         "label": "Read paper",
@@ -78,7 +78,7 @@
       },
       {
         "label": "Documentation",
-        "href": "https://sbl.inria.fr/doc/Plugin_manager-user-manual.html"
+        "href": "https://sbl.inria.fr/doc/AutoCLIP-user-manual.html"
       },
       {
         "label": "Watch demos",
