@@ -8,6 +8,7 @@
     "citation": "arXiv:2602.16047",
     "url": "https://arxiv.org/abs/2602.16047",
     "type": "Preprint",
+    "firstAuthor": true,
     "featured": true,
     "homeOrder": 1,
     "cvFeatured": true,
@@ -17,7 +18,24 @@
       "GUI generation",
       "Structural bioinformatics"
     ],
-    "contribution": "Framework design, implementation, platform-generator development, examples, and manuscript writing."
+    "contribution": "Framework design, implementation, platform-generator development, examples, and manuscript writing.",
+    "resources": [
+      {
+        "kind": "Code",
+        "label": "AutoCLIP repository",
+        "href": "https://github.com/Structural-Bioinformatics-Library/sbl/tree/master/Applications/AutoCLIP"
+      },
+      {
+        "kind": "Documentation",
+        "label": "User manual",
+        "href": "https://sbl.inria.fr/doc/AutoCLIP-user-manual.html"
+      },
+      {
+        "kind": "Demo",
+        "label": "Video demos",
+        "href": "https://www.youtube.com/@SBL-plugins"
+      }
+    ]
   },
   {
     "id": "ionerdss-2026",
@@ -38,7 +56,19 @@
       "Structure-to-simulation",
       "Coarse-graining"
     ],
-    "contribution": "Structure-processing workflows, software development, and validation."
+    "contribution": "Structure-processing workflows, software development, and validation.",
+    "resources": [
+      {
+        "kind": "Code",
+        "label": "ioNERDSS repository",
+        "href": "https://github.com/JohnsonBiophysicsLab/ionerdss"
+      },
+      {
+        "kind": "Documentation",
+        "label": "ioNERDSS documentation",
+        "href": "https://johnsonbiophysicslab.github.io/ionerdss/"
+      }
+    ]
   },
   {
     "id": "parallel-nerdss-2025",
@@ -50,6 +80,7 @@
     "url": "https://doi.org/10.1002/jcc.70132",
     "doi": "10.1002/jcc.70132",
     "type": "Journal article",
+    "firstAuthor": true,
     "featured": true,
     "homeOrder": 2,
     "cvFeatured": true,
@@ -59,7 +90,19 @@
       "Reaction-diffusion simulation",
       "High-performance computing"
     ],
-    "contribution": "Lead software development, parallel algorithm design, validation, benchmarking, analysis, and writing."
+    "contribution": "Lead software development, parallel algorithm design, validation, benchmarking, analysis, and writing.",
+    "resources": [
+      {
+        "kind": "Code",
+        "label": "NERDSS-MPI repository",
+        "href": "https://github.com/JohnsonBiophysicsLab/NERDSS/tree/mpi"
+      },
+      {
+        "kind": "Documentation",
+        "label": "Parallel developer guide",
+        "href": "https://github.com/JohnsonBiophysicsLab/NERDSS/blob/mpi/doc/NERDSS_Parallel_Developer_Guide.pdf"
+      }
+    ]
   },
   {
     "id": "dynamin-2024",
@@ -89,6 +132,7 @@
     "url": "https://doi.org/10.7554/eLife.84881",
     "doi": "10.7554/eLife.84881",
     "type": "Journal article",
+    "firstAuthor": true,
     "featured": true,
     "homeOrder": 3,
     "topics": [
@@ -142,6 +186,7 @@
     "url": "https://doi.org/10.1371/journal.pcbi.1009969",
     "doi": "10.1371/journal.pcbi.1009969",
     "type": "Journal article",
+    "firstAuthor": true,
     "featured": true,
     "homeOrder": 4,
     "topics": [

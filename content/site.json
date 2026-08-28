@@ -2,18 +2,29 @@
   "site": {
     "name": "Sikao Guo, Ph.D.",
     "shortName": "Sikao Guo",
-    "title": "Computational Biophysicist & Scientific Software Engineer",
-    "description": "Sikao Guo develops reusable scientific software and computational methods for protein conformational sampling, biomolecular self-assembly, structural bioinformatics, and high-performance simulation.",
+    "title": "Computational Biophysicist | Research Scientist & Research Software Engineer",
+    "description": "Sikao Guo develops validated computational methods and reusable C++/Python software for protein conformational sampling, biomolecular self-assembly, structural bioinformatics, and high-performance simulation.",
     "email": "sikaoguo@gmail.com",
     "phone": "(443) 449-9912",
-    "location": "",
+    "location": "Bethesda, MD",
     "affiliation": "",
-    "availability": "",
+    "availability": "Open to U.S.-based Research Scientist and Research Software Engineer roles",
+    "workAuthorization": "No sponsorship required",
     "social": {
       "github": "https://github.com/sikaoguo22",
       "linkedin": "https://www.linkedin.com/in/sikaoguo/",
       "scholar": "https://scholar.google.com/citations?hl=en&user=SVybCcwAAAAJ",
       "orcid": "https://orcid.org/0000-0002-7680-8060"
+    }
+  },
+  "resumes": {
+    "scientist": {
+      "label": "Research Scientist resume",
+      "path": "/documents/Sikao_Guo_Research_Scientist_Resume.pdf"
+    },
+    "engineer": {
+      "label": "Research Software Engineer resume",
+      "path": "/documents/Sikao_Guo_Research_Software_Engineer_Resume.pdf"
     }
   },
   "navigation": [
@@ -30,38 +41,43 @@
       "href": "/cv/"
     }
   ],
-  "capabilities": [
+  "hiringSnapshot": [
     {
-      "number": "01",
-      "title": "Molecular modeling algorithms",
-      "description": "Inverse kinematics, ensemble sampling, stochastic reaction-diffusion, geometric constraints, and quantitative model validation."
+      "label": "Target roles",
+      "title": "Research Scientist · Research Software Engineer",
+      "description": "Mechanistic research and production-minded scientific computing in one profile."
     },
     {
-      "number": "02",
-      "title": "Scalable scientific systems",
-      "description": "C++ and Python infrastructure spanning MPI parallelization, reproducible workflows, structural data processing, and automated validation."
+      "label": "Core methods",
+      "title": "Molecular modeling · structural bioinformatics",
+      "description": "Protein conformational sampling, biomolecular self-assembly, reaction-diffusion, and quantitative validation."
     },
     {
-      "number": "03",
-      "title": "Scientist-facing software",
-      "description": "Command-line tools, desktop plugins, web interfaces, molecular visualization, and code-generation systems built for maintainability."
+      "label": "Engineering stack",
+      "title": "C++17 · Python · MPI · OpenMM",
+      "description": "Parallel algorithms, scientific pipelines, testing, CI/CD, packaging, visualization, and researcher-facing interfaces."
+    },
+    {
+      "label": "Location & work status",
+      "title": "No sponsorship required",
+      "description": "Open to U.S.-based roles."
     }
   ],
   "impactStats": [
     {
-      "value": "1 → 3",
-      "suffix": " targets",
-      "label": "One specification to VMD, PyMOL, and web across 9 SBL applications"
+      "value": "≈90×",
+      "suffix": " speedup",
+      "label": "MPI NERDSS on 96 CPUs"
     },
     {
-      "value": "40k+",
-      "suffix": " PDB structures",
-      "label": "Benchmarking reported for ioNERDSS"
+      "value": "44,000+",
+      "suffix": " structures",
+      "label": "ioNERDSS benchmarking across the PDB"
     },
     {
-      "value": "96",
-      "suffix": " MPI processes",
-      "label": "Parallel NERDSS scaling benchmark"
+      "value": "9 applications",
+      "suffix": " · 3 platforms",
+      "label": "One specification to VMD, PyMOL, and web"
     }
   ],
   "experience": [
@@ -91,9 +107,9 @@
       "period": "Jan. 2020 – Jun. 2025",
       "location": "Baltimore, MD",
       "highlights": [
-        "Parallelized the C++ NERDSS reaction-diffusion simulator using MPI domain decomposition, achieving near-linear strong scaling to 96 CPU cores for large-scale biomolecular self-assembly simulations.",
+        "Parallelized the C++ NERDSS reaction-diffusion simulator using MPI domain decomposition, achieving approximately 90x acceleration on 96 CPUs for a 20,000-particle benchmark while preserving serial kinetics and diffusion.",
         "Developed structure-resolved computational models of clathrin-mediated endocytosis and HIV-1 assembly, revealing mechanisms governing critical nucleus formation, adaptor stoichiometry, and Gag-Pol dimerization.",
-        "Developed ioNERDSS, a Python toolkit that automates conversion of PDB/mmCIF structures into simulation-ready coarse-grained reaction-diffusion models, reducing manual model preparation.",
+        "Developed ioNERDSS, a Python toolkit that automates conversion of PDB/mmCIF structures into simulation-ready coarse-grained reaction-diffusion models and was benchmarked across more than 44,000 PDB structures.",
         "Implemented computational-geometry methods for interface detection and reaction-network generation, and integrated machine-learned predictors for binding-affinity initialization."
       ],
       "technologies": [

@@ -11,6 +11,10 @@
     "status": "Open source",
     "category": "Research software",
     "featured": true,
+    "roleOrder": {
+      "scientist": 4,
+      "engineer": 1
+    },
     "visual": "/images/gui-codegen-1600.webp",
     "visualSmall": "/images/gui-codegen-800.webp",
     "visualAlt": "Diagram showing a Qt interface and CLI metadata transformed into JSON and then into VMD, PyMOL, and web applications.",
@@ -69,19 +73,23 @@
     ],
     "links": [
       {
-        "label": "View code",
-        "href": "https://github.com/Structural-Bioinformatics-Library/sbl/tree/master/Applications/AutoCLIP"
-      },
-      {
-        "label": "Read paper",
+        "kind": "Paper",
+        "label": "Framework preprint",
         "href": "https://arxiv.org/abs/2602.16047"
       },
       {
+        "kind": "Code",
+        "label": "AutoCLIP repository",
+        "href": "https://github.com/Structural-Bioinformatics-Library/sbl/tree/master/Applications/AutoCLIP"
+      },
+      {
+        "kind": "Documentation",
         "label": "Documentation",
         "href": "https://sbl.inria.fr/doc/AutoCLIP-user-manual.html"
       },
       {
-        "label": "Watch demos",
+        "kind": "Demo",
+        "label": "Video demos",
         "href": "https://www.youtube.com/@SBL-plugins"
       }
     ],
@@ -101,6 +109,10 @@
     "status": "Ongoing work",
     "category": "Molecular modeling",
     "featured": true,
+    "roleOrder": {
+      "scientist": 1,
+      "engineer": 3
+    },
     "visual": "/images/backbone-sampling-1600.webp",
     "visualSmall": "/images/backbone-sampling-800.webp",
     "visualAlt": "Sampled protein backbone conformations.",
@@ -169,12 +181,16 @@
     "shortTitle": "NERDSS + ioNERDSS infrastructure",
     "subtitle": "Structure processing, coarse-grained model construction, and MPI reaction-diffusion",
     "summary": "A connected software stack that transforms PDB or mmCIF structures into simulation-ready coarse-grained models and runs explicit particle-based reaction-diffusion and self-assembly at larger spatial and computational scales.",
-    "heroResult": "Built a structure-to-simulation workflow and scaled particle-based reaction–diffusion to 96 MPI processes.",
+    "heroResult": "Built a structure-to-simulation workflow and achieved approximately 90x acceleration for particle-based reaction–diffusion on 96 CPUs.",
     "roleSummary": "Co-developed ioNERDSS and led the MPI design, implementation, validation, and benchmarking for NERDSS.",
     "period": "2022 – 2025",
     "status": "Open source",
     "category": "Scientific infrastructure",
     "featured": true,
+    "roleOrder": {
+      "scientist": 3,
+      "engineer": 2
+    },
     "visual": "/images/nerdss-infrastructure-1600.webp",
     "visualSmall": "/images/nerdss-infrastructure-800.webp",
     "visualAlt": "Conceptual path from particle-based reaction–diffusion models to parallel NERDSS simulation.",
@@ -216,18 +232,18 @@
       "Validated parallel behavior across reversible reactions and higher-order self-assembly in both 2D and 3D."
     ],
     "outcomes": [
-      "Benchmarked structure-processing workflows across more than 40,000 PDB structures.",
-      "Achieved close-to-linear scaling to 96 CPUs for suitable simulation regimes while preserving reaction-diffusion accuracy.",
+      "Benchmarked structure-processing workflows across more than 44,000 PDB structures.",
+      "Achieved approximately 90x acceleration on 96 CPUs for a 20,000-particle benchmark while preserving reaction-diffusion accuracy.",
       "Connected model construction, simulation, and analysis in a workflow usable by both developers and domain scientists."
     ],
     "metrics": [
       {
-        "value": "40k+",
+        "value": "44,000+",
         "label": "PDB structures benchmarked"
       },
       {
-        "value": "96",
-        "label": "MPI processes benchmarked"
+        "value": "≈90×",
+        "label": "speedup on 96 CPUs"
       },
       {
         "value": "2D + 3D",
@@ -236,20 +252,34 @@
     ],
     "links": [
       {
-        "label": "ioNERDSS repository",
-        "href": "https://github.com/JohnsonBiophysicsLab/ionerdss"
-      },
-      {
-        "label": "NERDSS repository",
-        "href": "https://github.com/JohnsonBiophysicsLab/NERDSS"
-      },
-      {
+        "kind": "Paper",
         "label": "ioNERDSS preprint",
         "href": "https://www.biorxiv.org/content/10.64898/2026.01.27.702082v2"
       },
       {
+        "kind": "Paper",
         "label": "MPI paper",
         "href": "https://doi.org/10.1002/jcc.70132"
+      },
+      {
+        "kind": "Code",
+        "label": "ioNERDSS repository",
+        "href": "https://github.com/JohnsonBiophysicsLab/ionerdss"
+      },
+      {
+        "kind": "Code",
+        "label": "NERDSS-MPI repository",
+        "href": "https://github.com/JohnsonBiophysicsLab/NERDSS/tree/mpi"
+      },
+      {
+        "kind": "Documentation",
+        "label": "ioNERDSS documentation",
+        "href": "https://johnsonbiophysicslab.github.io/ionerdss/"
+      },
+      {
+        "kind": "Documentation",
+        "label": "NERDSS parallel developer guide",
+        "href": "https://github.com/JohnsonBiophysicsLab/NERDSS/blob/mpi/doc/NERDSS_Parallel_Developer_Guide.pdf"
       }
     ],
     "relatedPublications": [
@@ -269,6 +299,10 @@
     "status": "Published",
     "category": "Computational biophysics",
     "featured": true,
+    "roleOrder": {
+      "scientist": 2,
+      "engineer": 4
+    },
     "visual": "/images/assembly-modeling-1600.webp",
     "visualSmall": "/images/assembly-modeling-800.webp",
     "visualAlt": "Eight simulation snapshots showing membrane-associated assemblies growing as molecular concentration increases, above a stylized membrane.",
@@ -325,18 +359,22 @@
     ],
     "links": [
       {
+        "kind": "Paper",
         "label": "Clathrin assembly paper",
         "href": "https://doi.org/10.1371/journal.pcbi.1009969"
       },
       {
+        "kind": "Paper",
         "label": "HIV-1 lattice paper",
         "href": "https://doi.org/10.7554/eLife.84881"
       },
       {
+        "kind": "Paper",
         "label": "Dynamin nanocluster paper",
         "href": "https://doi.org/10.1038/s41467-024-47677-8"
       },
       {
+        "kind": "Paper",
         "label": "Gag kinetic-control paper",
         "href": "https://doi.org/10.1016/j.bpj.2023.06.021"
       }

@@ -4,15 +4,16 @@ A dependency-free static portfolio focused on computational biophysics, molecula
 
 ## Included
 
-- Responsive homepage with research positioning, capabilities, impact metrics, selected projects, publications, background, and contact CTA.
+- Responsive homepage with explicit target roles, a role-aware hiring snapshot, quantified impact, selected projects, publications, professional timeline, and contact CTAs.
 - Four detailed project case studies:
   - cross-platform scientific GUI generation;
   - inverse-kinematics protein backbone sampling;
   - NERDSS and ioNERDSS infrastructure;
   - mechanistic models of membrane-associated assembly.
 - Filterable publications page.
-- Web CV and downloadable one-page PDF résumé.
+- Web CV and separate downloadable Research Scientist and Research Software Engineer PDF résumés.
 - Light and dark themes, mobile navigation, accessible focus states, reduced-motion support, metadata, sitemap, and robots file.
+- Machine-readable Person, ScholarlyArticle, and SoftwareSourceCode JSON-LD.
 - GitHub Pages deployment workflow.
 
 ## Project structure
@@ -58,9 +59,12 @@ SITE_URL=https://example.com python3 scripts/build.py
 
 `SITE_URL` may include a repository path, such as `https://username.github.io/repository`.
 
-## Update the résumé PDF
+## Update the résumé PDFs
 
-Replace `resume/Sikao_Guo_PhD_resume.pdf`, then rebuild the site:
+Replace the two role-specific files, then rebuild the site:
+
+- `resume/Sikao_Guo_Research_Scientist_Resume.pdf`
+- `resume/Sikao_Guo_Research_Software_Engineer_Resume.pdf`
 
 ```bash
 python3 scripts/build.py
