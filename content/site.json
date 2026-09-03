@@ -2,7 +2,7 @@
   "site": {
     "name": "Sikao Guo, Ph.D.",
     "shortName": "Sikao Guo",
-    "title": "Computational Biophysicist | Research Scientist & Research Software Engineer",
+    "title": "Computational Biophysicist | Molecular Modeling & Scientific Computing",
     "description": "Sikao Guo develops validated computational methods and reusable C++/Python software for protein conformational sampling, biomolecular self-assembly, structural bioinformatics, and high-performance simulation.",
     "email": "sikaoguo@gmail.com",
     "phone": "(443) 449-9912",
@@ -17,50 +17,26 @@
       "orcid": "https://orcid.org/0000-0002-7680-8060"
     }
   },
-  "resumes": {
-    "scientist": {
-      "label": "Research Scientist resume",
-      "path": "/documents/Sikao_Guo_Research_Scientist_Resume.pdf"
-    },
-    "engineer": {
-      "label": "Research Software Engineer resume",
-      "path": "/documents/Sikao_Guo_Research_Software_Engineer_Resume.pdf"
-    }
-  },
   "navigation": [
     {
-      "label": "Projects",
+      "label": "Research",
       "href": "/projects/"
+    },
+    {
+      "label": "Software",
+      "href": "/projects/#research-software"
     },
     {
       "label": "Publications",
       "href": "/publications/"
     },
     {
+      "label": "About",
+      "href": "/about/"
+    },
+    {
       "label": "CV",
       "href": "/cv/"
-    }
-  ],
-  "hiringSnapshot": [
-    {
-      "label": "Target roles",
-      "title": "Research Scientist · Research Software Engineer",
-      "description": "Mechanistic research and production-minded scientific computing in one profile."
-    },
-    {
-      "label": "Core methods",
-      "title": "Molecular modeling · structural bioinformatics",
-      "description": "Protein conformational sampling, biomolecular self-assembly, reaction-diffusion, and quantitative validation."
-    },
-    {
-      "label": "Engineering stack",
-      "title": "C++17 · Python · MPI · OpenMM",
-      "description": "Parallel algorithms, scientific pipelines, testing, CI/CD, packaging, visualization, and researcher-facing interfaces."
-    },
-    {
-      "label": "Location & work status",
-      "title": "No sponsorship required",
-      "description": "Open to U.S.-based roles."
     }
   ],
   "impactStats": [

@@ -48,7 +48,7 @@
     "doi": "10.64898/2026.01.27.702082",
     "type": "Preprint",
     "featured": true,
-    "homeOrder": 5,
+    "homeOrder": 3,
     "cvFeatured": true,
     "cvOrder": 3,
     "topics": [
@@ -134,7 +134,7 @@
     "type": "Journal article",
     "firstAuthor": true,
     "featured": true,
-    "homeOrder": 3,
+    "homeOrder": 4,
     "topics": [
       "HIV-1",
       "Self-assembly",
@@ -188,7 +188,7 @@
     "type": "Journal article",
     "firstAuthor": true,
     "featured": true,
-    "homeOrder": 4,
+    "homeOrder": 5,
     "topics": [
       "Clathrin",
       "Membrane assembly",

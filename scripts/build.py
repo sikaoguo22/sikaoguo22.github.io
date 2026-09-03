@@ -28,9 +28,7 @@ projects: list[dict[str, Any]] = json.loads((CONTENT / "projects.json").read_tex
 publications: list[dict[str, Any]] = json.loads((CONTENT / "publications.json").read_text(encoding="utf-8"))
 site = site_data["site"]
 navigation = site_data["navigation"]
-hiring_snapshot = site_data["hiringSnapshot"]
 impact_stats = site_data["impactStats"]
-resumes = site_data["resumes"]
 experience = site_data["experience"]
 education = site_data["education"]
 skill_groups = site_data["skillGroups"]
@@ -51,7 +49,6 @@ def icon(name: str, size: int = 20) -> str:
     p = {
         "arrow": '<path d="M5 12h14M13 6l6 6-6 6" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"/>',
         "external": '<path d="M14 5h5v5M19 5l-8 8" stroke="currentColor" stroke-width="1.7" stroke-linecap="round"/><path d="M18 13v5a1 1 0 0 1-1 1H6a1 1 0 0 1-1-1V7a1 1 0 0 1 1-1h5" stroke="currentColor" stroke-width="1.7"/>',
-        "download": '<path d="M12 4v11M7.5 10.5 12 15l4.5-4.5M5 19h14" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"/>',
         "mail": '<rect x="3.5" y="5.5" width="17" height="13" rx="2" stroke="currentColor" stroke-width="1.7"/><path d="m5 7 7 5.2L19 7" stroke="currentColor" stroke-width="1.7" stroke-linecap="round"/>',
         "sun": '<circle cx="12" cy="12" r="3.5" stroke="currentColor" stroke-width="1.6"/><path d="M12 2.5v2M12 19.5v2M2.5 12h2M19.5 12h2M5.3 5.3l1.4 1.4M17.3 17.3l1.4 1.4M18.7 5.3l-1.4 1.4M6.7 17.3l-1.4 1.4" stroke="currentColor" stroke-width="1.6" stroke-linecap="round"/>',
         "moon": '<path d="M20 15.3A8.3 8.3 0 0 1 8.7 4a8.3 8.3 0 1 0 11.3 11.3Z" stroke="currentColor" stroke-width="1.7"/>',
@@ -85,6 +82,14 @@ def project_image(
         f'sizes="{e(sizes)}" alt="{e(project["visualAlt"])}" width="1600" height="1000" '
         f'loading="{loading}" decoding="async"{priority}>'
     )
+
+
+def work_label(project: dict[str, Any]) -> str:
+    if project["slug"] == "cross-platform-gui-generation":
+        return "Software"
+    if project["slug"] == "nerdss-ionerdss-infrastructure":
+        return "Research infrastructure"
+    return "Research"
 
 
 def proof_links(items: list[dict[str, str]], class_name: str, limit: int | None = None) -> str:
@@ -140,7 +145,13 @@ def project_card(project: dict[str, Any], depth: int, index: int) -> str:
         sizes="(max-width: 840px) calc(100vw - 34px), 560px",
     )
     resources = proof_links(project["links"], "project-card-links", 3)
-    return f'''<article class="project-card reveal" style="--delay:{index*80}ms" data-project-card data-scientist-order="{project['roleOrder']['scientist']}" data-engineer-order="{project['roleOrder']['engineer']}"><a class="project-card-visual" href="{href}">{image}<span class="status-chip status-{status_cls}">{e(project['status'])}</span></a><div class="project-card-content"><div class="project-card-meta"><span>{e(project['category'])}</span><span>{e(project['period'])}</span></div><h3><a href="{href}">{e(project['shortTitle'])}</a></h3>{resources}<p>{e(project['summary'])}</p><p class="project-card-role"><strong>My role</strong>{e(project['roleSummary'])}</p>{tags(project['tags'][:4],True)}<a class="text-link" href="{href}">Read case study {icon('arrow',18)}</a></div></article>'''
+    signal = {
+        "inverse-kinematics-backbone-sampling": "Algorithms · C++ · structural validation",
+        "nerdss-ionerdss-infrastructure": "Structure → simulation → scalable HPC",
+        "mechanistic-assembly-models": "Clathrin · HIV Gag · dynamin",
+        "cross-platform-gui-generation": "Interfaces · code generation · scientific software",
+    }[project["slug"]]
+    return f'''<article class="project-card reveal" style="--delay:{index*80}ms"><a class="project-card-visual" href="{href}">{image}<span class="status-chip status-{status_cls}">{e(project['status'])}</span></a><div class="project-card-content"><div class="project-card-meta"><span class="work-label">{e(work_label(project))}</span><span>{e(project['period'])}</span></div><h3><a href="{href}">{e(project['shortTitle'])}</a></h3><p class="project-signal">{e(signal)}</p><p>{e(project['summary'])}</p><p class="project-card-role"><strong>Contribution</strong>{e(project['roleSummary'])}</p>{resources}{tags(project['tags'][:4],True)}<a class="text-link" href="{href}">Read case study {icon('arrow',18)}</a></div></article>'''
 
 
 def section_header(eyebrow: str, title: str, description: str) -> str:
@@ -263,93 +274,32 @@ def layout(
 
 
 def home() -> str:
-    ordered_projects = sorted(projects, key=lambda p: p["roleOrder"]["scientist"])
-    project_cards = [project_card(p,0,i) for i,p in enumerate(ordered_projects)]
-    featured_projects = "".join(project_cards[:3])
-    more_work = project_cards[3]
+    project_order = [
+        "inverse-kinematics-backbone-sampling",
+        "nerdss-ionerdss-infrastructure",
+        "mechanistic-assembly-models",
+        "cross-platform-gui-generation",
+    ]
+    by_slug = {p["slug"]: p for p in projects}
+    selected_work = "".join(project_card(by_slug[slug], 0, i) for i, slug in enumerate(project_order))
     home_publications = sorted((p for p in publications if p.get("homeOrder")), key=lambda p: p["homeOrder"])
     pubs = "".join(publication_item(p) for p in home_publications)
-    snapshot = "".join(f'<article class="snapshot-card reveal" style="--delay:{i*70}ms"><p>{e(x["label"])}</p><h3>{e(x["title"])}</h3><span>{e(x["description"])}</span></article>' for i,x in enumerate(hiring_snapshot))
     stats = "".join(f'<div class="impact-item"><div class="impact-value">{e(x["value"])}<span>{e(x["suffix"])}</span></div><p class="impact-label">{e(x["label"])}</p></div>' for x in impact_stats)
-    by_slug = {p["slug"]: p for p in projects}
-    evidence_specs = [
-        ("inverse-kinematics-backbone-sampling", "Protein conformations", "hero-evidence-main"),
-        ("cross-platform-gui-generation", "Scientific interfaces", ""),
-        ("mechanistic-assembly-models", "Mechanistic assembly", ""),
-    ]
-    evidence_cards = []
-    for index, (slug, label, class_name) in enumerate(evidence_specs):
-        project = by_slug[slug]
-        image = project_image(
-            project,
-            0,
-            loading="eager",
-            sizes="(max-width: 1050px) calc(100vw - 34px), 520px" if class_name else "(max-width: 1050px) calc((100vw - 46px) / 2), 250px",
-            fetch_priority=index == 0,
-        )
-        evidence_cards.append(f'<a class="hero-evidence-card {class_name}" href="{rel(0, f"projects/{slug}/")}">{image}<span class="hero-evidence-label"><small>0{index + 1}</small>{e(label)}</span></a>')
-    scientist_resume = resumes["scientist"]
-    engineer_resume = resumes["engineer"]
-    role_script = f'''<script>
-(() => {{
-  const roles = {{
-    scientist: {{
-      label: 'Research Scientist',
-      context: 'Mechanistic modeling, method development, and scientific validation appear first.',
-      resumeLabel: '{e(scientist_resume["label"])}',
-      resumePath: '{rel(0, scientist_resume["path"])}'
-    }},
-    engineer: {{
-      label: 'Research Software Engineer',
-      context: 'Software architecture, HPC, testing, and researcher-facing systems appear first.',
-      resumeLabel: '{e(engineer_resume["label"])}',
-      resumePath: '{rel(0, engineer_resume["path"])}'
-    }}
-  }};
-  const buttons = [...document.querySelectorAll('[data-career-role]')];
-  const cards = [...document.querySelectorAll('[data-project-card]')];
-  const featured = document.querySelector('[data-featured-projects]');
-  const more = document.querySelector('[data-more-work]');
-  const context = document.querySelector('[data-role-context]');
-  const resume = document.querySelector('[data-role-resume]');
-  const roleLabel = document.querySelector('[data-role-label]');
-
-  const setRole = role => {{
-    const selected = roles[role] ? role : 'scientist';
-    const config = roles[selected];
-    document.documentElement.dataset.careerRole = selected;
-    buttons.forEach(button => {{
-      const active = button.dataset.careerRole === selected;
-      button.classList.toggle('active', active);
-      button.setAttribute('aria-pressed', String(active));
-    }});
-    context.textContent = config.context;
-    roleLabel.textContent = config.label;
-    resume.href = config.resumePath;
-    resume.querySelector('[data-role-resume-label]').textContent = config.resumeLabel;
-    const orderKey = `${{selected}}Order`;
-    const ordered = cards.sort((a, b) => Number(a.dataset[orderKey]) - Number(b.dataset[orderKey]));
-    ordered.forEach(card => card.classList.remove('project-card-secondary'));
-    featured.replaceChildren(...ordered.slice(0, 3));
-    const secondary = ordered[3];
-    secondary.classList.add('project-card-secondary');
-    more.replaceChildren(secondary);
-    try {{ localStorage.setItem('careerRole', selected); }} catch {{}}
-  }};
-
-  buttons.forEach(button => button.addEventListener('click', () => setRole(button.dataset.careerRole)));
-  let initialRole = 'scientist';
-  try {{ initialRole = localStorage.getItem('careerRole') || initialRole; }} catch {{}}
-  setRole(initialRole);
-}})();
-</script>'''
-    body = f'''<section class="home-hero"><div class="container-wide hero-grid"><div class="hero-copy reveal is-visible"><p class="hero-kicker">Computational biophysics × scientific computing</p><h1>I build validated molecular-modeling methods and the software that makes them <span class="hero-accent">usable at scale.</span></h1><p class="hero-lead">Research scientist and software engineer working across protein conformational sampling, biomolecular self-assembly, structural bioinformatics, and high-performance simulation.</p><div class="hero-actions"><a class="button button-primary" href="#selected-work">View case studies {icon('arrow')}</a><a class="button button-secondary" href="{rel(0, scientist_resume['path'])}" download>{e(scientist_resume['label'])} {icon('download',18)}</a><a class="button button-secondary" href="{rel(0, engineer_resume['path'])}" download>{e(engineer_resume['label'])} {icon('download',18)}</a></div><div class="hero-trust"><span>{e(site['availability'])}</span><span>{e(site['workAuthorization'])}</span></div></div><div class="hero-evidence" role="group" aria-label="Selected project evidence">{''.join(evidence_cards)}</div></div></section>
-<section class="section section-muted hiring-section"><div class="container-wide"><div class="hiring-heading"><div>{section_header('Hiring snapshot','Two role paths. One scientific-computing profile.','Choose the lens most relevant to your team; the evidence is the same, while project priority and the recommended resume adapt.')}</div><div class="role-panel"><div class="role-toggle" role="group" aria-label="Choose a hiring perspective"><button class="role-button active" type="button" data-career-role="scientist" aria-pressed="true">View as Research Scientist</button><button class="role-button" type="button" data-career-role="engineer" aria-pressed="false">View as Research Software Engineer</button></div><p class="role-context" data-role-context aria-live="polite">Mechanistic modeling, method development, and scientific validation appear first.</p><a class="role-resume-link" href="{rel(0, scientist_resume['path'])}" download data-role-resume><span>Best-fit download</span><strong data-role-resume-label>{e(scientist_resume['label'])}</strong>{icon('download',18)}</a></div></div><div class="snapshot-grid">{snapshot}</div></div></section>
-<section class="section section-dark grid-noise"><div class="container"><div class="impact-strip reveal">{stats}</div></div></section>
-<section class="section" id="selected-work"><div class="container-wide">{section_header('Selected work','Research methods developed as reusable infrastructure.','The three strongest case studies for the selected role appear first. Change the hiring perspective above without changing the underlying evidence.')}<p class="selected-role-label">Priority for <strong data-role-label>Research Scientist</strong></p><div class="projects-grid featured-projects" data-featured-projects>{featured_projects}</div><div class="more-work"><p class="eyebrow">More work</p><div class="more-work-grid" data-more-work>{more_work}</div></div><div class="projects-footer"><a class="button button-secondary" href="projects/">Explore all case studies {icon('arrow')}</a></div></div></section>
-<section class="section section-muted"><div class="container">{section_header('Selected publications','Mechanistic modeling, molecular structure and dynamics, and scientific computing.','A focused selection of work in protein assembly, structural workflows, high-performance simulation, and research software.')}<div class="publication-list reveal">{pubs}</div><div class="projects-footer"><a class="button button-secondary" href="publications/">View publication list {icon('arrow')}</a></div></div></section>
-<section class="section"><div class="container about-grid"><div class="about-statement"><p class="eyebrow">Collaboration</p><h2>Physics training, biological questions, engineering execution.</h2><p>I work with experimental scientists, modelers, and software teams to turn research questions into testable methods—and those methods into maintainable systems others can validate, scale, and reuse.</p></div><div class="about-details"><div class="about-block reveal"><div class="about-block-label">2025–now</div><div><h3>Research Engineer · Inria</h3><p>Developing inverse-kinematics protein-backbone samplers and a cross-platform framework for automatically generating VMD, PyMOL, and web applications.</p></div></div><div class="about-block reveal"><div class="about-block-label">2020–2025</div><div><h3>Johns Hopkins University · Biophysics</h3><p>Built NERDSS and ioNERDSS infrastructure and led computational studies of clathrin, retroviral Gag, and membrane-associated assembly.</p></div></div><div class="about-block reveal"><div class="about-block-label">Ph.D.</div><div><h3>Institute of Physics, Chinese Academy of Sciences</h3><p>Developed quantitative models connecting molecular conformational changes and chemical transitions to the emergent mechanics of kinesin motors.</p></div></div></div></div></section>
-<section class="section-compact"><div class="container-wide"><div class="contact-panel reveal"><div class="contact-panel-copy"><p class="eyebrow">Contact</p><h2>Building a molecular-modeling method or scientific platform?</h2><p>I am open to U.S.-based Research Scientist and Research Software Engineer roles. No sponsorship required.</p></div><div class="contact-actions"><a class="button button-primary" href="mailto:{e(site['email'])}">Email me {icon('mail')}</a><a class="button button-secondary" href="{rel(0, scientist_resume['path'])}" download>Scientist resume {icon('download',18)}</a><a class="button button-secondary" href="{rel(0, engineer_resume['path'])}" download>Engineer resume {icon('download',18)}</a></div></div></div></section>'''
+    hero_project = by_slug["inverse-kinematics-backbone-sampling"]
+    hero_image = project_image(
+        hero_project,
+        0,
+        loading="eager",
+        sizes="(max-width: 1050px) calc(100vw - 34px), 680px",
+        fetch_priority=True,
+    )
+    body = f'''<section class="home-hero"><div class="container-wide hero-grid"><div class="hero-copy reveal is-visible"><p class="hero-kicker">Computational biophysics × scientific computing</p><h1>I develop computational methods and reusable software for understanding <span class="hero-accent">biomolecular systems across scales.</span></h1><p class="hero-lead">Computational biophysicist developing methods for protein conformational sampling, biomolecular self-assembly, structural bioinformatics, and scalable simulation.</p><p class="hero-topics">Protein sampling <span>·</span> Molecular simulation <span>·</span> HPC <span>·</span> Scientific software</p><div class="hero-actions"><a class="button button-primary" href="#research-vision">Explore research {icon('arrow')}</a><a class="button button-secondary" href="{e(site['social']['github'])}" target="_blank" rel="noreferrer">GitHub {icon('external',18)}</a><a class="button button-secondary" href="{rel(0, '/cv/')}">CV {icon('arrow',18)}</a></div><p class="hero-availability">U.S. Permanent Resident · Open to Research Scientist / Research Engineer opportunities</p></div><a class="hero-science" href="{rel(0, 'projects/inverse-kinematics-backbone-sampling/')}" aria-label="Explore protein backbone sampling research">{hero_image}<span class="hero-science-index">01 / Current research</span><span class="hero-science-caption"><strong>Protein conformational sampling</strong><small>Inverse kinematics · SE(3) · all-atom validation</small></span></a></div></section>
+<section class="section section-muted research-vision" id="research-vision"><div class="container-wide"><div class="vision-intro"><p class="eyebrow">Research vision</p><h2>How can we explore biomolecular conformational space efficiently, scalably, and reproducibly?</h2><p>My long-term goal is to develop fast algorithms and reusable computational infrastructure that connect molecular geometry, statistical mechanics, structural data, and scalable simulation.</p></div><div class="capability-grid"><article class="capability-card reveal" style="--delay:0ms"><span class="capability-number">01</span><h3>Efficient conformational sampling</h3><p>Explore flexible proteins, loops, and disordered regions without relying exclusively on long-timescale molecular dynamics.</p><small>Inverse kinematics · SE(3) · geometric sampling · OpenMM</small></article><article class="capability-card reveal" style="--delay:70ms"><span class="capability-number">02</span><h3>Multiscale molecular modeling</h3><p>Connect atomic structure, conformational ensembles, intermolecular interactions, and emergent mesoscale assembly.</p><small>Reaction–diffusion · stochastic simulation · self-assembly</small></article><article class="capability-card reveal" style="--delay:140ms"><span class="capability-number">03</span><h3>Research infrastructure</h3><p>Turn new algorithms into validated, scalable, reusable systems rather than one-off research code.</p><small>C++ · Python · MPI · reproducible workflows</small></article></div></div></section>
+<section class="section" id="selected-work"><div class="container-wide">{section_header('Selected work','One research direction, developed across methods, models, and software.','Four case studies trace the path from scientific question to validated algorithm, scalable simulation, and reusable infrastructure.')}<div class="projects-grid featured-projects">{selected_work}</div><div class="projects-footer"><a class="button button-secondary" href="projects/">Explore research and software {icon('arrow')}</a></div></div></section>
+<section class="section section-dark grid-noise impact-section"><div class="container"><div class="impact-heading"><p class="eyebrow">Measured impact</p><h2>Results that hold up beyond the prototype.</h2></div><div class="impact-strip reveal">{stats}</div></div></section>
+<section class="section section-muted"><div class="container">{section_header('Selected publications','Evidence across molecular modeling and scientific computing.','Selected work is ordered by research relevance; the full publication page remains chronologically filterable.')}<div class="publication-list reveal">{pubs}</div><div class="projects-footer"><a class="button button-secondary" href="publications/">View all publications {icon('arrow')}</a></div></div></section>
+<section class="section"><div class="container about-grid"><div class="about-statement"><p class="eyebrow">About</p><h2>Physics → computational biophysics → scientific computing.</h2><p>I develop quantitative models of molecular systems, then build the algorithms and software required to test, scale, and share them.</p><a class="text-link about-link" href="about/">Read the full biography {icon('arrow',18)}</a></div><div class="about-details"><div class="about-block reveal"><div class="about-block-label">Now</div><div><h3>Research Engineer · Inria</h3><p>Protein conformational sampling and reusable cross-platform scientific interfaces.</p></div></div><div class="about-block reveal"><div class="about-block-label">2020–25</div><div><h3>Johns Hopkins University</h3><p>Biomolecular self-assembly, NERDSS-MPI, and structure-to-simulation workflows.</p></div></div><div class="about-block reveal"><div class="about-block-label">Foundation</div><div><h3>Ph.D. in Physics</h3><p>Quantitative molecular models connecting microscopic transitions to emergent motion.</p></div></div></div></div></section>
+<section class="section-compact"><div class="container-wide"><div class="contact-panel reveal"><div class="contact-panel-copy"><p class="eyebrow">Collaborate</p><h2>Interested in computational molecular science?</h2><p>I am interested in collaborations and research opportunities involving molecular modeling, conformational sampling, scientific computing, and reusable research infrastructure.</p></div><div class="contact-actions"><a class="button button-primary" href="mailto:{e(site['email'])}">Email me {icon('mail')}</a><a class="button button-secondary" href="{rel(0, '/cv/')}">View CV {icon('arrow',18)}</a></div></div></div></section>'''
     profile_schema = {
         "@context": "https://schema.org",
         "@type": "ProfilePage",
@@ -365,12 +315,11 @@ def home() -> str:
             "sameAs": list(site["social"].values()),
         },
     }
-    return layout("",site["description"],body,0,structured_data=profile_schema,extra_script=role_script)
+    return layout("Computational Biophysics & Scientific Computing",site["description"],body,0,structured_data=profile_schema)
 
 
 def projects_index() -> str:
-    items=[]
-    for i,p in enumerate(projects):
+    def index_item(p: dict[str, Any], i: int) -> str:
         status=p["status"].lower().replace(" ","-")
         image = project_image(
             p,
@@ -380,9 +329,33 @@ def projects_index() -> str:
             fetch_priority=i == 0,
         )
         resources = proof_links(p["links"], "project-card-links", 4)
-        items.append(f'''<article class="project-index-item reveal" style="--delay:{i*70}ms"><a class="project-index-visual" href="{p['slug']}/">{image}<span class="status-chip status-{status}">{e(p['status'])}</span></a><div class="project-index-copy"><div class="project-index-meta"><span>{e(p['category'])}</span><span>{e(p['period'])}</span></div><h2><a href="{p['slug']}/">{e(p['title'])}</a></h2>{resources}<p>{e(p['summary'])}</p><p class="project-index-role"><strong>My role</strong>{e(p['roleSummary'])}</p>{tags(p['tags'][:6],True)}<a class="text-link" href="{p['slug']}/">Read case study {icon('arrow',18)}</a></div></article>''')
-    body=f'''<section class="page-hero"><div class="container page-hero-inner"><p class="eyebrow">Projects</p><h1>Scientific questions translated into algorithms and software.</h1><p class="page-hero-lead">These case studies show the complete path from problem definition and method design to implementation, validation, and reusable research infrastructure.</p></div></section><section class="section"><div class="container project-index-grid">{''.join(items)}</div></section>'''
-    return layout("Projects","Case studies in protein conformational sampling, scientific GUI generation, reaction-diffusion infrastructure, and mechanistic biomolecular modeling.",body,1,"projects","projects/")
+        return f'''<article class="project-index-item reveal" style="--delay:{i*70}ms"><a class="project-index-visual" href="{p['slug']}/">{image}<span class="status-chip status-{status}">{e(p['status'])}</span></a><div class="project-index-copy"><div class="project-index-meta"><span class="work-label">{e(work_label(p))}</span><span>{e(p['period'])}</span></div><h2><a href="{p['slug']}/">{e(p['title'])}</a></h2>{resources}<p>{e(p['summary'])}</p><p class="project-index-role"><strong>Contribution</strong>{e(p['roleSummary'])}</p>{tags(p['tags'][:6],True)}<a class="text-link" href="{p['slug']}/">Read case study {icon('arrow',18)}</a></div></article>'''
+
+    by_slug = {p["slug"]: p for p in projects}
+    groups = [
+        ("Current research", "Conformational sampling", "Algorithms for flexible protein structures, loops, and intrinsically disordered regions.", "inverse-kinematics-backbone-sampling", "current-research"),
+        ("Biomolecular organization", "Assembly across scales", "Structure-resolved models of clathrin, retroviral Gag, dynamin, and membrane-associated assembly.", "mechanistic-assembly-models", "biomolecular-assembly"),
+        ("Computational methods & infrastructure", "Structure to scalable simulation", "Automated coarse-graining and particle-based reaction–diffusion across serial and MPI workflows.", "nerdss-ionerdss-infrastructure", "research-infrastructure"),
+        ("Research software", "Methods made usable", "Specification-driven interfaces that expose scientific applications across VMD, PyMOL, and the web.", "cross-platform-gui-generation", "research-software"),
+    ]
+    sections = []
+    for i, (eyebrow, title, description, slug, section_id) in enumerate(groups):
+        sections.append(f'''<section class="research-group" id="{section_id}"><div class="research-group-heading"><p class="eyebrow">{e(eyebrow)}</p><h2>{e(title)}</h2><p>{e(description)}</p></div><div class="project-index-grid">{index_item(by_slug[slug], i)}</div></section>''')
+    body=f'''<section class="page-hero research-page-hero"><div class="container page-hero-inner"><p class="eyebrow">Research</p><h1>Exploring molecular systems from conformation to assembly.</h1><p class="page-hero-lead">The work connects geometric sampling, multiscale simulation, structural data, and reusable software. Each case study follows the path from research problem to method, contribution, and validated outcome.</p><nav class="page-jump-links" aria-label="Research areas"><a href="#current-research">Sampling</a><a href="#biomolecular-assembly">Assembly</a><a href="#research-infrastructure">Infrastructure</a><a href="#research-software">Software</a></nav></div></section><section class="section"><div class="container-wide research-groups">{''.join(sections)}</div></section>'''
+    return layout("Research","Research in protein conformational sampling, reaction-diffusion, biomolecular self-assembly, and reusable scientific infrastructure.",body,1,"research","projects/")
+
+
+def about_page() -> str:
+    social = site["social"]
+    profile_links = [
+        ("Google Scholar", social["scholar"], "Publications and citations"),
+        ("GitHub", social["github"], "Open-source research software"),
+        ("LinkedIn", social["linkedin"], "Professional profile"),
+        ("ORCID", social["orcid"], "Researcher identifier"),
+    ]
+    profiles = "".join(f'<a class="profile-link-card" href="{e(href)}" target="_blank" rel="noreferrer"><span><strong>{e(label)}</strong><small>{e(description)}</small></span>{icon("external",18)}</a>' for label, href, description in profile_links)
+    body = f'''<section class="page-hero about-page-hero"><div class="container page-hero-inner"><p class="eyebrow">About</p><h1>Physics-trained. Biology-driven. Built for computation.</h1><p class="page-hero-lead">I am a computational biophysicist and research engineer developing algorithms and reusable software for molecular modeling, structural bioinformatics, and scalable simulation.</p></div></section><section class="section"><div class="container about-page-grid"><div class="about-page-copy"><p class="eyebrow">Biography</p><h2>From molecular mechanisms to methods other researchers can use.</h2><p>My work begins with a scientific question: how molecular structure, motion, and interaction produce larger-scale biological behavior. I translate those questions into geometric algorithms, stochastic models, and computational experiments, then build the software needed to validate and reuse the resulting methods.</p><p>At Inria, I develop inverse-kinematics methods for protein-backbone conformational sampling and a framework for generating consistent scientific interfaces across molecular-visualization platforms. Previously at Johns Hopkins University, I developed mechanistic models of biomolecular self-assembly, co-developed ioNERDSS, and led the MPI parallelization of the NERDSS reaction–diffusion simulator.</p><p>My long-term research direction is to make biomolecular conformational exploration faster, more scalable, and more accessible by connecting geometric sampling, statistical mechanics, molecular simulation, structural data, and high-performance computing.</p></div><aside class="about-focus-card"><p class="eyebrow">Current interests</p><ul><li>Protein conformational sampling</li><li>Biomolecular self-assembly</li><li>Multiscale molecular modeling</li><li>Scientific computing and HPC</li><li>Reusable research infrastructure</li></ul><a class="button button-primary" href="mailto:{e(site['email'])}">Start a conversation {icon('mail',18)}</a></aside></div></section><section class="section section-muted"><div class="container"><div class="trajectory-heading"><p class="eyebrow">Trajectory</p><h2>A continuous path through scales.</h2></div><div class="trajectory"><article><span>01</span><p>Physics</p><h3>Molecular motors</h3><small>Quantitative models linking chemical transitions, conformational change, and motion.</small></article><article><span>02</span><p>Computational biophysics</p><h3>Self-assembly</h3><small>Mechanistic studies of clathrin, HIV Gag, dynamin, and membrane geometry.</small></article><article><span>03</span><p>Scientific computing</p><h3>Scalable simulation</h3><small>MPI reaction–diffusion and automated structure-to-model workflows.</small></article><article><span>04</span><p>Current direction</p><h3>Conformational space</h3><small>Geometric sampling, all-atom validation, and reusable molecular-modeling tools.</small></article></div></div></section><section class="section"><div class="container about-connections"><div>{section_header('Connect','Research profiles and source code.','Publications, open-source implementations, and professional background are available through the profiles below.')}</div><div class="profile-link-grid">{profiles}</div></div></section><section class="section-compact"><div class="container-wide"><div class="contact-panel reveal"><div class="contact-panel-copy"><p class="eyebrow">Collaborate</p><h2>Interested in computational molecular science?</h2><p>I welcome conversations about research collaborations and opportunities involving molecular modeling, scientific computing, and reusable research software.</p></div><div class="contact-actions"><a class="button button-primary" href="mailto:{e(site['email'])}">Email me {icon('mail')}</a><a class="button button-secondary" href="../cv/">View CV {icon('arrow',18)}</a></div></div></div></section>'''
+    return layout("About","Biography, research interests, and professional trajectory of computational biophysicist Sikao Guo.",body,1,"about","about/")
 
 
 def project_page(p: dict[str,Any], index: int) -> str:
@@ -410,7 +383,7 @@ def project_page(p: dict[str,Any], index: int) -> str:
         sizes="(max-width: 1050px) calc(100vw - 48px), 620px",
         fetch_priority=True,
     )
-    body=f'''<section class="project-hero"><div class="container-wide"><a class="project-breadcrumb" href="../">{icon('arrow',16)} All projects</a><div class="project-hero-grid"><div class="project-hero-copy"><p class="eyebrow">{e(p['category'])}</p><h1>{e(p['title'])}</h1><p class="project-subtitle">{e(p['subtitle'])}</p><p class="project-hero-result"><strong>Outcome</strong>{e(p['heroResult'])}</p><div class="project-role-summary"><span>My role</span><p>{e(p['roleSummary'])}</p></div><div class="project-hero-meta"><span>{e(p['status'])}</span><span>{e(p['period'])}</span></div>{tags(p['tags'])}{hero_links}</div><div class="project-hero-visual reveal is-visible">{hero_image}</div></div></div></section><div class="project-summary-strip"><div class="container-wide project-summary-inner">{metric}</div></div><section class="section"><div class="container case-study-grid"><aside class="case-study-nav"><p>On this page</p><a href="#context">Context</a><a href="#approach">Approach</a><a href="#contribution">My contribution</a><a href="#outcomes">Outcomes</a>{resource_nav}{pub_nav}</aside><div class="case-study-content"><section class="case-section" id="context"><p class="eyebrow">Context</p><h2>The problem</h2><div class="case-section-text">{''.join(f'<p>{e(x)}</p>' for x in p['context'])}</div></section><section class="case-section" id="approach"><p class="eyebrow">Method</p><h2>How the system works</h2><div class="process-grid">{steps}</div></section><section class="case-section" id="contribution"><p class="eyebrow">Role</p><h2>My contribution</h2><ul class="detail-list">{contributions}</ul></section><section class="case-section" id="outcomes"><p class="eyebrow">Result</p><h2>Outcomes and scientific value</h2><div class="outcome-grid">{outcomes}</div>{note}</section>{resources}{related_html}</div></div></section><section class="section-compact"><div class="container"><a class="next-project" href="../{e(nxt['slug'])}/"><div><p>Next case study</p><h2>{e(nxt['title'])}</h2></div>{icon('arrow',34)}</a></div></section>'''
+    body=f'''<section class="project-hero"><div class="container-wide"><a class="project-breadcrumb" href="../">{icon('arrow',16)} Research overview</a><div class="project-hero-grid"><div class="project-hero-copy"><p class="eyebrow">{e(work_label(p))}</p><h1>{e(p['title'])}</h1><p class="project-subtitle">{e(p['subtitle'])}</p><p class="project-hero-result"><strong>Outcome</strong>{e(p['heroResult'])}</p><div class="project-role-summary"><span>My role</span><p>{e(p['roleSummary'])}</p></div><div class="project-hero-meta"><span>{e(p['status'])}</span><span>{e(p['period'])}</span></div>{tags(p['tags'])}{hero_links}</div><div class="project-hero-visual reveal is-visible">{hero_image}</div></div></div></section><div class="project-summary-strip"><div class="container-wide project-summary-inner">{metric}</div></div><section class="section"><div class="container case-study-grid"><aside class="case-study-nav"><p>On this page</p><a href="#context">Context</a><a href="#approach">Approach</a><a href="#contribution">My contribution</a><a href="#outcomes">Outcomes</a>{resource_nav}{pub_nav}</aside><div class="case-study-content"><section class="case-section" id="context"><p class="eyebrow">Context</p><h2>The problem</h2><div class="case-section-text">{''.join(f'<p>{e(x)}</p>' for x in p['context'])}</div></section><section class="case-section" id="approach"><p class="eyebrow">Method</p><h2>How the system works</h2><div class="process-grid">{steps}</div></section><section class="case-section" id="contribution"><p class="eyebrow">Role</p><h2>My contribution</h2><ul class="detail-list">{contributions}</ul></section><section class="case-section" id="outcomes"><p class="eyebrow">Result</p><h2>Outcomes and scientific value</h2><div class="outcome-grid">{outcomes}</div>{note}</section>{resources}{related_html}</div></div></section><section class="section-compact"><div class="container"><a class="next-project" href="../{e(nxt['slug'])}/"><div><p>Next case study</p><h2>{e(nxt['title'])}</h2></div>{icon('arrow',34)}</a></div></section>'''
     schema_entities: list[dict[str, Any]] = []
     code_repositories = [x["href"] for x in p["links"] if x["kind"] == "Code"]
     if code_repositories:
@@ -426,7 +399,8 @@ def project_page(p: dict[str,Any], index: int) -> str:
         })
     schema_entities.extend(scholarly_article_schema(x) for x in related)
     project_schema = {"@context": "https://schema.org", "@graph": schema_entities} if schema_entities else None
-    return layout(p["shortTitle"],p["summary"],body,2,"projects",f"projects/{p['slug']}/",structured_data=project_schema)
+    active = "software" if p["slug"] == "cross-platform-gui-generation" else "research"
+    return layout(p["shortTitle"],p["summary"],body,2,active,f"projects/{p['slug']}/",structured_data=project_schema)
 
 
 def publications_page() -> str:
@@ -478,7 +452,7 @@ def cv_page() -> str:
         software_parts.append(f'<article class="cv-software-item"><div><h3>{e(x["name"])}</h3><p>{e(x["description"])}</p></div><div class="cv-software-links">{links}</div></article>')
     software="".join(software_parts)
     phone_href="".join(c for c in site["phone"] if c.isdigit() or c == "+")
-    body=f'''<section class="page-hero"><div class="container page-hero-inner"><p class="eyebrow">Curriculum vitae</p><h1>Computational biology and molecular simulation.</h1><p class="page-hero-lead">Research scientist and software engineer developing validated C++ and Python methods across molecular modeling, structural bioinformatics, and high-performance simulation.</p><div class="cv-actions"><a class="button button-primary" href="../documents/{e(Path(resumes['scientist']['path']).name)}" download>Research Scientist resume {icon('download')}</a><a class="button button-secondary" href="../documents/{e(Path(resumes['engineer']['path']).name)}" download>Research Software Engineer resume {icon('download')}</a><a class="button button-secondary" href="mailto:{e(site['email'])}">Contact {icon('mail')}</a></div></div></section><section class="section"><div class="container cv-layout"><aside class="cv-sidebar"><div class="cv-profile"><p class="eyebrow">Profile</p><h2>{e(site['name'])}</h2><p>Research scientist and software engineer building validated methods and reusable scientific infrastructure for computational biology, molecular simulation, and high-performance computing.</p><div class="cv-contact-list"><a href="mailto:{e(site['email'])}">{e(site['email'])}</a><a href="tel:{e(phone_href)}">{e(site['phone'])}</a><span>{e(site['workAuthorization'])}</span><a href="{e(site['social']['linkedin'])}" target="_blank">LinkedIn · sikaoguo</a><a href="{e(site['social']['github'])}" target="_blank">GitHub · sikaoguo22</a><a href="{e(site['social']['orcid'])}" target="_blank">ORCID · 0000-0002-7680-8060</a></div></div></aside><div class="cv-main"><section class="cv-section"><p class="eyebrow">Experience</p><h2>Research and engineering</h2><div class="timeline">{timeline}</div></section><section class="cv-section"><p class="eyebrow">Education</p><h2>Physics training</h2><div class="education-list">{edu}</div></section><section class="cv-section"><p class="eyebrow">Selected publications</p><h2>Research output</h2><div class="publication-list">{cvpubs}</div></section><section class="cv-section"><p class="eyebrow">Selected work</p><h2>Open-source software</h2><div class="cv-software-list">{software}</div></section><section class="cv-section"><p class="eyebrow">Technical strengths</p><h2>Methods and tools</h2><div class="skill-groups">{skills}</div></section></div></div></section>'''
+    body=f'''<section class="page-hero"><div class="container page-hero-inner"><p class="eyebrow">Curriculum vitae</p><h1>Computational Biophysicist | Dynamics-Aware Structural Bioinformatician | Scientific Software Engineer</h1><p class="page-hero-lead">Research scientist and software engineer developing validated C++ and Python methods across molecular modeling, structural bioinformatics, and high-performance simulation.</p><div class="cv-actions"><a class="button button-primary" href="mailto:{e(site['email'])}">Contact {icon('mail')}</a></div></div></section><section class="section"><div class="container cv-layout"><aside class="cv-sidebar"><div class="cv-profile"><p class="eyebrow">Profile</p><h2>{e(site['name'])}</h2><p>Research scientist and software engineer building validated methods and reusable scientific infrastructure for computational biology, molecular simulation, and high-performance computing.</p><div class="cv-contact-list"><a href="mailto:{e(site['email'])}">{e(site['email'])}</a><a href="tel:{e(phone_href)}">{e(site['phone'])}</a><span>{e(site['workAuthorization'])}</span><a href="{e(site['social']['linkedin'])}" target="_blank">LinkedIn · sikaoguo</a><a href="{e(site['social']['github'])}" target="_blank">GitHub · sikaoguo22</a><a href="{e(site['social']['orcid'])}" target="_blank">ORCID · 0000-0002-7680-8060</a></div></div></aside><div class="cv-main"><section class="cv-section"><p class="eyebrow">Experience</p><h2>Research and engineering</h2><div class="timeline">{timeline}</div></section><section class="cv-section"><p class="eyebrow">Education</p><h2>Physics training</h2><div class="education-list">{edu}</div></section><section class="cv-section"><p class="eyebrow">Selected publications</p><h2>Research output</h2><div class="publication-list">{cvpubs}</div></section><section class="cv-section"><p class="eyebrow">Selected work</p><h2>Open-source software</h2><div class="cv-software-list">{software}</div></section><section class="cv-section"><p class="eyebrow">Technical strengths</p><h2>Methods and tools</h2><div class="skill-groups">{skills}</div></section></div></div></section>'''
     return layout("CV","Experience, education, publications, open-source software, and technical strengths of computational biology research engineer Sikao Guo.",body,1,"cv","cv/")
 
 
@@ -498,20 +472,17 @@ def main() -> None:
         runtime_images.add(Path(project["visualSmall"]).name)
     for image_name in sorted(runtime_images):
         shutil.copy2(ROOT/"src"/"images"/image_name,OUT/"images"/image_name)
-    (OUT/"documents").mkdir()
-    for resume in resumes.values():
-        filename = Path(resume["path"]).name
-        shutil.copy2(ROOT/"resume"/filename,OUT/"documents"/filename)
     write(OUT/"index.html",home())
     write(OUT/"projects"/"index.html",projects_index())
     for i,p in enumerate(projects): write(OUT/"projects"/p["slug"]/"index.html",project_page(p,i))
     write(OUT/"publications"/"index.html",publications_page())
+    write(OUT/"about"/"index.html",about_page())
     write(OUT/"cv"/"index.html",cv_page())
     notfound=f'<section class="not-found"><div class="container"><p class="not-found-code">404</p><h1>This page is outside the sampled conformational space.</h1><p>The requested path does not exist.</p><a class="button button-primary" href="{rel(0, "/")}">Return home {icon("arrow")}</a></div></section>'
     write(OUT/"404.html",layout("Page not found","Page not found",notfound,0,path="404.html",noindex=True))
     write(OUT/".nojekyll","")
     write(OUT/"robots.txt",f"User-agent: *\nAllow: /\nSitemap: {SITE_URL}/sitemap.xml\n")
-    paths=["","projects/","publications/","cv/"]+[f"projects/{p['slug']}/" for p in projects]
+    paths=["","projects/","publications/","about/","cv/"]+[f"projects/{p['slug']}/" for p in projects]
     sitemap='<?xml version="1.0" encoding="UTF-8"?>\n<urlset xmlns="http://www.sitemaps.org/schemas/sitemap/0.9">\n'+''.join(f'  <url><loc>{SITE_URL}/{p}</loc></url>\n' for p in paths)+'</urlset>\n'
     write(OUT/"sitemap.xml",sitemap)
     print(f"Built {len(paths)} pages in {OUT}")

@@ -4,14 +4,15 @@ A dependency-free static portfolio focused on computational biophysics, molecula
 
 ## Included
 
-- Responsive homepage with explicit target roles, a role-aware hiring snapshot, quantified impact, selected projects, publications, professional timeline, and contact CTAs.
+- Responsive homepage organized around a stable computational-biophysics identity, research vision, selected work, quantified impact, publications, biography, and collaboration CTA.
 - Four detailed project case studies:
   - cross-platform scientific GUI generation;
   - inverse-kinematics protein backbone sampling;
   - NERDSS and ioNERDSS infrastructure;
   - mechanistic models of membrane-associated assembly.
 - Filterable publications page.
-- Web CV and separate downloadable Research Scientist and Research Software Engineer PDF résumés.
+- Dedicated research overview and About page.
+- Web CV with experience, education, publications, software, and technical strengths.
 - Light and dark themes, mobile navigation, accessible focus states, reduced-motion support, metadata, sitemap, and robots file.
 - Machine-readable Person, ScholarlyArticle, and SoftwareSourceCode JSON-LD.
 - GitHub Pages deployment workflow.
@@ -25,7 +26,6 @@ A dependency-free static portfolio focused on computational biophysics, molecula
 │   ├── images/              # Editable SVG artwork and optimized runtime exports
 │   └── styles.css           # Global responsive design
 ├── scripts/build.py         # Dependency-free static-site generator
-├── resume/                  # Editable résumé HTML and generated PDF
 ├── site/                    # Built site; deploy this directory
 └── .github/workflows/       # GitHub Pages deployment
 ```
@@ -59,17 +59,6 @@ SITE_URL=https://example.com python3 scripts/build.py
 
 `SITE_URL` may include a repository path, such as `https://username.github.io/repository`.
 
-## Update the résumé PDFs
-
-Replace the two role-specific files, then rebuild the site:
-
-- `resume/Sikao_Guo_Research_Scientist_Resume.pdf`
-- `resume/Sikao_Guo_Research_Software_Engineer_Resume.pdf`
-
-```bash
-python3 scripts/build.py
-```
-
 ## Deploy with GitHub Pages
 
 1. Create a repository. For the root profile site, use `sikaoguo22.github.io`; otherwise any repository name works.
@@ -90,4 +79,4 @@ The workflow rebuilds the site, uploads the `site/` directory, and deploys it as
 
 ## Design notes
 
-The site uses project-specific scientific artwork rather than stock imagery or third-party fonts. Editable project composites remain as SVG sources; the deployed pages use responsive 800 px and 1600 px lossless WebP exports, plus a 1200 × 630 PNG social card. No analytics, cookies, external JavaScript, or runtime dependencies are included.
+The site uses project-specific scientific artwork rather than stock imagery or third-party fonts. Editable project composites remain as SVG sources; the deployed pages use responsive 800 px and 1600 px lossless WebP exports, plus a 1200 × 630 PNG social card. Research and software coexist as labeled parts of one portfolio. No analytics, cookies, external JavaScript, or runtime dependencies are included.

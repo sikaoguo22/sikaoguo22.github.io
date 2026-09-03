@@ -11,10 +11,6 @@
     "status": "Open source",
     "category": "Research software",
     "featured": true,
-    "roleOrder": {
-      "scientist": 4,
-      "engineer": 1
-    },
     "visual": "/images/gui-codegen-1600.webp",
     "visualSmall": "/images/gui-codegen-800.webp",
     "visualAlt": "Diagram showing a Qt interface and CLI metadata transformed into JSON and then into VMD, PyMOL, and web applications.",
@@ -109,10 +105,6 @@
     "status": "Ongoing work",
     "category": "Molecular modeling",
     "featured": true,
-    "roleOrder": {
-      "scientist": 1,
-      "engineer": 3
-    },
     "visual": "/images/backbone-sampling-1600.webp",
     "visualSmall": "/images/backbone-sampling-800.webp",
     "visualAlt": "Sampled protein backbone conformations.",
@@ -187,10 +179,6 @@
     "status": "Open source",
     "category": "Scientific infrastructure",
     "featured": true,
-    "roleOrder": {
-      "scientist": 3,
-      "engineer": 2
-    },
     "visual": "/images/nerdss-infrastructure-1600.webp",
     "visualSmall": "/images/nerdss-infrastructure-800.webp",
     "visualAlt": "Conceptual path from particle-based reaction–diffusion models to parallel NERDSS simulation.",
@@ -299,10 +287,6 @@
     "status": "Published",
     "category": "Computational biophysics",
     "featured": true,
-    "roleOrder": {
-      "scientist": 2,
-      "engineer": 4
-    },
     "visual": "/images/assembly-modeling-1600.webp",
     "visualSmall": "/images/assembly-modeling-800.webp",
     "visualAlt": "Eight simulation snapshots showing membrane-associated assemblies growing as molecular concentration increases, above a stylized membrane.",
