@@ -29,7 +29,7 @@ def main() -> None:
             mime = mimetypes.guess_type(path)[0] or 'application/octet-stream'
             uri = 'data:'+mime+';base64,'+base64.b64encode(path.read_bytes()).decode()
             return 'href="'+uri+'"'
-        text = re.sub(r'href="(/(?:assets|citations)/[^\"]+\.(?:pdf|bib))"', embed_download, text)
+        text = re.sub(r'href="(/citations/[^\"]+\.bib)"', embed_download, text)
         bridge = '''<script>
 (() => {
   document.addEventListener('click', event => {

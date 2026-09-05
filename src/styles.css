@@ -242,11 +242,6 @@ a:hover .arrow{transform:translateX(3px)}
 .timeline-role{font-size:.88rem;margin-top:5px}
 .timeline-location{font-size:.76rem;color:var(--muted);margin-top:4px}
 .timeline-summary{font-size:.91rem;color:var(--muted);margin-top:12px;max-width:690px}
-.download-grid{display:grid;grid-template-columns:1fr 1fr;gap:21px;margin-top:31px}
-.download-card{padding:25px;border:1px solid var(--line);border-radius:12px;background:var(--surface)}
-.download-card h2{font-size:1.12rem;margin-bottom:9px}
-.download-card p{font-size:.84rem;color:var(--muted)}
-.download-card .button{margin-top:20px}
 .cv-content{max-width:1000px}
 .cv-content .section-title-row{margin-bottom:20px}
 .cv-content .timeline-item{grid-template-columns:180px 1fr;gap:32px}
@@ -278,7 +273,7 @@ a:hover .arrow{transform:translateX(3px)}
  .about-strip{grid-template-columns:1fr;gap:24px}.about-strip h2{max-width:600px}.section-title-row{align-items:start;gap:22px}.section-title-row>.text-link{white-space:normal;font-size:.8rem;max-width:145px;flex-shrink:0;padding-top:8px}.contact-inner{align-items:start}.contact-section h2{font-size:1.6rem}.contact-section p:not(.eyebrow){font-size:.85rem}.footer-links{gap:15px}
  .page-intro{padding:45px 0 32px}.page-intro h1{font-size:2.7rem}.page-intro .lede{font-size:1rem}.project-card-body{padding:22px}.project-grid{gap:21px}.project-card h2{font-size:1.45rem}.project-card p{font-size:.87rem}.project-card .diagram{min-height:205px;padding:15px}
  .case-layout{grid-template-columns:1fr;gap:30px;padding-top:32px}.case-sidebar{position:static;border-bottom:1px solid var(--line);padding-bottom:25px}.case-sidebar nav{display:flex;flex-wrap:wrap;gap:20px;margin-bottom:20px}.case-sidebar p{margin-bottom:20px}.case-sidebar .resource-links{display:flex;flex-wrap:wrap;gap:15px}.case-section h2{font-size:1.65rem}
- .software-detail{grid-template-columns:1fr 1.25fr;gap:28px}.about-layout{grid-template-columns:1.5fr 1fr;gap:28px}.about-copy{font-size:.97rem}.timeline-item{grid-template-columns:150px 1fr;gap:27px}.cv-content .timeline-item{grid-template-columns:145px 1fr;gap:25px}.download-grid{gap:17px}.download-card{padding:20px}.skill-grid{gap:23px}
+ .software-detail{grid-template-columns:1fr 1.25fr;gap:28px}.about-layout{grid-template-columns:1.5fr 1fr;gap:28px}.about-copy{font-size:.97rem}.timeline-item{grid-template-columns:150px 1fr;gap:27px}.cv-content .timeline-item{grid-template-columns:145px 1fr;gap:25px}.skill-grid{gap:23px}
 }
 @media(max-width:600px){
  .hero{display:flex;flex-direction:column;align-items:stretch;gap:33px}.hero h1{font-size:clamp(2.05rem,9.4vw,2.7rem);letter-spacing:-.046em}.hero-description{font-size:1.05rem;max-width:440px}.hero .eyebrow{font-size:.62rem;max-width:none}.hero-name{font-size:1rem}.hero .button{font-size:.85rem;padding:12px 19px}.hero-tech{font-size:.73rem}.hero-socials{font-size:.76rem;gap:19px;margin-top:20px}.portrait-card{max-width:310px;align-self:center;justify-self:auto}.portrait-caption{padding:14px 20px}.portrait-caption strong{font-size:.85rem}.portrait-caption p{font-size:.7rem}.portrait-caption .initials{display:grid}
@@ -289,11 +284,11 @@ a:hover .arrow{transform:translateX(3px)}
  .page-intro h1{font-size:2.45rem}.page-intro .lede{font-size:1.01rem}.page-intro{padding-top:38px}.project-grid{grid-template-columns:1fr}.project-card h2{font-size:1.7rem}.project-card p{font-size:.96rem}.project-card .diagram{min-height:214px}.project-card .text-link{font-size:.9rem}.project-card-body{padding:26px}
  .case-section>p{font-size:.97rem}.case-section .diagram .targets span{padding:8px 16px;font-size:.8rem}.prose-list{font-size:.91rem}.case-sidebar .resource-links{font-size:.79rem}.step p{font-size:.9rem}.notice{padding:17px;font-size:.88rem}.case-meta{font-size:.72rem}
  .software-detail{grid-template-columns:1fr;gap:23px;padding:30px 0}.software-detail .diagram{min-height:214px}.software-detail h2{font-size:1.8rem}.software-detail .description{font-size:.96rem}.software-detail .card-links{font-size:.79rem;gap:20px}.filters{align-items:stretch;gap:17px}.search-field{width:100%}.filter-buttons{gap:6px}.filter-button{font-size:.73rem;padding:8px 10px}.result-count{font-size:.73rem}
- .about-layout{grid-template-columns:1fr;gap:31px}.about-photo{max-width:310px;width:100%;justify-self:center}.about-copy{font-size:1rem}.timeline-item,.cv-content .timeline-item{grid-template-columns:1fr;gap:10px}.timeline-item h3{font-size:1.12rem}.timeline-role{font-size:.88rem}.timeline-summary{font-size:.94rem}.download-grid{grid-template-columns:1fr}.download-card{padding:24px}.download-card h2{font-size:1.2rem}.download-card p{font-size:.9rem}.skill-grid{grid-template-columns:1fr;gap:25px}.school{display:block}.school .period{display:block;margin-top:12px}.cv-content .prose-list{font-size:.9rem}
+ .about-layout{grid-template-columns:1fr;gap:31px}.about-photo{max-width:310px;width:100%;justify-self:center}.about-copy{font-size:1rem}.timeline-item,.cv-content .timeline-item{grid-template-columns:1fr;gap:10px}.timeline-item h3{font-size:1.12rem}.timeline-role{font-size:.88rem}.timeline-summary{font-size:.94rem}.skill-grid{grid-template-columns:1fr;gap:25px}.school{display:block}.school .period{display:block;margin-top:12px}.cv-content .prose-list{font-size:.9rem}
 }
 @media(prefers-reduced-motion:reduce){html{scroll-behavior:auto}*,*::before,*::after{animation:none!important;transition:none!important}.button:hover{transform:none}}
 @media print{
  :root,:root[data-theme="dark"]{--paper:white;--ink:#111;--muted:#333;--accent:#222;--line:#ccc;font-size:11pt;color-scheme:light}
- .site-header,.site-footer,.contact-section,.skip-link,.download-grid,.filters,.publication-actions,.button-row,.hero-socials,.to-top,.case-sidebar{display:none!important}
+ .site-header,.site-footer,.contact-section,.skip-link,.filters,.publication-actions,.button-row,.hero-socials,.to-top,.case-sidebar{display:none!important}
  .container{width:100%;max-width:none}.section,.soft-section{padding:18px 0;background:none}.page-intro{padding:0 0 20px}.page-intro h1{font-size:30pt}.page-intro .lede{font-size:11pt}.timeline-item,.cv-content .timeline-item{grid-template-columns:135px 1fr;gap:20px;padding:14px 0}.timeline-item,.publication,.skill-group,.school{break-inside:avoid}.publication{padding:12px 0}.section-title-row h2{font-size:18pt}.skill-grid{grid-template-columns:repeat(3,1fr)}.case-layout{display:block;padding:0}.case-section h2{font-size:19pt}.diagram{break-inside:avoid}.portrait-card{box-shadow:none}
 }

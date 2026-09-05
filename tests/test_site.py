@@ -79,10 +79,10 @@ class WebsiteTests(unittest.TestCase):
             for image in doc.images:
                 with self.subTest(page=str(path)):
                     self.assertTrue(image.get('alt'));self.assertTrue(image.get('width'));self.assertTrue(image.get('height'))
-    def test_assets_and_resume_files(self):
-        for role in ('Research_Scientist','Research_Software_Engineer'):
-            path=SITE/'assets'/f'Sikao_Guo_{role}_Resume_Enhanced.pdf'
-            self.assertTrue(path.read_bytes().startswith(b'%PDF-'))
+    def test_assets_and_cv_without_downloads(self):
+        self.assertFalse(list((ROOT/'src/assets').glob('*.pdf')))
+        self.assertFalse(list((SITE/'assets').glob('*.pdf')))
+        self.assertNotIn(' download',(SITE/'cv/index.html').read_text())
         self.assertTrue((SITE/'assets/social-card.png').is_file())
         self.assertLess((SITE/'assets/sikao-guo-480.webp').stat().st_size,70000)
     def test_publication_fidelity(self):
