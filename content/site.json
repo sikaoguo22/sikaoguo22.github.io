@@ -1,59 +1,66 @@
 {
-  "site": {
-    "name": "Sikao Guo, Ph.D.",
-    "shortName": "Sikao Guo",
-    "title": "Computational Biophysicist | Molecular Modeling & Scientific Computing",
-    "description": "Sikao Guo develops validated computational methods and reusable C++/Python software for protein conformational sampling, biomolecular self-assembly, structural bioinformatics, and high-performance simulation.",
-    "email": "sikaoguo@gmail.com",
-    "phone": "(443) 449-9912",
-    "location": "Bethesda, MD",
-    "affiliation": "",
-    "availability": "Open to U.S.-based Research Scientist and Research Software Engineer roles",
-    "workAuthorization": "No sponsorship required",
-    "social": {
-      "github": "https://github.com/sikaoguo22",
-      "linkedin": "https://www.linkedin.com/in/sikaoguo/",
-      "scholar": "https://scholar.google.com/citations?hl=en&user=SVybCcwAAAAJ",
-      "orcid": "https://orcid.org/0000-0002-7680-8060"
-    }
+  "name": "Sikao Guo, Ph.D.",
+  "shortName": "Sikao Guo",
+  "title": "Computational Biophysics & Scientific Software",
+  "description": "Sikao Guo develops computational methods and open-source C++/Python software for protein conformational sampling, biomolecular self-assembly, and high-performance simulation.",
+  "email": "sikaoguo@gmail.com",
+  "affiliation": "Research Engineer at Inria",
+  "workAuthorization": "U.S. Permanent Resident · No sponsorship required",
+  "social": {
+    "github": "https://github.com/sikaoguo22",
+    "linkedin": "https://www.linkedin.com/in/sikaoguo/",
+    "scholar": "https://scholar.google.com/citations?hl=en&user=SVybCcwAAAAJ",
+    "orcid": "https://orcid.org/0000-0002-7680-8060"
   },
-  "navigation": [
-    {
-      "label": "Research",
-      "href": "/projects/"
-    },
-    {
-      "label": "Software",
-      "href": "/projects/#research-software"
-    },
-    {
-      "label": "Publications",
-      "href": "/publications/"
-    },
-    {
-      "label": "About",
-      "href": "/about/"
-    },
-    {
-      "label": "CV",
-      "href": "/cv/"
-    }
-  ],
-  "impactStats": [
+  "hero": {
+    "eyebrow": "Computational biophysicist · Research software engineer",
+    "title": [
+      "Exploring proteins.",
+      "Building the tools."
+    ],
+    "text": "I develop computational methods and open-source software to understand how proteins move, interact, and assemble."
+  },
+  "stats": [
     {
       "value": "≈90×",
-      "suffix": " speedup",
-      "label": "MPI NERDSS on 96 CPUs"
+      "label": "Faster parallel simulation",
+      "detail": "NERDSS · 96 CPUs · 20,000-particle benchmark",
+      "href": "/projects/nerdss-ionerdss-infrastructure/#outcomes"
     },
     {
       "value": "44,000+",
-      "suffix": " structures",
-      "label": "ioNERDSS benchmarking across the PDB"
+      "label": "Structures benchmarked",
+      "detail": "ioNERDSS structure-to-simulation workflows",
+      "href": "/projects/nerdss-ionerdss-infrastructure/"
     },
     {
-      "value": "9 applications",
-      "suffix": " · 3 platforms",
-      "label": "One specification to VMD, PyMOL, and web"
+      "value": "9 tools",
+      "label": "One specification. Three interfaces.",
+      "detail": "AutoCLIP · PyMOL, VMD, and the web",
+      "href": "/projects/cross-platform-gui-generation/"
+    }
+  ],
+  "researchThemes": [
+    {
+      "title": "Protein conformational sampling",
+      "question": "How can we explore beyond one protein structure?",
+      "text": "Geometric sampling methods for protein loops, fragments, and disordered regions, coupled to all-atom structural validation.",
+      "href": "/projects/inverse-kinematics-backbone-sampling/",
+      "tag": "Current research"
+    },
+    {
+      "title": "Biomolecular self-assembly",
+      "question": "What makes an assembly grow, stabilize, or remodel?",
+      "text": "Mechanistic models linking molecular interactions and spatial organization to clathrin and HIV lattice dynamics.",
+      "href": "/projects/mechanistic-assembly-models/",
+      "tag": "Mechanistic modeling"
+    },
+    {
+      "title": "Reusable computational methods",
+      "question": "How do we make a method useful beyond one study?",
+      "text": "Parallel simulation engines, automated model-building workflows, and consistent interfaces that other researchers can use.",
+      "href": "/software/",
+      "tag": "Scientific software"
     }
   ],
   "experience": [
@@ -62,41 +69,35 @@
       "role": "Research Engineer",
       "period": "Jul. 2025 – Present",
       "location": "Sophia Antipolis, France",
+      "summary": "Protein conformational sampling, structural validation, and cross-platform scientific applications.",
       "highlights": [
-        "Developed a cross-platform GUI code-generation framework that automated interface generation for 9 computational biology applications across VMD, PyMOL, and web platforms.",
-        "Engineered a C++ protein backbone sampler that generalized inverse-kinematics loop sampling to backbone and intrinsically disordered region conformational sampling using SE(3)-based rigid-body moves.",
-        "Built an automated structural validation pipeline integrating AttnPacker, OpenMM, and PhiSiCal for reproducible evaluation and benchmarking of sampled protein conformations."
-      ],
-      "technologies": [
-        "C++",
-        "Python",
-        "Panel",
-        "Qt",
-        "OpenMM",
-        "VMD",
-        "PyMOL"
+        "Developed a modular C++/Python sampler for protein loops, fragments, and intrinsically disordered regions, with flexible endpoints and residue-specific Ramachandran priors.",
+        "Built an all-atom validation workflow with side-chain reconstruction, OpenMM minimization, and conformational-quality checks.",
+        "Created AutoCLIP to generate PyMOL, VMD, and web applications from reusable specifications; deployed nine structural-biology tools.",
+        "Built cross-platform testing, CI/CD, reproducible packaging, and authenticated web deployment."
       ]
     },
     {
       "organization": "Johns Hopkins University",
-      "role": "Postdoctoral Researcher, Assistant Research Scientist",
+      "role": "Assistant Research Scientist (2025); Postdoctoral Fellow (2020–2024)",
       "period": "Jan. 2020 – Jun. 2025",
-      "location": "Baltimore, MD",
+      "location": "Baltimore, Maryland",
+      "summary": "Biomolecular self-assembly, parallel reaction-diffusion simulation, and structure-to-simulation modeling.",
       "highlights": [
-        "Parallelized the C++ NERDSS reaction-diffusion simulator using MPI domain decomposition, achieving approximately 90x acceleration on 96 CPUs for a 20,000-particle benchmark while preserving serial kinetics and diffusion.",
-        "Developed structure-resolved computational models of clathrin-mediated endocytosis and HIV-1 assembly, revealing mechanisms governing critical nucleus formation, adaptor stoichiometry, and Gag-Pol dimerization.",
-        "Developed ioNERDSS, a Python toolkit that automates conversion of PDB/mmCIF structures into simulation-ready coarse-grained reaction-diffusion models and was benchmarked across more than 44,000 PDB structures.",
-        "Implemented computational-geometry methods for interface detection and reaction-network generation, and integrated machine-learned predictors for binding-affinity initialization."
-      ],
-      "technologies": [
-        "C++",
-        "Python",
-        "MPI",
-        "PDB/mmCIF",
-        "Coarse-graining",
-        "Reaction-diffusion",
-        "Stochastic simulation",
-        "HPC"
+        "Modeled clathrin self-assembly, reproducing experimental kinetics and explaining why lattices fail to stabilize without sufficient adaptor proteins.",
+        "Identified a binding-affinity range that permits HIV Gag/Gag-Pol lattice stability and remodeling on experimentally observed viral-maturation timescales.",
+        "Led C++/MPI development of NERDSS, achieving approximately 90× speedup on 96 CPUs for a 20,000-particle benchmark; validated distributed behavior across seven benchmark models.",
+        "Built ioNERDSS structure-to-simulation workflows benchmarked on 44,000+ structures and assemblies of 3–720 subunits."
+      ]
+    },
+    {
+      "organization": "Institute of Physics, Chinese Academy of Sciences",
+      "role": "Doctoral Researcher",
+      "period": "Sep. 2014 – Dec. 2019",
+      "location": "Beijing, China",
+      "summary": "Mechanochemical models of kinesin and computational studies of molecular-motor coordination.",
+      "highlights": [
+        "Combined stochastic simulation, molecular dynamics, and umbrella sampling to reproduce experimental motility measurements and explain coordination between kinesin heads."
       ]
     }
   ],
@@ -104,83 +105,52 @@
     {
       "degree": "Ph.D. in Physics",
       "institution": "Institute of Physics, Chinese Academy of Sciences",
-      "period": "Sept. 2014 – Dec. 2019",
-      "location": "Beijing, China"
+      "period": "2014–2019"
     },
     {
       "degree": "B.S. in Physics",
       "institution": "Nankai University",
-      "period": "Sept. 2010 – Jun. 2014",
-      "location": "Tianjin, China"
+      "period": "2010–2014"
     }
   ],
-  "skillGroups": [
+  "skills": [
     {
-      "title": "Software engineering",
-      "skills": [
-        "Python",
-        "C++",
-        "Scientific software development",
-        "Algorithm development"
-      ]
-    },
-    {
-      "title": "High-performance computing",
-      "skills": [
-        "MPI",
-        "Parallel computing"
-      ]
-    },
-    {
-      "title": "Computational science",
-      "skills": [
-        "Computational biophysics",
+      "title": "Methods",
+      "items": [
+        "Protein conformational sampling",
+        "Molecular dynamics",
+        "Monte Carlo",
+        "Reaction-diffusion modeling",
         "Structural bioinformatics",
-        "Protein modeling"
-      ]
-    }
-  ],
-  "openSourceSoftware": [
-    {
-      "name": "Scientific GUI Framework",
-      "description": "Cross-platform scientific GUI generation framework.",
-      "links": [
-        {
-          "label": "GitHub",
-          "href": "https://github.com/Structural-Bioinformatics-Library/sbl/tree/master/Applications/AutoCLIP"
-        },
-        {
-          "label": "Documentation",
-          "href": "https://sbl.inria.fr/doc/AutoCLIP-user-manual.html"
-        }
+        "Numerical validation"
       ]
     },
     {
-      "name": "NERDSS-MPI",
-      "description": "Parallel C++ biomolecular reaction–diffusion simulator using MPI.",
-      "links": [
-        {
-          "label": "GitHub",
-          "href": "https://github.com/JohnsonBiophysicsLab/NERDSS/tree/mpi"
-        },
-        {
-          "label": "Documentation",
-          "href": "https://github.com/JohnsonBiophysicsLab/NERDSS/blob/mpi/doc/NERDSS_Parallel_Developer_Guide.pdf"
-        }
+      "title": "Scientific computing",
+      "items": [
+        "C++",
+        "Python",
+        "MPI",
+        "Linux",
+        "CMake",
+        "OpenMM",
+        "GROMACS",
+        "NumPy",
+        "SciPy",
+        "Biopython"
       ]
     },
     {
-      "name": "ioNERDSS",
-      "description": "Automated construction of coarse-grained reaction-diffusion models.",
-      "links": [
-        {
-          "label": "GitHub",
-          "href": "https://github.com/johnsonbiophysicslab/ioNERDSS"
-        },
-        {
-          "label": "Documentation",
-          "href": "https://johnsonbiophysicslab.github.io/ionerdss/"
-        }
+      "title": "Research software",
+      "items": [
+        "API design",
+        "Automated testing",
+        "CI/CD",
+        "Docker",
+        "Conda / Pixi",
+        "PyQt6",
+        "FastAPI",
+        "Panel / Bokeh"
       ]
     }
   ]

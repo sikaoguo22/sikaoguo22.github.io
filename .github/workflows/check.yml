@@ -1,0 +1,25 @@
+name: Check website update
+
+on:
+  pull_request:
+  workflow_dispatch:
+
+permissions:
+  contents: read
+
+jobs:
+  check:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Check out repository
+        uses: actions/checkout@v7
+      - name: Build and check root-domain output
+        run: |
+          python scripts/build.py
+          python -m unittest discover -s tests -v
+      - name: Build and check repository-subpath output
+        env:
+          SITE_URL: https://example.org/preview
+        run: |
+          python scripts/build.py
+          python -m unittest discover -s tests -v
