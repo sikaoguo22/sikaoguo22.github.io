@@ -12,9 +12,10 @@ The following current Word files were read through the connected Drive account:
 - Research Software Engineer Resume (enhanced): `1nipcuTLLMdzwtM4VfOeXyZ5J0II_WhRv`.
 
 Both are in `MyResume/Enhanced_2026-09-05`.
-The corresponding PDFs supplied in the conversation are included unchanged.
-They ground the employment record, education, methods, software contributions,
-and headline benchmark results. Older File Library resumes were not substituted.
+These documents ground the employment record, education, methods, software
+contributions, and headline benchmark results. Older File Library resumes were
+not substituted. The supplied PDFs are not bundled with the website; the CV is
+presented as a web page.
 
 ## Website under revision
 

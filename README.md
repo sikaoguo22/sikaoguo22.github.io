@@ -1,14 +1,14 @@
 # Sikao Guo — research and scientific software website
 
 The personal website at `sikaoguo22.github.io`, with the September 2026 redesign.
-The design connects the existing research portfolio, revised resumes, and updated
+The design connects the existing research portfolio, career background, and updated
 profile photo.
 
 ## Preview
 
 The optional `Sikao_Guo_Website_Preview.html` can be generated locally using the
 command below. Open it in a browser. Its navigation, mobile-width selector, publication
-filters, and embedded PDF downloads work without a server. External links still
+filters, and embedded citation downloads work without a server. External links still
 require an internet connection. The preview toolbar is not part of the website.
 
 For the actual production pages, use a local server rather than double-clicking
@@ -29,7 +29,7 @@ standard library. No npm, frontend framework, or runtime CDN is required.
 - Separate Research and Software pages, an all-projects index, and four case studies.
 - A publications page with search, publication-type filters, explicit preprint and
   first-author labels, and copyable/downloadable citations.
-- About and CV pages, with the two updated PDF resumes.
+- About and web CV pages.
 - Responsive mobile navigation, light/dark themes, keyboard focus states, reduced
   motion support, and core content/navigation that work without JavaScript.
 - Search/social metadata, a portrait-based social card, sitemap, robots file, and 404.
@@ -47,7 +47,7 @@ src/templates/base.html    Shared page structure and metadata
 src/styles.css             Design tokens and responsive layouts
 src/site.js                Navigation, theme, publication filtering/copying
 src/theme-init.js          Before-paint theme selection
-src/assets/                Optimized portrait, PDFs, favicon, social card
+src/assets/                Optimized portrait, favicon, social card
 scripts/build.py           Standard-library static generator
 scripts/make_preview.py    Optional single-file review preview generator
 tests/                     Standard-library and optional browser regression checks
@@ -73,8 +73,7 @@ not experimental figures, measured curves, or interactive molecular viewers.
 
 Review the public wording before publishing ongoing research. This package adds
 no unpublished manuscript or private research data. Its public assets include the
-profile photo and the two user-provided resumes, with their existing contact and
-work-authorization information.
+profile photo; career details are presented in the web CV.
 
 ## Verification
 
