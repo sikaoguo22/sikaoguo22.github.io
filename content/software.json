@@ -1,0 +1,35 @@
+[
+  {
+    "name": "AutoCLIP",
+    "slug": "cross-platform-gui-generation",
+    "description": "Generate PyMOL, VMD, and web applications from one reusable specification.",
+    "language": "Python · JSON Schema · Web",
+    "evidence": "9 structural-biology tools · 3 platforms",
+    "code": "https://github.com/Structural-Bioinformatics-Library/sbl/tree/master/Applications/AutoCLIP",
+    "docs": "https://sbl.inria.fr/doc/AutoCLIP-user-manual.html",
+    "paper": "https://arxiv.org/abs/2602.16047",
+    "visual": "autoclip"
+  },
+  {
+    "name": "NERDSS-MPI",
+    "slug": "nerdss-ionerdss-infrastructure",
+    "description": "Scale particle-based reaction-diffusion simulation while checking distributed numerical behavior.",
+    "language": "C++ · MPI · Linux",
+    "evidence": "≈90× on 96 CPUs · 20,000-particle benchmark",
+    "code": "https://github.com/JohnsonBiophysicsLab/NERDSS/tree/mpi",
+    "docs": "https://github.com/JohnsonBiophysicsLab/NERDSS/blob/mpi/doc/NERDSS_Parallel_Developer_Guide.pdf",
+    "paper": "https://doi.org/10.1002/jcc.70132",
+    "visual": "mpi"
+  },
+  {
+    "name": "ioNERDSS",
+    "slug": "nerdss-ionerdss-infrastructure",
+    "description": "Turn PDB/mmCIF structures into coarse-grained models and connect simulation, analysis, and visualization.",
+    "language": "Python · Structural data · PyQt6",
+    "evidence": "44,000+ structures · 3–720-subunit assemblies",
+    "code": "https://github.com/johnsonbiophysicslab/ioNERDSS",
+    "docs": "https://johnsonbiophysicslab.github.io/ionerdss/",
+    "paper": "https://doi.org/10.64898/2026.01.27.702082",
+    "visual": "pipeline"
+  }
+]

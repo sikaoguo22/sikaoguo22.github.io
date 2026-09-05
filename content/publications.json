@@ -9,33 +9,12 @@
     "url": "https://arxiv.org/abs/2602.16047",
     "type": "Preprint",
     "firstAuthor": true,
-    "featured": true,
-    "homeOrder": 1,
-    "cvFeatured": true,
-    "cvOrder": 1,
     "topics": [
       "Scientific software",
       "GUI generation",
       "Structural bioinformatics"
     ],
-    "contribution": "Framework design, implementation, platform-generator development, examples, and manuscript writing.",
-    "resources": [
-      {
-        "kind": "Code",
-        "label": "AutoCLIP repository",
-        "href": "https://github.com/Structural-Bioinformatics-Library/sbl/tree/master/Applications/AutoCLIP"
-      },
-      {
-        "kind": "Documentation",
-        "label": "User manual",
-        "href": "https://sbl.inria.fr/doc/AutoCLIP-user-manual.html"
-      },
-      {
-        "kind": "Demo",
-        "label": "Video demos",
-        "href": "https://www.youtube.com/@SBL-plugins"
-      }
-    ]
+    "contribution": "Framework design, implementation, platform-generator development, examples, and manuscript writing."
   },
   {
     "id": "ionerdss-2026",
@@ -47,28 +26,13 @@
     "url": "https://doi.org/10.64898/2026.01.27.702082",
     "doi": "10.64898/2026.01.27.702082",
     "type": "Preprint",
-    "featured": true,
-    "homeOrder": 3,
-    "cvFeatured": true,
-    "cvOrder": 3,
+    "firstAuthor": false,
     "topics": [
       "ioNERDSS",
       "Structure-to-simulation",
       "Coarse-graining"
     ],
-    "contribution": "Structure-processing workflows, software development, and validation.",
-    "resources": [
-      {
-        "kind": "Code",
-        "label": "ioNERDSS repository",
-        "href": "https://github.com/JohnsonBiophysicsLab/ionerdss"
-      },
-      {
-        "kind": "Documentation",
-        "label": "ioNERDSS documentation",
-        "href": "https://johnsonbiophysicslab.github.io/ionerdss/"
-      }
-    ]
+    "contribution": "Structure-processing workflows, software development, and validation."
   },
   {
     "id": "parallel-nerdss-2025",
@@ -81,28 +45,12 @@
     "doi": "10.1002/jcc.70132",
     "type": "Journal article",
     "firstAuthor": true,
-    "featured": true,
-    "homeOrder": 2,
-    "cvFeatured": true,
-    "cvOrder": 2,
     "topics": [
       "MPI",
       "Reaction-diffusion simulation",
       "High-performance computing"
     ],
-    "contribution": "Lead software development, parallel algorithm design, validation, benchmarking, analysis, and writing.",
-    "resources": [
-      {
-        "kind": "Code",
-        "label": "NERDSS-MPI repository",
-        "href": "https://github.com/JohnsonBiophysicsLab/NERDSS/tree/mpi"
-      },
-      {
-        "kind": "Documentation",
-        "label": "Parallel developer guide",
-        "href": "https://github.com/JohnsonBiophysicsLab/NERDSS/blob/mpi/doc/NERDSS_Parallel_Developer_Guide.pdf"
-      }
-    ]
+    "contribution": "Lead software development, parallel algorithm design, validation, benchmarking, analysis, and writing."
   },
   {
     "id": "dynamin-2024",
@@ -114,7 +62,7 @@
     "url": "https://doi.org/10.1038/s41467-024-47677-8",
     "doi": "10.1038/s41467-024-47677-8",
     "type": "Journal article",
-    "featured": true,
+    "firstAuthor": false,
     "topics": [
       "Endocytosis",
       "Spatiotemporal modeling",
@@ -133,8 +81,6 @@
     "doi": "10.7554/eLife.84881",
     "type": "Journal article",
     "firstAuthor": true,
-    "featured": true,
-    "homeOrder": 4,
     "topics": [
       "HIV-1",
       "Self-assembly",
@@ -152,7 +98,7 @@
     "url": "https://doi.org/10.1016/j.bpj.2023.06.021",
     "doi": "10.1016/j.bpj.2023.06.021",
     "type": "Journal article",
-    "featured": false,
+    "firstAuthor": false,
     "topics": [
       "Retroviral assembly",
       "Kinetic control",
@@ -169,7 +115,7 @@
     "url": "https://doi.org/10.1002/anie.202305178",
     "doi": "10.1002/anie.202305178",
     "type": "Journal article",
-    "featured": false,
+    "firstAuthor": false,
     "topics": [
       "Protein biomaterials",
       "Membrane assembly",
@@ -187,8 +133,6 @@
     "doi": "10.1371/journal.pcbi.1009969",
     "type": "Journal article",
     "firstAuthor": true,
-    "featured": true,
-    "homeOrder": 5,
     "topics": [
       "Clathrin",
       "Membrane assembly",
