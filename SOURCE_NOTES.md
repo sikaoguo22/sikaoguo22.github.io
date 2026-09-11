@@ -34,10 +34,10 @@ first-author claim.
 
 ## Visual assets
 
-The portrait is the improved profile photo supplied/generated earlier in the
-same conversation. Only optimized web sizes were made for this website; no new
-facial retouching was done for the website update. The social card is a rendered
-HTML layout using that photo and the site's own typography.
+The portrait was replaced on September 11, 2026 with the user-supplied `me.png`.
+Only optimized web sizes were made for this website; no facial retouching was
+applied. The social card is a rendered HTML layout using that photo and the
+site's own typography.
 
 New project visuals are labeled conceptual schematics. They are not scientific
 data or original research figures. Existing repository artwork does not need to
