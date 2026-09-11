@@ -30,6 +30,6 @@
     "code": "https://github.com/johnsonbiophysicslab/ioNERDSS",
     "docs": "https://johnsonbiophysicslab.github.io/ionerdss/",
     "paper": "https://doi.org/10.64898/2026.01.27.702082",
-    "visual": "pipeline"
+    "visual": "mpi"
   }
 ]

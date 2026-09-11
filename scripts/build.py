@@ -139,27 +139,15 @@ def portrait(cls: str = 'portrait-card', eager: bool = False) -> str:
 
 
 def diagram(kind: str) -> str:
-    """UI schematics. They intentionally do not imply measured or sampled data."""
-    if kind == 'autoclip':
-        body = '<div class="diagram-label">Application definition</div><div class="specification">Validated JSON</div><div class="diagram-stem"></div><div class="targets"><span>PyMOL</span><span>VMD</span><span>Web</span></div>'
-        label = 'One specification to three interfaces'
-    elif kind == 'mpi':
-        domain = '<div class="mpi-domain" aria-hidden="true">' + '<i></i>'*4 + '</div>'
-        body = '<div class="diagram-label">Spatial domain decomposition</div><div class="mpi-grid">' + domain*4 + '</div>'
-        label = 'Communicating simulation domains'
-    elif kind == 'pipeline':
-        body = '<div class="diagram-label">Structure-to-simulation workflow</div><div class="pipeline"><div class="pipeline-step"><strong>PDB / mmCIF</strong>Structures</div>'+arrow()+'<div class="pipeline-step"><strong>CG model</strong>Reactions</div>'+arrow()+'<div class="pipeline-step"><strong>NERDSS</strong>Simulation</div></div>'
-        label = 'Model construction and simulation'
-    elif kind == 'sampling':
-        body = '''<div class="diagram-label">Flexible-endpoint sampling</div><svg class="sampling-svg" viewBox="0 0 340 130" fill="none" aria-hidden="true"><path d="M22 101C57 37 85 112 116 56S176 96 210 38 261 89 316 33" stroke="currentColor" stroke-width="3"/><path d="M22 101C78 68 63 6 116 56S181 121 210 38 281 21 315 61" stroke="currentColor" opacity=".27" stroke-width="2.5"/><path d="M22 101C63 122 66 59 116 56S187 17 210 38 283 123 309 89" stroke="currentColor" opacity=".15" stroke-width="2.5"/><g fill="var(--surface)" stroke="currentColor" stroke-width="2"><circle cx="22" cy="101" r="5"/><circle cx="116" cy="56" r="5"/><circle cx="210" cy="38" r="5"/><circle cx="316" cy="33" r="5"/></g></svg>'''
-        label = 'Conceptual paths · not sampled structures'
-    elif kind == 'assembly':
-        cluster = '<i></i>'*6
-        body = f'<div class="diagram-label">Interactions → assembly → remodeling</div><div class="assembly-flow" aria-hidden="true"><div class="assembly-cluster loose">{cluster}</div><span class="arrow">⇄</span><div class="assembly-cluster">{cluster}</div></div>'
-        label = 'Conceptual assembly · not simulation output'
-    else:
-        raise ValueError(f'Unknown diagram type: {kind}')
-    return f'<figure class="diagram">{body}<figcaption>{e(label)} · schematic</figcaption></figure>'
+    """Render the supplied project illustrations without cropping their labels."""
+    images = {
+        'sampling': ('protein-sampling', 'Protein backbone sampling: backbone selection, SE(3) exploration, inverse-kinematics loop closure, and all-atom validation.'),
+        'assembly': ('assembly', 'Biomolecular assembly models of clathrin, HIV-1, and dynamin, linking structural constraints to mechanistic models and system-level predictions.'),
+        'mpi': ('nerdss', 'NERDSS and ioNERDSS workflow from PDB/mmCIF structures through coarse-grained models and reaction rules to parallel simulation.'),
+        'autoclip': ('gui-generator', 'AutoCLIP workflow from CLI metadata and interface design to a validated JSON specification and VMD, PyMOL, and web applications.'),
+    }
+    name, alt = images[kind]
+    return f'''<figure class="diagram"><img src="{link('/images/'+name+'-800.webp')}" srcset="{link('/images/'+name+'-800.webp')} 800w, {link('/images/'+name+'-1448.webp')} 1448w" sizes="(max-width: 780px) 100vw, 50vw" alt="{e(alt)}" width="1448" height="1086" loading="lazy" decoding="async"><figcaption>Conceptual schematic</figcaption></figure>'''
 
 
 def section_heading(eyebrow: str, title: str, more: tuple[str,str] | None = None, intro: str = '') -> str:
