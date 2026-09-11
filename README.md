@@ -48,6 +48,7 @@ src/styles.css             Design tokens and responsive layouts
 src/site.js                Navigation, theme, publication filtering/copying
 src/theme-init.js          Before-paint theme selection
 src/assets/                Optimized portrait, favicon, social card
+src/images/                Responsive project illustrations and existing artwork
 scripts/build.py           Standard-library static generator
 scripts/make_preview.py    Optional single-file review preview generator
 tests/                     Standard-library and optional browser regression checks

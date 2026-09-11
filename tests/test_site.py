@@ -25,6 +25,9 @@ class Document(HTMLParser):
         if tag=='meta' and a.get('name')=='description':self.descriptions+=1
         if tag=='link' and a.get('rel')=='canonical':self.canonicals.append(a['href'])
         if tag=='img':self.images.append(a)
+        if tag=='img' and a.get('srcset'):
+            for candidate in a['srcset'].split(','):
+                self.links.append((tag,'srcset',candidate.strip().split()[0]))
         for key in ('href','src'):
             if a.get(key):self.links.append((tag,key,a[key]))
 
@@ -74,11 +77,32 @@ class WebsiteTests(unittest.TestCase):
                     self.assertTrue(dest.is_file(),f'Broken local link: {value}')
                     if url.fragment and dest.suffix=='.html':
                         self.assertIn(unquote(url.fragment),self.docs.get(dest,Document(dest.read_text())).ids)
-    def test_portraits_have_alt_and_dimensions(self):
+    def test_images_have_alt_and_dimensions(self):
         for path,doc in self.docs.items():
             for image in doc.images:
                 with self.subTest(page=str(path)):
                     self.assertTrue(image.get('alt'));self.assertTrue(image.get('width'));self.assertTrue(image.get('height'))
+    def test_project_illustrations(self):
+        cases={
+            'inverse-kinematics-backbone-sampling':'protein-sampling',
+            'mechanistic-assembly-models':'assembly',
+            'nerdss-ionerdss-infrastructure':'nerdss',
+            'cross-platform-gui-generation':'gui-generator',
+        }
+        expected={
+            'index.html':['gui-generator','nerdss','nerdss'],
+            'research/index.html':['protein-sampling','assembly'],
+            'software/index.html':['gui-generator','nerdss','nerdss'],
+            'projects/index.html':['protein-sampling','nerdss','gui-generator','assembly'],
+            **{f'projects/{slug}/index.html':[name] for slug,name in cases.items()},
+        }
+        for route,names in expected.items():
+            images=[image for image in self.docs[SITE/route].images if '/images/' in image['src']]
+            with self.subTest(page=route):
+                self.assertEqual([Path(image['src']).name for image in images],[f'{name}-800.webp' for name in names])
+                for image,name in zip(images,names):
+                    self.assertIn(f'{name}-1448.webp 1448w',image['srcset'])
+                    self.assertEqual((image['width'],image['height']),('1448','1086'))
     def test_assets_and_cv_without_downloads(self):
         self.assertFalse(list((ROOT/'src/assets').glob('*.pdf')))
         self.assertFalse(list((SITE/'assets').glob('*.pdf')))

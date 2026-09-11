@@ -39,9 +39,12 @@ Only optimized web sizes were made for this website; no facial retouching was
 applied. The social card is a rendered HTML layout using that photo and the
 site's own typography.
 
-New project visuals are labeled conceptual schematics. They are not scientific
-data or original research figures. Existing repository artwork does not need to
-be deleted: it is copied by the generator when `src/images/` remains present.
+Project illustrations were replaced on September 11, 2026 with the supplied
+`protein-sampling.png`, `assembly.png`, `nerdss.png`, and `gui-generator.png`.
+The website uses 800 px and 1448 px WebP exports with the complete compositions
+preserved. The NERDSS illustration is shared by NERDSS-MPI and ioNERDSS.
+These remain labeled conceptual schematics, not measured scientific data.
+Existing repository artwork is retained in `src/images/`.
 
 ## Deliberate changes
 
