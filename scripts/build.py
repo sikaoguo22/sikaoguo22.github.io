@@ -135,7 +135,7 @@ def write_page(route: str, title: str, body: str, active: str = '', description:
 
 
 def portrait(cls: str = 'portrait-card', eager: bool = False) -> str:
-    return f'''<figure class="{cls}"><img src="{link('/assets/sikao-guo-480.webp')}" srcset="{link('/assets/sikao-guo-480.webp')} 480w, {link('/assets/sikao-guo-800.webp')} 800w" sizes="(max-width: 600px) 310px, 360px" alt="Sikao Guo, wearing a blue checked shirt, outdoors" width="800" height="800" loading="{'eager' if eager else 'lazy'}" decoding="async" {'fetchpriority="high"' if eager else ''}><figcaption class="portrait-caption"><div><strong>Sikao Guo, Ph.D.</strong><p>Research Engineer · Inria</p></div><span class="initials" aria-hidden="true">SG</span></figcaption></figure>'''
+    return f'''<figure class="{cls}"><img src="{link('/assets/sikao-guo-480.webp')}" srcset="{link('/assets/sikao-guo-480.webp')} 480w, {link('/assets/sikao-guo-800.webp')} 800w" sizes="(max-width: 600px) 310px, 360px" alt="Portrait of Sikao Guo wearing a blue checked shirt" width="800" height="800" loading="{'eager' if eager else 'lazy'}" decoding="async" {'fetchpriority="high"' if eager else ''}><figcaption class="portrait-caption"><div><strong>Sikao Guo, Ph.D.</strong><p>Research Engineer · Inria</p></div><span class="initials" aria-hidden="true">SG</span></figcaption></figure>'''
 
 
 def diagram(kind: str) -> str:
