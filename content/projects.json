@@ -15,8 +15,8 @@
     ],
     "role": "Extended and optimized the C++ sampler and built its all-atom validation workflow.",
     "impact": {
-      "problem": "Loop-closure methods assume fixed endpoints, limiting exploration of fragments and disordered regions.",
-      "built": "A C++ sampler with released-endpoint moves, spatial-hash clash detection, and an OpenMM all-atom validation workflow.",
+      "problem": "Fixed-end loop closure limits exploration of fragments and disordered regions, whose endpoints need to move.",
+      "built": "Extensions to a C++ sampler (released-endpoint moves, spatial-hash clash detection) plus an OpenMM all-atom validation workflow.",
       "result": "Broader exploration than tested generative samplers on the evaluated systems (ongoing work)."
     },
     "steps": [
@@ -68,9 +68,9 @@
     ],
     "role": "Co-developed ioNERDSS and led MPI design, implementation, validation, and benchmarking for NERDSS.",
     "impact": {
-      "problem": "Turning molecular structures into simulation models was manual, and particle-based simulation needed to scale beyond a single process.",
-      "built": "C++/MPI spatial domain decomposition for NERDSS and an automated structure-to-model Python pipeline (ioNERDSS).",
-      "result": "≈90× speedup on 96 CPUs (20,000-particle benchmark) · 44,000+ structures processed · validated across 7 benchmark models."
+      "problem": "Building simulation models from molecular structures needed automation, and particle-based simulation needed to scale beyond a single process.",
+      "built": "C++/MPI spatial domain decomposition for NERDSS and automated structure-to-model Python workflows in ioNERDSS (co-developed).",
+      "result": "≈90× speedup on 96 CPUs (20,000-particle benchmark) · 44,000+ structures benchmarked · validated across 7 benchmark models."
     },
     "steps": [
       {
@@ -225,7 +225,7 @@
     "impact": {
       "problem": "Why do some molecular lattices stabilize while others fall apart or remodel?",
       "built": "Stochastic reaction-diffusion models of clathrin and HIV Gag lattices.",
-      "result": "Reproduced experimental clathrin kinetics · identified an HIV binding-affinity range for stability and remodeling · published in eLife, PLOS Comp Biol, and Nature Communications."
+      "result": "Reproduced experimental clathrin kinetics · identified an HIV binding-affinity range for stability and remodeling · first-author papers in PLOS Comp Biol and eLife, plus modeling for a Nature Communications study."
     },
     "steps": [
       {

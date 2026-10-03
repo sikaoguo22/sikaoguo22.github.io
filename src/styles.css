@@ -256,7 +256,7 @@ a:hover .arrow{transform:translateX(3px)}
 .status-ongoing{background:var(--wash-blue);color:var(--muted)}
 @media(min-width:1600px){.hero{padding-block:88px}.hero h1{font-size:4.15rem}}
 @media(max-width:1050px){
- .work-card-wide{grid-column:span 12}.work-card-narrow,.work-card-half{grid-column:span 6}
+ .work-card-wide{grid-column:span 12}.work-card-narrow,.work-card-half{grid-column:span 6}.work-card-half:last-child{grid-column:span 12}
  .container{width:calc(100% - 60px)}.primary-nav{gap:17px}.header-inner{gap:18px}.brand{font-size:1rem}.header-contact{display:none}
  .hero{gap:44px;grid-template-columns:1.4fr 1fr;padding-block:58px}.hero h1{font-size:3.45rem}.hero-description{font-size:1.02rem}.hero .eyebrow{max-width:370px;line-height:1.8}.portrait-caption{padding:15px}.portrait-caption p{font-size:.64rem}
  .stats{gap:19px}.stat+.stat{padding-left:23px}.software-card-body{padding:20px}

@@ -136,6 +136,14 @@ class WebsiteTests(unittest.TestCase):
             with self.subTest(project=project['slug']):
                 for key in ('problem','built','result'):
                     self.assertTrue(project['impact'][key].strip(),key)
+    def test_impact_copy_stays_within_source_claims(self):
+        impact={p['slug']:p['impact'] for p in json.loads((ROOT/'content/projects.json').read_text())}
+        self.assertTrue(impact['inverse-kinematics-backbone-sampling']['built'].startswith('Extensions to'))
+        self.assertTrue(impact['inverse-kinematics-backbone-sampling']['problem'].startswith('Fixed-end loop closure'))
+        self.assertIn('co-developed',impact['nerdss-ionerdss-infrastructure']['built'])
+        self.assertNotIn('was manual',impact['nerdss-ionerdss-infrastructure']['problem'])
+        self.assertIn('44,000+ structures benchmarked',impact['nerdss-ionerdss-infrastructure']['result'])
+        self.assertIn('modeling for a Nature Communications study',impact['mechanistic-assembly-models']['result'])
     def test_impact_blocks_on_cards_and_case_studies(self):
         projects=json.loads((ROOT/'content/projects.json').read_text())
         self.assertEqual((SITE/'projects/index.html').read_text().count('class="impact"'),4)
