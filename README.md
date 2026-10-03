@@ -35,7 +35,8 @@ standard library. No npm, frontend framework, or runtime CDN is required.
 - Responsive mobile navigation, light/dark themes, keyboard focus states, reduced
   motion support, and core content/navigation that work without JavaScript.
 - Search/social metadata, a portrait-based social card, sitemap, robots file, and 404.
-- Local assets only. No tracking scripts, analytics, cookies, or external web fonts.
+- Local assets only. No tracking scripts, analytics, cookies, or third-party font
+  requests; Space Grotesk is self-hosted from `src/assets/fonts/` (SIL OFL 1.1).
   A localStorage preference remembers the chosen theme where storage is available.
 
 ## Structure and editing
@@ -49,7 +50,7 @@ src/templates/base.html    Shared page structure and metadata
 src/styles.css             Design tokens and responsive layouts
 src/site.js                Navigation, theme, publication filtering/copying
 src/theme-init.js          Before-paint theme selection
-src/assets/                Optimized portrait, favicon, social card
+src/assets/                Optimized portrait, favicon, social card, self-hosted font
 src/images/                Responsive project illustrations and existing artwork
 scripts/build.py           Standard-library static generator
 scripts/make_preview.py    Optional single-file review preview generator
@@ -58,7 +59,8 @@ site/                      Generated production output, not source
 ```
 
 Edit the JSON and rebuild. Page-specific layout functions live in `scripts/build.py`.
-The visual system uses navy, muted teal, and light neutral surfaces. Adjust the
+The visual system is a Swiss color-block style: Space Grotesk, ink rules, square
+corners, cobalt (`--cobalt`) and yellow (`--yellow`) fields. Adjust the
 variables at the beginning of `src/styles.css` to change the palette.
 
 ### Content safeguards

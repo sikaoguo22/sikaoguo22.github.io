@@ -1,6 +1,7 @@
 """Offline regression tests. Run after scripts/build.py; no packages required."""
 from __future__ import annotations
 import json
+import re
 import unittest
 from html.parser import HTMLParser
 from pathlib import Path
@@ -136,6 +137,40 @@ class WebsiteTests(unittest.TestCase):
             with self.subTest(project=project['slug']):
                 for key in ('problem','built','result'):
                     self.assertTrue(project['impact'][key].strip(),key)
+    def test_self_hosted_font(self):
+        font=SITE/'assets/fonts/space-grotesk-latin-wght-normal.woff2'
+        self.assertTrue(font.is_file())
+        self.assertEqual(font.read_bytes()[:4],b'wOF2')
+        self.assertIn('SIL OPEN FONT LICENSE',(SITE/'assets/fonts/OFL.txt').read_text().upper())
+        css=(SITE/'assets/styles.css').read_text()
+        self.assertIn('@font-face',css)
+        self.assertIn('"Space Grotesk"',css)
+        self.assertNotRegex(css,r'url\(\s*["\']?(https?:)?//')
+        self.assertIn('rel="preload"',(SITE/'index.html').read_text())
+    def test_square_corners_and_token_contrast(self):
+        css=(SITE/'assets/styles.css').read_text()
+        self.assertEqual(set(re.findall(r'border-radius:\s*([^;}]+)',css)),{'0'})
+        def tokens(selector):
+            block=re.search(re.escape(selector)+r'\s*\{([^}]*)\}',css).group(1)
+            return dict(re.findall(r'--([\w-]+):\s*(#[0-9a-fA-F]{6})',block))
+        def luminance(hex_):
+            channels=[int(hex_[i:i+2],16)/255 for i in (1,3,5)]
+            channels=[c/12.92 if c<=.03928 else ((c+.055)/1.055)**2.4 for c in channels]
+            return .2126*channels[0]+.7152*channels[1]+.0722*channels[2]
+        def contrast(a,b):
+            hi,lo=sorted((luminance(a),luminance(b)),reverse=True)
+            return (hi+.05)/(lo+.05)
+        light=tokens(':root ')
+        dark={**light,**tokens(':root[data-theme="dark"] ')}
+        for name,theme in (('light',light),('dark',dark)):
+            for fg in ('ink','muted','accent','caption'):
+                with self.subTest(theme=name,token=fg):
+                    self.assertGreaterEqual(contrast(theme[fg],theme['paper']),4.5)
+        for name,theme in (('light',light),('dark',dark)):
+            with self.subTest(theme=name,block='cobalt'):
+                self.assertGreaterEqual(contrast('#ffffff',theme['cobalt']),4.5)
+            with self.subTest(theme=name,block='yellow'):
+                self.assertGreaterEqual(contrast('#0a0a0a',theme['yellow']),4.5)
     def test_impact_copy_stays_within_source_claims(self):
         impact={p['slug']:p['impact'] for p in json.loads((ROOT/'content/projects.json').read_text())}
         self.assertTrue(impact['inverse-kinematics-backbone-sampling']['built'].startswith('Extensions to'))

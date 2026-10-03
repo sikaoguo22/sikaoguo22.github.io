@@ -46,6 +46,12 @@ preserved. The NERDSS illustration is shared by NERDSS-MPI and ioNERDSS.
 These remain labeled conceptual schematics, not measured scientific data.
 Existing repository artwork is retained in `src/images/`.
 
+Typeface (October 3, 2026): Space Grotesk variable font, Latin subset
+(`space-grotesk-latin-wght-normal.woff2`), from the `@fontsource-variable/space-grotesk`
+5.3.0 npm package via jsDelivr. Licensed under the SIL Open Font License 1.1; the
+licence is kept beside the font as `src/assets/fonts/OFL.txt`. It is served from the
+site itself, so pages make no third-party font requests.
+
 ## Deliberate changes
 
 - A personal, research-first homepage rather than a job-search landing page.
