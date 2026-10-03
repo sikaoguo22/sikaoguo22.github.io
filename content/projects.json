@@ -14,6 +14,11 @@
       "My work extends the geometric sampling machinery and separates conformational exploration from downstream evaluation of structural quality."
     ],
     "role": "Extended and optimized the C++ sampler and built its all-atom validation workflow.",
+    "impact": {
+      "problem": "Loop-closure methods assume fixed endpoints, limiting exploration of fragments and disordered regions.",
+      "built": "A C++ sampler with released-endpoint moves, spatial-hash clash detection, and an OpenMM all-atom validation workflow.",
+      "result": "Broader exploration than tested generative samplers on the evaluated systems (ongoing work)."
+    },
     "steps": [
       {
         "title": "Extend the sampler",
@@ -62,6 +67,11 @@
       "Large particle-based simulations introduce an additional challenge: reactions and assemblies must remain consistent across processor boundaries. NERDSS-MPI addresses this through spatial domain decomposition and distributed communication."
     ],
     "role": "Co-developed ioNERDSS and led MPI design, implementation, validation, and benchmarking for NERDSS.",
+    "impact": {
+      "problem": "Turning molecular structures into simulation models was manual, and particle-based simulation needed to scale beyond a single process.",
+      "built": "C++/MPI spatial domain decomposition for NERDSS and an automated structure-to-model Python pipeline (ioNERDSS).",
+      "result": "≈90× speedup on 96 CPUs (20,000-particle benchmark) · 44,000+ structures processed · validated across 7 benchmark models."
+    },
     "steps": [
       {
         "title": "Build the model",
@@ -139,6 +149,11 @@
       "Platform adapters generate interfaces while keeping application state, execution logic, post-analysis, and molecular visualization modular."
     ],
     "role": "Designed the framework architecture and implemented specification validation and platform generators.",
+    "impact": {
+      "problem": "Each scientific tool needed a separate implementation for PyMOL, VMD, and the web.",
+      "built": "A specification-driven Python framework with JSON Schema validation, platform generators, and Linux/macOS CI.",
+      "result": "9 structural-biology tools deployed across 3 platforms, one specification each."
+    },
     "steps": [
       {
         "title": "Describe the application",
@@ -207,6 +222,11 @@
       "The goal is to connect microscopic interaction rules to experimentally interpretable assembly behavior rather than reproduce a single structural snapshot."
     ],
     "role": "Designed and analyzed clathrin and HIV-1 models and contributed quantitative modeling to collaborative studies.",
+    "impact": {
+      "problem": "Why do some molecular lattices stabilize while others fall apart or remodel?",
+      "built": "Stochastic reaction-diffusion models of clathrin and HIV Gag lattices.",
+      "result": "Reproduced experimental clathrin kinetics · identified an HIV binding-affinity range for stability and remodeling · published in eLife, PLOS Comp Biol, and Nature Communications."
+    },
     "steps": [
       {
         "title": "Define molecular interactions",

@@ -129,5 +129,12 @@ class WebsiteTests(unittest.TestCase):
         self.assertIn('evaluated systems',ongoing)
         self.assertIn('Ongoing research',ongoing)
         self.assertNotIn('healthier tomorrow',home.lower())
+    def test_projects_have_impact_summaries(self):
+        projects=json.loads((ROOT/'content/projects.json').read_text())
+        self.assertEqual(len(projects),4)
+        for project in projects:
+            with self.subTest(project=project['slug']):
+                for key in ('problem','built','result'):
+                    self.assertTrue(project['impact'][key].strip(),key)
 
 if __name__=='__main__':unittest.main()
