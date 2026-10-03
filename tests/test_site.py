@@ -90,7 +90,7 @@ class WebsiteTests(unittest.TestCase):
             'cross-platform-gui-generation':'gui-generator',
         }
         expected={
-            'index.html':['gui-generator','nerdss','nerdss'],
+            'index.html':['nerdss'],
             'research/index.html':['protein-sampling','assembly'],
             'software/index.html':['gui-generator','nerdss','nerdss'],
             'projects/index.html':['protein-sampling','nerdss','gui-generator','assembly'],
@@ -144,5 +144,13 @@ class WebsiteTests(unittest.TestCase):
                 page=(SITE/'projects'/project['slug']/'index.html').read_text()
                 self.assertIn('At a glance',page)
                 self.assertEqual(page.count('class="impact-result"'),1)
+    def test_homepage_bento_and_research_themes(self):
+        home=(SITE/'index.html').read_text()
+        self.assertIn('work',self.docs[SITE/'index.html'].ids)
+        self.assertEqual(home.count('<article class="work-card'),4)
+        self.assertEqual(home.count('class="impact"'),4)
+        self.assertIn('View CV',home)
+        self.assertNotIn('theme-card',home)
+        self.assertEqual((SITE/'research/index.html').read_text().count('class="theme-card"'),3)
 
 if __name__=='__main__':unittest.main()

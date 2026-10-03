@@ -163,10 +163,6 @@ def impact_block(p: dict[str, Any]) -> str:
     return '<dl class="impact">' + ''.join(f'<div{cls}><dt>{label}</dt><dd>{e(p["impact"][key])}</dd></div>' for label,key,cls in rows) + '</dl>'
 
 
-def software_card(item: dict[str, Any]) -> str:
-    resources = external(item['code'],'Code') + external(item['docs'],'Docs') + f'<a href="{link("/projects/"+item["slug"]+"/")}">Case study {arrow()}</a>'
-    return f'''<article class="software-card">{diagram(item['visual'])}<div class="software-card-body"><h3>{e(item['name'])}</h3><div class="language-line">{e(item['language'])}</div><p>{e(item['description'])}</p><p class="evidence">{e(item['evidence'])}</p><div class="card-links">{resources}</div></div></article>'''
-
 
 def publication(pub: dict[str,Any], full: bool = False) -> str:
     kind = 'preprint' if pub['type'] == 'Preprint' else 'journal'
@@ -186,15 +182,24 @@ def page_intro(eyebrow: str, title: str, text: str, extra: str = '') -> str:
     return f'<section class="container page-intro"><p class="eyebrow">{e(eyebrow)}</p><h1>{e(title)}</h1><p class="lede">{e(text)}</p>{extra}</section>'
 
 
+def theme_cards() -> str:
+    return '<div class="theme-grid">' + ''.join(f'<article class="theme-card"><div class="theme-top"><span class="theme-number">0{i+1}</span><span class="theme-tag">{e(x["tag"])}</span></div><h3>{e(x["question"])}</h3><p>{e(x["text"])}</p>{text_link(x["href"],x["title"])}</article>' for i,x in enumerate(site['researchThemes'])) + '</div>'
+
+
+def bento_card(p: dict[str, Any], cls: str) -> str:
+    chip = 'status-chip status-ongoing' if p['status'] == 'Ongoing research' else 'status-chip'
+    visual = diagram(p['visual']) if cls == 'work-card-wide' else ''
+    return f'''<article class="work-card {cls}"><div class="work-card-body"><div class="work-card-top"><p class="eyebrow">{e(p['category'])}</p><span class="{chip}">{e(p['status'])}</span></div><h3><a href="{link('/projects/'+p['slug']+'/')}">{e(p['shortTitle'])}</a></h3>{impact_block(p)}{text_link('/projects/'+p['slug']+'/','Read case study')}</div>{visual}</article>'''
+
+
 def home() -> str:
     hero = site['hero']
     socials = ''.join(external(site['social'][key],label) for key,label in [('github','GitHub'),('scholar','Scholar'),('linkedin','LinkedIn')])
     stats = ''.join(f'<a class="stat" href="{link(x["href"])}"><span class="stat-value">{e(x["value"])}</span><span class="stat-label">{e(x["label"])}</span><span class="stat-detail">{e(x["detail"])}</span></a>' for x in site['stats'])
-    themes = ''.join(f'<article class="theme-card"><div class="theme-top"><span class="theme-number">0{i+1}</span><span class="theme-tag">{e(x["tag"])}</span></div><h3>{e(x["question"])}</h3><p>{e(x["text"])}</p>{text_link(x["href"],x["title"])}</article>' for i,x in enumerate(site['researchThemes']))
+    work = ''.join(bento_card(by_slug[slug],cls) for slug,cls in [('nerdss-ionerdss-infrastructure','work-card-wide'),('cross-platform-gui-generation','work-card-narrow'),('inverse-kinematics-backbone-sampling','work-card-half'),('mechanistic-assembly-models','work-card-half')])
     selected = ''.join(publication(by_pub[key]) for key in ['gui-framework-2026','parallel-nerdss-2025','hiv-2023'])
-    return f'''<div class="container"><section class="hero" aria-labelledby="hero-title"><div><p class="hero-name">{e(site['name'])}</p><p class="eyebrow">{e(hero['eyebrow'])}</p><h1 id="hero-title"><span>{e(hero['title'][0])}</span><span>{e(hero['title'][1])}</span></h1><p class="hero-description">{e(hero['text'])}</p><div class="button-row">{button('/research/','Explore research',True)}{button('/software/','View software')}</div><p class="hero-tech">Protein modeling · C++ / Python · High-performance computing</p><div class="hero-socials">{socials}</div></div>{portrait(eager=True)}</section><section class="stats" aria-label="Selected, benchmark-specific results">{stats}</section>
-<section class="section" aria-label="Research directions">{section_heading('Research directions','Questions that drive my work.',('/research/','Research overview'))}<div class="theme-grid">{themes}</div></section></div>
-<section class="soft-section"><div class="container">{section_heading('Open-source software','Methods you can build on.',('/software/','All software'))}<div class="software-grid">{''.join(software_card(x) for x in software)}</div></div></section>
+    return f'''<div class="container"><section class="hero" aria-labelledby="hero-title"><div><p class="hero-name">{e(site['name'])}</p><p class="eyebrow">{e(hero['eyebrow'])}</p><h1 id="hero-title"><span>{e(hero['title'][0])}</span><span>{e(hero['title'][1])}</span></h1><p class="hero-description">{e(hero['text'])}</p><div class="button-row">{button('#work','See my work',True)}{button('/cv/','View CV')}</div><p class="hero-tech">Protein modeling · C++ / Python · High-performance computing</p><div class="hero-socials">{socials}</div></div>{portrait(eager=True)}</section><section class="stats" aria-label="Selected, benchmark-specific results">{stats}</section>
+<section class="section" id="work" aria-label="Selected work">{section_heading('Selected work','What I built, and what it achieved.',('/projects/','All projects'))}<div class="bento">{work}</div></section></div>
 <div class="container"><section class="section">{section_heading('Selected publications','From methods to mechanisms.',('/publications/','Papers & preprints'))}<div class="publication-list">{selected}</div></section>
 <section class="section"><div class="about-strip"><div><p class="eyebrow">About me</p><h2>Physics, biological questions, and the software in between.</h2></div><div><p>My work has grown from mechanochemical models of molecular motors to biomolecular self-assembly, parallel simulation, and protein conformational sampling. Across these problems, I connect method development with numerical validation and reusable software.</p>{text_link('/about/','More about my background')}</div></div></section></div>{contact()}'''
 
@@ -211,7 +216,8 @@ def research_page(all_projects: bool = False) -> str:
     intro = page_intro('Research portfolio' if all_projects else 'Research', 'Methods, mechanisms, and reusable tools.' if all_projects else 'Understanding proteins through computation.', 'Selected projects in protein conformational sampling, biomolecular self-assembly, and scientific software.' if all_projects else 'I connect molecular models, stochastic simulation, and structural data to study how proteins explore conformations and organize into functional assemblies.')
     chosen = projects if all_projects else [by_slug['inverse-kinematics-backbone-sampling'],by_slug['mechanistic-assembly-models']]
     infrastructure = '' if all_projects else f'''<section class="section"><div class="about-strip"><div><p class="eyebrow">Methods that support the science</p><h2>Models need reliable computational tools.</h2></div><div><p>NERDSS-MPI, ioNERDSS, and AutoCLIP connect simulation, automated model construction, and scientist-facing interfaces. Validation, testing, and documentation are part of the method—not an afterthought.</p>{text_link('/software/','Explore the software')}</div></div></section>'''
-    return intro + f'<div class="container"><section class="section"><div class="project-grid">{"".join(project_card(p) for p in chosen)}</div></section>{infrastructure}</div>' + contact()
+    themes = '' if all_projects else f'<section class="section" aria-label="Research directions">{section_heading("Research directions","Questions that drive my work.")}{theme_cards()}</section>'
+    return intro + f'<div class="container">{themes}<section class="section"><div class="project-grid">{"".join(project_card(p) for p in chosen)}</div></section>{infrastructure}</div>' + contact()
 
 
 def software_page() -> str:
