@@ -24,8 +24,10 @@ standard library. No npm, frontend framework, or runtime CDN is required.
 
 ## Included
 
-- A personal homepage with portrait, research questions, scoped results, software,
-  selected papers, and a research/collaboration contact section.
+- A personal homepage with portrait, scoped results, an impact-first "selected work"
+  bento (problem → built → result), selected papers, and a contact section.
+- Research questions on the Research page; "At a glance" impact summaries on every
+  project card and case study (`impact` field in `content/projects.json`).
 - Separate Research and Software pages, an all-projects index, and four case studies.
 - A publications page with search, publication-type filters, explicit preprint and
   first-author labels, and copyable/downloadable citations.
