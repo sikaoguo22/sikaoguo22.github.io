@@ -158,6 +158,11 @@ def tags(values: list[str]) -> str:
     return '<ul class="tags" aria-label="Methods and technologies">' + ''.join(f'<li>{e(x)}</li>' for x in values) + '</ul>'
 
 
+def impact_block(p: dict[str, Any]) -> str:
+    rows = [('Problem','problem',''),('Built','built',''),('Result','result',' class="impact-result"')]
+    return '<dl class="impact">' + ''.join(f'<div{cls}><dt>{label}</dt><dd>{e(p["impact"][key])}</dd></div>' for label,key,cls in rows) + '</dl>'
+
+
 def software_card(item: dict[str, Any]) -> str:
     resources = external(item['code'],'Code') + external(item['docs'],'Docs') + f'<a href="{link("/projects/"+item["slug"]+"/")}">Case study {arrow()}</a>'
     return f'''<article class="software-card">{diagram(item['visual'])}<div class="software-card-body"><h3>{e(item['name'])}</h3><div class="language-line">{e(item['language'])}</div><p>{e(item['description'])}</p><p class="evidence">{e(item['evidence'])}</p><div class="card-links">{resources}</div></div></article>'''
@@ -199,7 +204,7 @@ def project_card(p: dict[str,Any]) -> str:
                 'mechanistic-assembly-models':'biomolecular-assembly',
                 'nerdss-ionerdss-infrastructure':'research-infrastructure',
                 'cross-platform-gui-generation':'research-software'}[p['slug']]
-    return f'''<article class="project-card" id="{fragment}">{diagram(p['visual'])}<div class="project-card-body"><p class="eyebrow">{e(p['category'])} · {e(p['status'])}</p><h2><a href="{link('/projects/'+p['slug']+'/')}">{e(p['shortTitle'])}</a></h2><p>{e(p['summary'])}</p>{tags(p['tags'])}{text_link('/projects/'+p['slug']+'/','Explore the work')}</div></article>'''
+    return f'''<article class="project-card" id="{fragment}">{diagram(p['visual'])}<div class="project-card-body"><p class="eyebrow">{e(p['category'])} · {e(p['status'])}</p><h2><a href="{link('/projects/'+p['slug']+'/')}">{e(p['shortTitle'])}</a></h2>{impact_block(p)}{tags(p['tags'])}{text_link('/projects/'+p['slug']+'/','Explore the work')}</div></article>'''
 
 
 def research_page(all_projects: bool = False) -> str:
@@ -261,7 +266,8 @@ def case_page(p: dict[str, Any]) -> str:
     if p['relatedPublications']:
         related='<section class="case-section" id="publications"><h2>Related publications</h2><div class="publication-list">'+''.join(publication(by_pub[k]) for k in p['relatedPublications'])+'</div></section>'
     article=f'''<div><section class="case-section" id="context"><p class="eyebrow">The question</p><h2>{e(p['question'])}</h2>{contexts}</section><section class="case-section" id="approach"><h2>The approach</h2>{diagram(p['visual'])}<ol class="steps">{steps}</ol></section><section class="case-section" id="contribution"><h2>What I developed</h2>{contributions}{tags(p['tags'])}</section><section class="case-section" id="outcomes"><h2>Results &amp; validation</h2>{outcomes}{note}</section>{related}<a class="to-top" href="#main">Back to top ↑</a></div>'''
-    return intro + f'<div class="container case-layout">{side}{article}</div>' + contact()
+    glance=f'<section class="container glance" aria-label="At a glance"><p class="eyebrow">At a glance</p>{impact_block(p)}</section>'
+    return intro + glance + f'<div class="container case-layout">{side}{article}</div>' + contact()
 
 
 def bibtex(pub: dict[str,Any]) -> str:

@@ -136,5 +136,13 @@ class WebsiteTests(unittest.TestCase):
             with self.subTest(project=project['slug']):
                 for key in ('problem','built','result'):
                     self.assertTrue(project['impact'][key].strip(),key)
+    def test_impact_blocks_on_cards_and_case_studies(self):
+        projects=json.loads((ROOT/'content/projects.json').read_text())
+        self.assertEqual((SITE/'projects/index.html').read_text().count('class="impact"'),4)
+        for project in projects:
+            with self.subTest(project=project['slug']):
+                page=(SITE/'projects'/project['slug']/'index.html').read_text()
+                self.assertIn('At a glance',page)
+                self.assertEqual(page.count('class="impact-result"'),1)
 
 if __name__=='__main__':unittest.main()
