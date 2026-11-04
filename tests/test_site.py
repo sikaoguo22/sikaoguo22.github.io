@@ -39,21 +39,6 @@ class WebsiteTests(unittest.TestCase):
         if not cls.files:raise AssertionError('Build the website first: python3 scripts/build.py')
         cls.docs={p:Document(p.read_text()) for p in cls.files}
         cls.prefix=urlsplit(cls.docs[SITE/'index.html'].canonicals[0]).path.rstrip('/')
-    def test_page_count_and_legacy_routes(self):
-        self.assertEqual(len(self.files),12)
-        for route in ('research','projects','software','publications','about','cv',
-                      'projects/cross-platform-gui-generation','projects/inverse-kinematics-backbone-sampling',
-                      'projects/nerdss-ionerdss-infrastructure','projects/mechanistic-assembly-models'):
-            self.assertTrue((SITE/route/'index.html').is_file(),route)
-        for fragment in ('current-research','biomolecular-assembly','research-infrastructure','research-software'):
-            self.assertIn(fragment,self.docs[SITE/'projects/index.html'].ids)
-        projects=json.loads((ROOT/'content/projects.json').read_text())
-        for project in projects:
-            ids=self.docs[SITE/'projects'/project['slug']/'index.html'].ids
-            for fragment in ('context','approach','contribution','outcomes'):
-                self.assertIn(fragment,ids,project['slug'])
-            if project['links']:self.assertIn('resources',ids,project['slug'])
-            if project['relatedPublications']:self.assertIn('publications',ids,project['slug'])
     def test_heading_metadata_and_unique_ids(self):
         for path,doc in self.docs.items():
             with self.subTest(page=str(path)):
@@ -83,27 +68,6 @@ class WebsiteTests(unittest.TestCase):
             for image in doc.images:
                 with self.subTest(page=str(path)):
                     self.assertTrue(image.get('alt'));self.assertTrue(image.get('width'));self.assertTrue(image.get('height'))
-    def test_project_illustrations(self):
-        cases={
-            'inverse-kinematics-backbone-sampling':'protein-sampling',
-            'mechanistic-assembly-models':'assembly',
-            'nerdss-ionerdss-infrastructure':'nerdss',
-            'cross-platform-gui-generation':'gui-generator',
-        }
-        expected={
-            'index.html':['nerdss'],
-            'research/index.html':['protein-sampling','assembly'],
-            'software/index.html':['gui-generator','nerdss','nerdss'],
-            'projects/index.html':['protein-sampling','nerdss','gui-generator','assembly'],
-            **{f'projects/{slug}/index.html':[name] for slug,name in cases.items()},
-        }
-        for route,names in expected.items():
-            images=[image for image in self.docs[SITE/route].images if '/images/' in image['src']]
-            with self.subTest(page=route):
-                self.assertEqual([Path(image['src']).name for image in images],[f'{name}-800.webp' for name in names])
-                for image,name in zip(images,names):
-                    self.assertIn(f'{name}-1448.webp 1448w',image['srcset'])
-                    self.assertEqual((image['width'],image['height']),('1448','1086'))
     def test_assets_and_cv_without_downloads(self):
         self.assertFalse(list((ROOT/'src/assets').glob('*.pdf')))
         self.assertFalse(list((SITE/'assets').glob('*.pdf')))
@@ -122,37 +86,21 @@ class WebsiteTests(unittest.TestCase):
             for tag,key,value in doc.links:
                 if tag in ('script','img') and key=='src':
                     self.assertFalse(urlsplit(value).scheme,f'External runtime dependency in {path}: {value}')
-    def test_ongoing_work_and_benchmark_scope(self):
-        home=(SITE/'index.html').read_text()
-        self.assertIn('20,000-particle benchmark',home)
-        self.assertIn('96 CPUs',home)
-        ongoing=(SITE/'projects/inverse-kinematics-backbone-sampling/index.html').read_text()
-        self.assertIn('evaluated systems',ongoing)
-        self.assertIn('Ongoing research',ongoing)
-        self.assertNotIn('healthier tomorrow',home.lower())
-    def test_projects_have_impact_summaries(self):
-        projects=json.loads((ROOT/'content/projects.json').read_text())
-        self.assertEqual(len(projects),4)
-        for project in projects:
-            with self.subTest(project=project['slug']):
-                for key in ('problem','built','result'):
-                    self.assertTrue(project['impact'][key].strip(),key)
     def test_self_hosted_font(self):
-        font=SITE/'assets/fonts/space-grotesk-latin-wght-normal.woff2'
+        font=SITE/'assets/fonts/ibm-plex-mono-latin-400-normal.woff2'
         self.assertTrue(font.is_file())
         self.assertEqual(font.read_bytes()[:4],b'wOF2')
         self.assertIn('SIL OPEN FONT LICENSE',(SITE/'assets/fonts/OFL.txt').read_text().upper())
         css=(SITE/'assets/styles.css').read_text()
         self.assertIn('@font-face',css)
-        self.assertIn('"Space Grotesk"',css)
+        self.assertIn('"IBM Plex Mono"',css)
         self.assertNotRegex(css,r'url\(\s*["\']?(https?:)?//')
         self.assertIn('rel="preload"',(SITE/'index.html').read_text())
-    def test_square_corners_and_token_contrast(self):
+    def test_single_weight_and_token_contrast(self):
         css=(SITE/'assets/styles.css').read_text()
-        self.assertEqual(set(re.findall(r'border-radius:\s*([^;}]+)',css)),{'0'})
-        def tokens(selector):
-            block=re.search(re.escape(selector)+r'\s*\{([^}]*)\}',css).group(1)
-            return dict(re.findall(r'--([\w-]+):\s*(#[0-9a-fA-F]{6})',block))
+        self.assertEqual(set(re.findall(r'font-weight:\s*([^;}]+)',css)),{'400'})
+        block=re.search(r':root\s*\{([^}]*)\}',css).group(1)
+        theme=dict(re.findall(r'--([\w-]+):\s*(#[0-9a-fA-F]{6})',block))
         def luminance(hex_):
             channels=[int(hex_[i:i+2],16)/255 for i in (1,3,5)]
             channels=[c/12.92 if c<=.03928 else ((c+.055)/1.055)**2.4 for c in channels]
@@ -160,40 +108,34 @@ class WebsiteTests(unittest.TestCase):
         def contrast(a,b):
             hi,lo=sorted((luminance(a),luminance(b)),reverse=True)
             return (hi+.05)/(lo+.05)
-        light=tokens(':root ')
-        dark={**light,**tokens(':root[data-theme="dark"] ')}
-        for name,theme in (('light',light),('dark',dark)):
-            for fg in ('ink','muted','accent','caption'):
-                with self.subTest(theme=name,token=fg):
-                    self.assertGreaterEqual(contrast(theme[fg],theme['paper']),4.5)
-        for name,theme in (('light',light),('dark',dark)):
-            with self.subTest(theme=name,block='cobalt'):
-                self.assertGreaterEqual(contrast('#ffffff',theme['cobalt']),4.5)
-            with self.subTest(theme=name,block='yellow'):
-                self.assertGreaterEqual(contrast('#0a0a0a',theme['yellow']),4.5)
-    def test_impact_copy_stays_within_source_claims(self):
-        impact={p['slug']:p['impact'] for p in json.loads((ROOT/'content/projects.json').read_text())}
-        self.assertTrue(impact['inverse-kinematics-backbone-sampling']['built'].startswith('Extensions to'))
-        self.assertTrue(impact['inverse-kinematics-backbone-sampling']['problem'].startswith('Fixed-end loop closure'))
-        self.assertIn('co-developed',impact['nerdss-ionerdss-infrastructure']['built'])
-        self.assertNotIn('was manual',impact['nerdss-ionerdss-infrastructure']['problem'])
-        self.assertIn('44,000+ structures benchmarked',impact['nerdss-ionerdss-infrastructure']['result'])
-        self.assertIn('modeling for a Nature Communications study',impact['mechanistic-assembly-models']['result'])
-    def test_impact_blocks_on_cards_and_case_studies(self):
-        projects=json.loads((ROOT/'content/projects.json').read_text())
-        self.assertEqual((SITE/'projects/index.html').read_text().count('class="impact"'),4)
-        for project in projects:
-            with self.subTest(project=project['slug']):
-                page=(SITE/'projects'/project['slug']/'index.html').read_text()
-                self.assertIn('At a glance',page)
-                self.assertEqual(page.count('class="impact-result"'),1)
-    def test_homepage_bento_and_research_themes(self):
+        for fg in ('ink','muted','accent','warm'):
+            for bg in ('bg','surface'):
+                with self.subTest(token=fg,background=bg):
+                    self.assertGreaterEqual(contrast(theme[fg],theme[bg]),4.5)
+    def test_cv_matches_source(self):
+        cv=(SITE/'cv/index.html').read_text()
+        pubs=json.loads((ROOT/'content/publications.json').read_text())
+        self.assertEqual(len(pubs),20)
+        self.assertEqual(cv.count('<li><span>'),21)
+        for text in ('Frédéric Cazals','Margaret E. Johnson','Ping Xie','Gordon Research Conference'):
+            self.assertIn(text,cv)
+        self.assertNotIn('443',cv)
+        self.assertTrue((SITE/'citations/publications.bib').is_file())
+        self.assertEqual((SITE/'citations/publications.bib').read_text().count('@'),20)
+    def test_pages_and_navigation(self):
+        self.assertEqual(sorted(str(p.relative_to(SITE)) for p in self.files),['404.html','cv/index.html','index.html','publications/index.html'])
         home=(SITE/'index.html').read_text()
-        self.assertIn('work',self.docs[SITE/'index.html'].ids)
-        self.assertEqual(home.count('<article class="work-card'),4)
-        self.assertEqual(home.count('class="impact"'),4)
-        self.assertIn('View CV',home)
-        self.assertNotIn('theme-card',home)
-        self.assertEqual((SITE/'research/index.html').read_text().count('class="theme-card"'),3)
+        nav=re.search(r'<nav class="primary-nav".*?</nav>',home,re.S).group(0)
+        self.assertEqual(re.findall(r'>([^<]+)</a>',nav),['Home','Publications','CV'])
+    def test_homepage_sections(self):
+        home=(SITE/'index.html').read_text()
+        self.assertEqual(re.findall(r'<span class="section-number">\d+</span><h2>([^<]+)</h2>',home),['Short Bio','Selected Publications','Contact'])
+        self.assertIn('Algorithms–Biology–Structure (ABS) team',home)
+        self.assertNotIn('team.inria.fr/abs',home)
+    def test_cv_and_publications_sections(self):
+        cv=(SITE/'cv/index.html').read_text()
+        self.assertNotIn('Teaching, Mentoring',cv)
+        self.assertNotIn('My name is underlined',(SITE/'publications/index.html').read_text())
+
 
 if __name__=='__main__':unittest.main()

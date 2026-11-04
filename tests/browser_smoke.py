@@ -37,50 +37,38 @@ def main() -> None:
                 results['page_layout_checks'].append({'page': str(path.relative_to(SITE)), 'width': width, 'passed': True})
         assert not errors, errors
 
-        page.set_viewport_size({'width': 390, 'height': 844})
-        page.set_content(inline_page(SITE/'index.html', base_prefix), wait_until='load')
-        menu = page.locator('[data-menu-toggle]')
-        menu.click()
-        assert menu.get_attribute('aria-expanded') == 'true'
-        assert page.locator('#primary-navigation').is_visible()
-        page.keyboard.press('Escape')
-        assert menu.get_attribute('aria-expanded') == 'false'
-        assert menu.evaluate('(node) => document.activeElement === node')
-        results['interactions'].append('Mobile navigation opens; Escape closes and restores focus.')
-        theme = page.locator('[data-theme-toggle]')
-        theme.click()
-        assert page.locator('html').get_attribute('data-theme') == 'dark'
-        assert theme.get_attribute('aria-label') == 'Switch to light theme'
-        theme.click()
-        assert page.locator('html').get_attribute('data-theme') == 'light'
-        results['interactions'].append('Theme toggle updates appearance and accessible state.')
-
         page.set_viewport_size({'width': 1440, 'height': 1000})
         page.set_content(inline_page(SITE/'publications/index.html', base_prefix), wait_until='load')
         visible = lambda: page.locator('[data-publication]:visible').count()
-        assert visible() == 8
-        page.locator('[data-publication-filter="journal"]').click()
-        assert visible() == 6
-        page.locator('[data-publication-filter="preprint"]').click()
+        total = len(json.loads((SITE.parent/'content/publications.json').read_text(encoding='utf-8')))
+        assert visible() == total
+        page.select_option('[data-publication-filter]', 'journal')
+        assert visible() == total - 2
+        page.select_option('[data-publication-filter]', 'preprint')
         assert visible() == 2
-        page.locator('[data-publication-filter="all"]').click()
+        page.select_option('[data-publication-filter]', 'all')
         search = page.locator('[data-publication-search]')
         search.fill('clathrin')
         assert visible() == 1
+        assert page.locator('[data-year-group]:visible').count() == 1
         search.fill('NoMatchingPublication000')
         assert visible() == 0
         assert page.locator('[data-empty-state]').is_visible()
         search.fill('')
-        assert visible() == 8
-        results['interactions'].append('Publication type filters, text search, result count, and empty state.')
-        page.locator('[data-copy-citation]').first.click()
-        assert page.locator('[data-citation-fallback]').count() == 1
-        assert len(page.locator('[data-citation-fallback]').input_value()) > 60
-        results['interactions'].append('Citation copy offers selectable text when clipboard is unavailable.')
+        assert visible() == total
+        results['interactions'].append('Publication type filter, text search, year groups, and empty state.')
+        page.locator('.bibtex summary').first.click()
+        assert page.locator('.bibtex pre').first.is_visible()
+        assert '@misc' in page.locator('.bibtex pre').first.inner_text()
+        results['interactions'].append('BibTeX toggle expands an inline citation block.')
+        toggle = page.locator('[data-drift-toggle]')
+        toggle.click()
+        assert toggle.get_attribute('aria-pressed') == 'true'
+        results['interactions'].append('Background animation can be paused.')
 
         nojs = browser.new_page(java_script_enabled=False, viewport={'width': 390, 'height': 844})
         nojs.set_content(inline_page(SITE/'publications/index.html', base_prefix), wait_until='load')
-        assert nojs.locator('[data-publication]:visible').count() == 8
+        assert nojs.locator('[data-publication]:visible').count() == total
         assert nojs.locator('#primary-navigation').is_visible()
         results['interactions'].append('Core content and navigation remain available without JavaScript.')
         reduced = browser.new_page(reduced_motion='reduce')

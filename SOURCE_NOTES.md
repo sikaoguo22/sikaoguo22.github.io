@@ -46,11 +46,14 @@ preserved. The NERDSS illustration is shared by NERDSS-MPI and ioNERDSS.
 These remain labeled conceptual schematics, not measured scientific data.
 Existing repository artwork is retained in `src/images/`.
 
-Typeface (October 3, 2026): Space Grotesk variable font, Latin subset
-(`space-grotesk-latin-wght-normal.woff2`), from the `@fontsource-variable/space-grotesk`
-5.3.0 npm package via jsDelivr. Licensed under the SIL Open Font License 1.1; the
+Typeface (November 4, 2026): IBM Plex Mono 400, Latin subset
+(`ibm-plex-mono-latin-400-normal.woff2`), from the `@fontsource/ibm-plex-mono`
+5.0.8 npm package via jsDelivr. Licensed under the SIL Open Font License 1.1; the
 licence is kept beside the font as `src/assets/fonts/OFL.txt`. It is served from the
 site itself, so pages make no third-party font requests.
+
+Content (November 4, 2026): appointments, education, publications, presentations,
+and service were synced to the PDF CV. The phone number in the CV is not published.
 
 ## Deliberate changes
 

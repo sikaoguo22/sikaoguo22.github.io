@@ -3,7 +3,8 @@
 <head>
   <meta charset="utf-8">
   <meta name="viewport" content="width=device-width, initial-scale=1">
-  <meta name="color-scheme" content="light dark">
+  <meta name="color-scheme" content="light">
+  <meta name="theme-color" content="#f5f2ec">
   <title>$title</title>
   <meta name="description" content="$description">
   <link rel="canonical" href="$canonical">
@@ -16,14 +17,15 @@
   <meta property="og:image:alt" content="Sikao Guo — computational biophysics and scientific software">
   <meta name="twitter:card" content="summary_large_image">
   <link rel="icon" type="image/svg+xml" href="$asset_prefix/favicon.svg">
-  <script src="$asset_prefix/theme-init.js"></script>
-  <link rel="preload" href="$asset_prefix/fonts/space-grotesk-latin-wght-normal.woff2" as="font" type="font/woff2" crossorigin>
+  <script src="$asset_prefix/init.js"></script>
+  <link rel="preload" href="$asset_prefix/fonts/ibm-plex-mono-latin-400-normal.woff2" as="font" type="font/woff2" crossorigin>
   <link rel="stylesheet" href="$asset_prefix/styles.css">
   <script src="$asset_prefix/site.js" defer></script>
   <script type="application/ld+json">$schema</script>
   $extra_head
 </head>
 <body class="$body_class">
+  <canvas class="drift-field" data-drift aria-hidden="true"></canvas>
   <a class="skip-link" href="#main">Skip to content</a>
   $header
   <main id="main" tabindex="-1">$body</main>

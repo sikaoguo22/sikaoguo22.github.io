@@ -1,96 +1,101 @@
 'use strict';
 (() => {
-  const root = document.documentElement;
-  const themeButton = document.querySelector('[data-theme-toggle]');
-  const updateThemeLabel = () => {
-    const dark = root.dataset.theme === 'dark';
-    if (themeButton) {
-      themeButton.setAttribute('aria-label', `Switch to ${dark ? 'light' : 'dark'} theme`);
-      themeButton.setAttribute('aria-pressed', String(dark));
-    }
-  };
-  updateThemeLabel();
-  themeButton?.addEventListener('click', () => {
-    root.dataset.theme = root.dataset.theme === 'dark' ? 'light' : 'dark';
-    try { localStorage.setItem('sikao-theme', root.dataset.theme); } catch (_) { /* Theme still works for this page. */ }
-    updateThemeLabel();
-  });
-  const menuButton = document.querySelector('[data-menu-toggle]');
-  const nav = document.getElementById('primary-navigation');
-  const closeMenu = () => {
-    nav?.classList.remove('is-open');
-    menuButton?.setAttribute('aria-expanded', 'false');
-    menuButton?.setAttribute('aria-label', 'Open navigation');
-  };
-  menuButton?.addEventListener('click', () => {
-    const open = menuButton.getAttribute('aria-expanded') !== 'true';
-    menuButton.setAttribute('aria-expanded', String(open));
-    menuButton.setAttribute('aria-label', open ? 'Close navigation' : 'Open navigation');
-    nav?.classList.toggle('is-open', open);
-  });
-  nav?.querySelectorAll('a').forEach(link => link.addEventListener('click', closeMenu));
-  document.addEventListener('keydown', event => {
-    if (event.key === 'Escape' && menuButton?.getAttribute('aria-expanded') === 'true') {
-      closeMenu(); menuButton.focus();
-    }
-  });
-  const widthQuery = window.matchMedia('(min-width: 781px)');
-  widthQuery.addEventListener('change', event => { if (event.matches) closeMenu(); });
-
+  /* ---------- Publication search and type filter ---------- */
   const search = document.querySelector('[data-publication-search]');
-  const filters = document.querySelectorAll('[data-publication-filter]');
+  const typeFilter = document.querySelector('[data-publication-filter]');
   const publications = [...document.querySelectorAll('[data-publication]')];
+  const groups = [...document.querySelectorAll('[data-year-group]')];
   const resultCount = document.querySelector('[data-result-count]');
   const empty = document.querySelector('[data-empty-state]');
-  let filter = 'all';
+  const initialCount = resultCount?.textContent;
+  const plural = n => `${n} publication${n === 1 ? '' : 's'}`;
   const applyFilter = () => {
     const term = (search?.value || '').trim().toLocaleLowerCase();
+    const type = typeFilter?.value || 'all';
     let count = 0;
     for (const item of publications) {
-      const matchesType = filter === 'all' || item.dataset.type === filter;
-      const matchesSearch = item.dataset.search.toLocaleLowerCase().includes(term);
-      item.hidden = !(matchesType && matchesSearch);
-      if (!item.hidden) count += 1;
+      const show = (type === 'all' || item.dataset.type === type) && item.dataset.search.toLocaleLowerCase().includes(term);
+      item.hidden = !show;
+      if (show) count += 1;
     }
-    if (resultCount) resultCount.textContent = `${count} of ${publications.length} selected publications`;
+    for (const group of groups) {
+      const visible = group.querySelectorAll('[data-publication]:not([hidden])').length;
+      group.hidden = visible === 0;
+      const label = group.querySelector('[data-year-count]');
+      if (label) label.textContent = plural(visible);
+    }
+    const filtered = term || type !== 'all';
+    if (resultCount) resultCount.textContent = filtered ? `${count} of ${plural(publications.length)}` : initialCount;
     if (empty) empty.hidden = count !== 0;
   };
-  filters.forEach(button => button.addEventListener('click', () => {
-    filter = button.dataset.publicationFilter;
-    filters.forEach(other => other.setAttribute('aria-pressed', String(other === button)));
-    applyFilter();
-  }));
   search?.addEventListener('input', applyFilter);
+  typeFilter?.addEventListener('change', applyFilter);
   if (search) applyFilter();
 
-  document.querySelectorAll('[data-copy-citation]').forEach(button => {
-    button.addEventListener('click', async () => {
-      const citation = button.dataset.copyCitation;
-      const original = button.textContent;
-      try {
-        if (!navigator.clipboard?.writeText) throw new Error('Clipboard unavailable');
-        await navigator.clipboard.writeText(citation);
-        button.textContent = 'Copied';
-        const status = document.querySelector('[data-copy-status]');
-        if (status) status.textContent = 'Citation copied to clipboard.';
-      } catch (_) {
-        // A read-only field provides an accessible fallback without deprecated execCommand.
-        const parent = button.closest('[data-publication]');
-        let field = parent?.querySelector('[data-citation-fallback]');
-        if (!field && parent) {
-          field = document.createElement('textarea');
-          field.dataset.citationFallback = '';
-          field.setAttribute('aria-label', 'Citation. Select and copy this text.');
-          field.setAttribute('readonly', '');
-          field.rows = 4;
-          field.style.width = '100%';
-          field.value = citation;
-          parent.querySelector('.publication-body').appendChild(field);
-        }
-        field?.focus(); field?.select();
-        button.textContent = 'Select text to copy';
-      }
-      window.setTimeout(() => { button.textContent = original; }, 2200);
-    });
+  /* ---------- Background drift: faint warm specks, paused on request ---------- */
+  const canvas = document.querySelector('[data-drift]');
+  const toggle = document.querySelector('[data-drift-toggle]');
+  const ctx = canvas?.getContext?.('2d');
+  if (!canvas || !ctx) return;
+  const reduced = window.matchMedia('(prefers-reduced-motion: reduce)');
+  const color = getComputedStyle(document.documentElement).getPropertyValue('--speck').trim() || '#8c8070';
+  let specks = [];
+  let width = 0, height = 0, frame = 0, last = 0;
+  let paused = false;
+  try { paused = localStorage.getItem('sikao-drift') === 'paused'; } catch (_) { /* Storage unavailable. */ }
+
+  const resize = () => {
+    const dpr = Math.min(window.devicePixelRatio || 1, 2);
+    width = window.innerWidth; height = window.innerHeight;
+    canvas.width = Math.round(width * dpr); canvas.height = Math.round(height * dpr);
+    ctx.setTransform(dpr, 0, 0, dpr, 0, 0);
+    const n = Math.round(Math.min(140, (width * height) / 9000));
+    specks = Array.from({ length: n }, () => ({
+      x: Math.random() * width, y: Math.random() * height,
+      r: 0.5 + Math.random() * 1.1, a: 0.12 + Math.random() * 0.28,
+      phase: Math.random() * Math.PI * 2, speed: 0.04 + Math.random() * 0.1,
+    }));
+    draw(0);
+  };
+  const draw = dt => {
+    ctx.clearRect(0, 0, width, height);
+    ctx.fillStyle = color;
+    for (const s of specks) {
+      s.phase += dt * 0.0003;
+      s.x += (Math.cos(s.phase) * 0.6 + 0.4) * s.speed * dt * 0.06;
+      s.y += Math.sin(s.phase * 1.3) * s.speed * dt * 0.03;
+      if (s.x > width + 4) s.x = -4;
+      if (s.y < -4) s.y = height + 4; else if (s.y > height + 4) s.y = -4;
+      ctx.globalAlpha = s.a;
+      ctx.beginPath(); ctx.arc(s.x, s.y, s.r, 0, Math.PI * 2); ctx.fill();
+    }
+    ctx.globalAlpha = 1;
+  };
+  const loop = now => {
+    const dt = last ? Math.min(now - last, 64) : 16;
+    last = now;
+    draw(dt);
+    frame = requestAnimationFrame(loop);
+  };
+  const sync = () => {
+    cancelAnimationFrame(frame); last = 0;
+    const still = paused || reduced.matches;
+    if (!still) frame = requestAnimationFrame(loop);
+    if (toggle) {
+      toggle.textContent = paused ? 'Resume background' : 'Pause background';
+      toggle.setAttribute('aria-pressed', String(paused));
+      toggle.hidden = reduced.matches;
+    }
+  };
+  toggle?.addEventListener('click', () => {
+    paused = !paused;
+    try { localStorage.setItem('sikao-drift', paused ? 'paused' : 'running'); } catch (_) { /* Session-only. */ }
+    sync();
   });
+  reduced.addEventListener?.('change', sync);
+  let resizeTimer = 0;
+  window.addEventListener('resize', () => { clearTimeout(resizeTimer); resizeTimer = setTimeout(resize, 150); });
+  document.addEventListener('visibilitychange', () => { if (document.hidden) cancelAnimationFrame(frame); else sync(); });
+  resize();
+  sync();
 })();

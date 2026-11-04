@@ -24,34 +24,33 @@ standard library. No npm, frontend framework, or runtime CDN is required.
 
 ## Included
 
-- A personal homepage with portrait, scoped results, an impact-first "selected work"
-  bento (problem → built → result), selected papers, and a contact section.
-- Research questions on the Research page; "At a glance" impact summaries on every
-  project card and case study (`impact` field in `content/projects.json`).
-- Separate Research and Software pages, an all-projects index, and four case studies.
-- A publications page with search, publication-type filters, explicit preprint and
-  first-author labels, and copyable/downloadable citations.
-- About and web CV pages.
-- Responsive mobile navigation, light/dark themes, keyboard focus states, reduced
-  motion support, and core content/navigation that work without JavaScript.
+- A light "warm paper terminal" design: one monospace (IBM Plex Mono 400) at
+  10–15px, hierarchy from size and colour only, `~/` prompt wordmark, numbered
+  sections divided by 1px rules, steel-blue links and copper structure (section
+  numbers, years, venues), and a faint drifting-speck background with a pause control.
+- Three pages: Home, Publications, and CV.
+- Homepage: research-focus strip, short bio with portrait, selected publications,
+  and contact.
+- A publications page with the full record from the CV (18 peer-reviewed, 2 preprints),
+  grouped by year, with search, a type filter, and inline BibTeX toggles.
+- A web CV drawn from the PDF CV: research focus, appointments, education,
+  publications, and presentations.
+- Responsive layout, keyboard focus states, reduced-motion support (the background
+  stays still), and core content/navigation that work without JavaScript.
 - Search/social metadata, a portrait-based social card, sitemap, robots file, and 404.
 - Local assets only. No tracking scripts, analytics, cookies, or third-party font
-  requests; Space Grotesk is self-hosted from `src/assets/fonts/` (SIL OFL 1.1).
-  A localStorage preference remembers the chosen theme where storage is available.
+  requests; IBM Plex Mono is self-hosted from `src/assets/fonts/` (SIL OFL 1.1).
 
 ## Structure and editing
 
 ```text
-content/site.json          Identity, hero copy, research themes, experience, skills
-content/projects.json      Four detailed project case studies
-content/software.json      AutoCLIP, NERDSS-MPI, and ioNERDSS
-content/publications.json  The selected publication record
+content/site.json          Identity, bio, research focus, CV sections
+content/publications.json  The full publication record (CV-style author lists)
 src/templates/base.html    Shared page structure and metadata
 src/styles.css             Design tokens and responsive layouts
-src/site.js                Navigation, theme, publication filtering/copying
-src/theme-init.js          Before-paint theme selection
+src/site.js                Publication filtering, background animation
+src/init.js                Before-paint `js` class
 src/assets/                Optimized portrait, favicon, social card, self-hosted font
-src/images/                Responsive project illustrations and existing artwork
 scripts/build.py           Standard-library static generator
 scripts/make_preview.py    Optional single-file review preview generator
 tests/                     Standard-library and optional browser regression checks
@@ -59,22 +58,17 @@ site/                      Generated production output, not source
 ```
 
 Edit the JSON and rebuild. Page-specific layout functions live in `scripts/build.py`.
-The visual system is a Swiss color-block style: Space Grotesk, ink rules, square
-corners, cobalt (`--cobalt`) and yellow (`--yellow`) fields. Adjust the
-variables at the beginning of `src/styles.css` to change the palette.
+The visual system is a light warm-mono style: paper `--bg`, ink `--ink`, rules
+`--line`, steel-blue `--accent` for things you click and copper `--warm` for
+structure. Adjust the variables at the beginning of `src/styles.css`; the tests
+check that text tokens keep 4.5:1 contrast and that only weight 400 is used.
 
 ### Content safeguards
 
 Keep publication status and authorship accurate. Two entries are explicitly
 preprints in the supplied source; the ioNERDSS paper is not marked first-author.
-The list is selected, not a complete bibliography. Google Scholar links to the
-full record. Statuses were preserved from supplied materials, not independently
+The list mirrors the publications section of the CV (`academic_cv/main.pdf`). Statuses were preserved from supplied materials, not independently
 rechecked with publishers during this update.
-
-The approximately 90× result is scoped to 96 CPUs and a 20,000-particle benchmark.
-The sampler remains ongoing work; its generative-sampler comparison is limited
-to evaluated systems. The project diagrams are labeled **conceptual schematics**,
-not experimental figures, measured curves, or interactive molecular viewers.
 
 Review the public wording before publishing ongoing research. This package adds
 no unpublished manuscript or private research data. Its public assets include the
@@ -125,13 +119,11 @@ project-subpath deployment, test production output via a local server instead.
 
 The redesign was applied from `Sikao_Guo_Website_Enhanced.zip` at the repository
 root, based on `main` commit `4b08151b60acbe93d539c8b9425c6097301e38de`.
-Existing `src/images/` artwork is retained and copied by the generator.
 
 The generator and JSON schema are updated together; do not replace only the JSON
-or only the generator. All four existing project slugs and the legacy
-`/projects/#research-software` anchor are retained, along with existing project
-resource URLs and case-study section anchors. A distinct `/software/` page has
-been added.
+or only the generator. In November 2026 the Research, Software, About, and
+project case-study pages were removed; their content and artwork remain in git
+history (`content/projects.json`, `content/software.json`, `src/images/`).
 
 The workflow retains the action versions already present in the repository. It
 adds a standard-library test step before upload, plus a pull-request check that
