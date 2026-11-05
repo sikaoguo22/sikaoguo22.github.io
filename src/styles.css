@@ -97,48 +97,6 @@ html:not(.js) .js-only { display: none !important; }
 .bio-grid { display: grid; grid-template-columns: 180px minmax(0, 1fr); gap: 30px; align-items: start; }
 .portrait { width: 180px; height: 180px; object-fit: cover; border-radius: 2px; filter: saturate(.35); }
 
-/* ---------- Publications ---------- */
-.pub-tools { display: flex; justify-content: space-between; flex-wrap: wrap; gap: 6px 20px; margin-bottom: 13px; font-size: 11px; color: var(--muted); }
-.filters { display: flex; flex-wrap: wrap; gap: 12px; margin-bottom: 22px; }
-.field { display: grid; gap: 4px; font-size: 11px; color: var(--muted); }
-.field-search { flex: 1 1 280px; }
-.field-select { flex: 0 1 180px; }
-.field input, .field select {
-  min-height: 44px; padding: 9px 11px; width: 100%;
-  background: var(--surface); color: var(--ink); font-size: 12px;
-  border: 1px solid var(--control); border-radius: 3px;
-}
-.field input::placeholder { color: var(--muted); }
-.field input:hover, .field select:hover { border-color: var(--warm); }
-
-.year-group { margin-bottom: 18px; }
-.year-group > summary {
-  display: flex; align-items: baseline; gap: 12px; padding: 9px 0; cursor: pointer; list-style: none;
-  border-top: 1px solid var(--line); border-bottom: 1px solid var(--line); color: var(--warm); font-size: 13px;
-}
-.year-group > summary::-webkit-details-marker { display: none; }
-.year-group > summary::before { content: "▸"; font-size: 10px; }
-.year-group[open] > summary::before { content: "▾"; }
-.year-count { color: var(--muted); font-size: 10px; }
-
-.publication { padding: 15px 0 14px; border-bottom: 1px solid var(--line); }
-.publication-title { font-size: 13px; line-height: 1.75; margin-bottom: 5px; }
-.publication-title a { color: var(--ink); }
-.publication-title a:hover { color: var(--accent); }
-.publication-authors { color: var(--muted); font-size: 11px; line-height: 1.8; }
-.publication-authors .me { color: var(--ink); text-decoration: underline; text-decoration-color: var(--line); text-underline-offset: 3px; }
-.publication-venue { color: var(--warm); font-size: 11px; line-height: 1.8; }
-.publication-venue .flag { color: var(--muted); }
-.publication-contribution { color: var(--muted); font-size: 11px; line-height: 1.8; margin-top: 2px; }
-.publication-links { display: flex; flex-wrap: wrap; align-items: baseline; gap: 3px 17px; margin-top: 4px; font-size: 11px; }
-.bibtex > summary { color: var(--accent); cursor: pointer; list-style: none; }
-.bibtex > summary::-webkit-details-marker { display: none; }
-.bibtex > summary::before { content: "+ "; color: var(--warm); }
-.bibtex[open] > summary::before { content: "− "; }
-.bibtex[open] { flex-basis: 100%; }
-.bibtex pre { margin: 8px 0 0; padding: 13px; background: var(--surface); border: 1px solid var(--line); font: 12px/1.8 var(--mono); overflow-x: auto; white-space: pre; }
-.empty-state { color: var(--muted); font-size: 12px; padding: 14px 0; }
-
 /* ---------- CV ---------- */
 .cv-item { display: grid; grid-template-columns: 150px minmax(0, 1fr); gap: 4px 24px; padding: 14px 0; border-bottom: 1px solid var(--line); }
 .cv-item:first-child { border-top: 1px solid var(--line); }
@@ -149,13 +107,6 @@ html:not(.js) .js-only { display: none !important; }
 .cv-list li { position: relative; padding-left: 16px; }
 .cv-list li + li { margin-top: 4px; }
 .cv-list li::before { content: "–"; position: absolute; left: 0; color: var(--warm); }
-.cv-subhead { color: var(--muted); font-size: 11px; margin: 18px 0 6px; }
-.cv-subhead:first-child { margin-top: 0; }
-.ref-list { counter-reset: ref; border-top: 1px solid var(--line); }
-.ref-list li { display: grid; grid-template-columns: 36px minmax(0, 1fr); gap: 8px; padding: 8px 0; border-bottom: 1px solid var(--line); font-size: 11px; line-height: 1.8; color: var(--muted); }
-.ref-list li > span:first-child { color: var(--warm); }
-.ref-list .ref-title { color: var(--ink); }
-.ref-list .ref-venue { color: var(--warm); }
 
 /* ---------- Footer & background ---------- */
 .site-footer { border-top: 1px solid var(--line); margin-top: 24px; }
@@ -184,15 +135,15 @@ html:not(.js) .js-only { display: none !important; }
   .primary-nav a { padding: 8px 0; }
   .bio-grid { grid-template-columns: 1fr; }
   .cv-item { grid-template-columns: 1fr; }
-  .section-number, .year-count, .footer-inner, .text-button { font-size: 11px; }
-  .link-row, .publication-links, .pub-tools, .publication-authors, .publication-venue, .cv-sub { font-size: 12px; }
-  .link-row a, .publication-links a, .bibtex > summary { display: inline-block; padding: 6px 0; }
+  .section-number, .footer-inner, .text-button { font-size: 11px; }
+  .link-row, .cv-sub { font-size: 12px; }
+  .link-row a { display: inline-block; padding: 6px 0; }
   .footer-inner { flex-direction: column; align-items: flex-start; }
 }
 @media (prefers-reduced-motion: reduce) {
   html { scroll-behavior: auto; }
 }
 @media print {
-  .drift-field, .site-header nav, .filters, .text-button { display: none !important; }
+  .drift-field, .site-header nav, .text-button { display: none !important; }
   body { background: #fff; }
 }

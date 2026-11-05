@@ -55,6 +55,11 @@ site itself, so pages make no third-party font requests.
 Content (November 4, 2026): appointments, education, publications, presentations,
 and service were synced to the PDF CV. The phone number in the CV is not published.
 
+Content (November 5, 2026): the site was reduced to a single page matching
+`Sikao_Guo_Resume_Computational_Biophysicist.pdf` (summary, experience, education,
+contact). Publications, presentations, the in-preparation manuscript, advisor names,
+GitHub, and ORCID links were removed because the resume omits them.
+
 ## Deliberate changes
 
 - A personal, research-first homepage rather than a job-search landing page.

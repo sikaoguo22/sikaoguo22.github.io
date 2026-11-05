@@ -38,37 +38,15 @@ def main() -> None:
         assert not errors, errors
 
         page.set_viewport_size({'width': 1440, 'height': 1000})
-        page.set_content(inline_page(SITE/'publications/index.html', base_prefix), wait_until='load')
-        visible = lambda: page.locator('[data-publication]:visible').count()
-        total = len(json.loads((SITE.parent/'content/publications.json').read_text(encoding='utf-8')))
-        assert visible() == total
-        page.select_option('[data-publication-filter]', 'journal')
-        assert visible() == total - 2
-        page.select_option('[data-publication-filter]', 'preprint')
-        assert visible() == 2
-        page.select_option('[data-publication-filter]', 'all')
-        search = page.locator('[data-publication-search]')
-        search.fill('clathrin')
-        assert visible() == 1
-        assert page.locator('[data-year-group]:visible').count() == 1
-        search.fill('NoMatchingPublication000')
-        assert visible() == 0
-        assert page.locator('[data-empty-state]').is_visible()
-        search.fill('')
-        assert visible() == total
-        results['interactions'].append('Publication type filter, text search, year groups, and empty state.')
-        page.locator('.bibtex summary').first.click()
-        assert page.locator('.bibtex pre').first.is_visible()
-        assert '@misc' in page.locator('.bibtex pre').first.inner_text()
-        results['interactions'].append('BibTeX toggle expands an inline citation block.')
+        page.set_content(inline_page(SITE/'index.html', base_prefix), wait_until='load')
         toggle = page.locator('[data-drift-toggle]')
         toggle.click()
         assert toggle.get_attribute('aria-pressed') == 'true'
         results['interactions'].append('Background animation can be paused.')
 
         nojs = browser.new_page(java_script_enabled=False, viewport={'width': 390, 'height': 844})
-        nojs.set_content(inline_page(SITE/'publications/index.html', base_prefix), wait_until='load')
-        assert nojs.locator('[data-publication]:visible').count() == total
+        nojs.set_content(inline_page(SITE/'index.html', base_prefix), wait_until='load')
+        assert nojs.locator('.cv-item:visible').count() == 5
         assert nojs.locator('#primary-navigation').is_visible()
         results['interactions'].append('Core content and navigation remain available without JavaScript.')
         reduced = browser.new_page(reduced_motion='reduce')

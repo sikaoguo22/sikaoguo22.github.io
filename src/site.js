@@ -1,37 +1,5 @@
 'use strict';
 (() => {
-  /* ---------- Publication search and type filter ---------- */
-  const search = document.querySelector('[data-publication-search]');
-  const typeFilter = document.querySelector('[data-publication-filter]');
-  const publications = [...document.querySelectorAll('[data-publication]')];
-  const groups = [...document.querySelectorAll('[data-year-group]')];
-  const resultCount = document.querySelector('[data-result-count]');
-  const empty = document.querySelector('[data-empty-state]');
-  const initialCount = resultCount?.textContent;
-  const plural = n => `${n} publication${n === 1 ? '' : 's'}`;
-  const applyFilter = () => {
-    const term = (search?.value || '').trim().toLocaleLowerCase();
-    const type = typeFilter?.value || 'all';
-    let count = 0;
-    for (const item of publications) {
-      const show = (type === 'all' || item.dataset.type === type) && item.dataset.search.toLocaleLowerCase().includes(term);
-      item.hidden = !show;
-      if (show) count += 1;
-    }
-    for (const group of groups) {
-      const visible = group.querySelectorAll('[data-publication]:not([hidden])').length;
-      group.hidden = visible === 0;
-      const label = group.querySelector('[data-year-count]');
-      if (label) label.textContent = plural(visible);
-    }
-    const filtered = term || type !== 'all';
-    if (resultCount) resultCount.textContent = filtered ? `${count} of ${plural(publications.length)}` : initialCount;
-    if (empty) empty.hidden = count !== 0;
-  };
-  search?.addEventListener('input', applyFilter);
-  typeFilter?.addEventListener('change', applyFilter);
-  if (search) applyFilter();
-
   /* ---------- Background drift: faint warm specks, paused on request ---------- */
   const canvas = document.querySelector('[data-drift]');
   const toggle = document.querySelector('[data-drift-toggle]');

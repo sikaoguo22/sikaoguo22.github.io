@@ -7,8 +7,7 @@ profile photo.
 ## Preview
 
 The optional `Sikao_Guo_Website_Preview.html` can be generated locally using the
-command below. Open it in a browser. Its navigation, mobile-width selector, publication
-filters, and embedded citation downloads work without a server. External links still
+command below. Open it in a browser. Its navigation, and mobile-width selector work without a server. External links still
 require an internet connection. The preview toolbar is not part of the website.
 
 For the actual production pages, use a local server rather than double-clicking
@@ -28,15 +27,11 @@ standard library. No npm, frontend framework, or runtime CDN is required.
   10–15px, hierarchy from size and colour only, `~/` prompt wordmark, numbered
   sections divided by 1px rules, steel-blue links and copper structure (section
   numbers, years, venues), and a faint drifting-speck background with a pause control.
-- Three pages: Home, Publications, and CV.
-- Homepage: research-focus strip, short bio with portrait, selected publications,
-  and contact.
-- A publications page with the full record from the CV (18 peer-reviewed, 2 preprints),
-  grouped by year, with search, a type filter, and inline BibTeX toggles.
-- A web CV drawn from the PDF CV: research focus, appointments, education,
-  publications, and presentations.
+- A single resume page (November 2026) that mirrors
+  `Sikao_Guo_Resume_Computational_Biophysicist.pdf`: name and headline, focus strip,
+  summary with portrait, experience, education, and contact, with in-page navigation.
 - Responsive layout, keyboard focus states, reduced-motion support (the background
-  stays still), and core content/navigation that work without JavaScript.
+  stays still), and content/navigation that work without JavaScript.
 - Search/social metadata, a portrait-based social card, sitemap, robots file, and 404.
 - Local assets only. No tracking scripts, analytics, cookies, or third-party font
   requests; IBM Plex Mono is self-hosted from `src/assets/fonts/` (SIL OFL 1.1).
@@ -44,11 +39,10 @@ standard library. No npm, frontend framework, or runtime CDN is required.
 ## Structure and editing
 
 ```text
-content/site.json          Identity, bio, research focus, CV sections
-content/publications.json  The full publication record (CV-style author lists)
+content/site.json          Identity, summary, focus, experience, education (from the resume)
 src/templates/base.html    Shared page structure and metadata
 src/styles.css             Design tokens and responsive layouts
-src/site.js                Publication filtering, background animation
+src/site.js                Background animation
 src/init.js                Before-paint `js` class
 src/assets/                Optimized portrait, favicon, social card, self-hosted font
 scripts/build.py           Standard-library static generator
@@ -65,14 +59,10 @@ check that text tokens keep 4.5:1 contrast and that only weight 400 is used.
 
 ### Content safeguards
 
-Keep publication status and authorship accurate. Two entries are explicitly
-preprints in the supplied source; the ioNERDSS paper is not marked first-author.
-The list mirrors the publications section of the CV (`academic_cv/main.pdf`). Statuses were preserved from supplied materials, not independently
-rechecked with publishers during this update.
-
-Review the public wording before publishing ongoing research. This package adds
-no unpublished manuscript or private research data. Its public assets include the
-profile photo; career details are presented in the web CV.
+Keep `content/site.json` in line with the current resume. Publications,
+presentations, advisor names, GitHub, and ORCID were removed in November 2026
+because the resume does not include them; they remain in git history
+(`content/publications.json`). The resume PDF itself is not published.
 
 ## Verification
 

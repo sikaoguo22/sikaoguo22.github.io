@@ -5,10 +5,7 @@ Usage: python3 scripts/make_preview.py [output.html]
 Build the site first. The preview can be opened directly in a browser.
 """
 from __future__ import annotations
-import base64
 import json
-import mimetypes
-import re
 import sys
 from pathlib import Path
 
@@ -24,12 +21,6 @@ def main() -> None:
         relative = file.relative_to(SITE).as_posix()
         route = '/'+(relative[:-10] if relative.endswith('index.html') else relative)
         text = inline_page(file)
-        def embed_download(match: re.Match) -> str:
-            path = SITE/match[1].lstrip('/')
-            mime = mimetypes.guess_type(path)[0] or 'application/octet-stream'
-            uri = 'data:'+mime+';base64,'+base64.b64encode(path.read_bytes()).decode()
-            return 'href="'+uri+'"'
-        text = re.sub(r'href="(/citations/[^\"]+\.bib)"', embed_download, text)
         bridge = '''<script>
 (() => {
   document.addEventListener('click', event => {

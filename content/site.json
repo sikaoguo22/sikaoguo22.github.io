@@ -1,42 +1,52 @@
 {
   "name": "Sikao Guo, Ph.D.",
   "shortName": "Sikao Guo",
-  "title": "Computational Biophysics & Scientific Software",
-  "description": "Sikao Guo develops computational methods and open-source C++/Python software for protein conformational sampling, biomolecular self-assembly, and high-performance simulation.",
+  "title": "Computational Biophysicist | Molecular Modeling and Simulation",
+  "description": "Sikao Guo is a computational biophysicist developing molecular modeling methods and production-quality C++/Python software for protein structure, dynamics, and assembly.",
   "email": "sikaoguo@gmail.com",
-  "affiliation": "Research Engineer at Inria",
   "social": {
-    "github": "https://github.com/sikaoguo22",
     "linkedin": "https://www.linkedin.com/in/sikaoguo/",
-    "scholar": "https://scholar.google.com/citations?hl=en&user=SVybCcwAAAAJ",
-    "orcid": "https://orcid.org/0000-0002-7680-8060"
+    "scholar": "https://scholar.google.com/citations?hl=en&user=SVybCcwAAAAJ"
   },
+  "focus": [
+    "Protein conformational sampling",
+    "Molecular dynamics & umbrella sampling",
+    "Kinetic models of binding & self-assembly",
+    "C++/Python scientific software"
+  ],
+  "summary": "Computational biophysicist with a Ph.D. in physics and 6+ years developing molecular modeling methods and production-quality C++/Python software for protein structure, dynamics, and assembly. Experience spans protein conformational sampling, all-atom molecular dynamics with umbrella sampling, and structure-resolved kinetic models of protein binding and self-assembly validated against experiment.",
   "experience": [
     {
       "organization": "Inria",
-      "role": "Research Engineer",
+      "roles": [["Research Engineer", "July 2025 – December 2026"]],
       "period": "Jul. 2025 – Dec. 2026",
       "location": "Algorithms–Biology–Structure (ABS) team, Sophia Antipolis, France",
-      "supervisor": "Supervisor: Frédéric Cazals",
-      "summary": "Protein conformational sampling, all-atom assessment of samplers, and generated interfaces for structural-biology tools.",
       "highlights": [
-        "Extended inverse-kinematics sampling in the Structural Bioinformatics Library to flexible protein fragments and intrinsically disordered regions, with released-endpoint SE(3) moves, Ramachandran-informed selection, and clash checks.",
-        "Built AttnPacker/OpenMM workflows for all-atom assessment and comparative benchmarking of geometric and generative protein samplers. Manuscript in preparation.",
-        "Designed AutoCLIP, a specification-driven framework generating PyMOL, VMD, and web interfaces for structural-biology tools. First-author arXiv preprint, 2026."
+        "Extended inverse-kinematics sampling to protein loops, fragments, and intrinsically disordered regions, with released-endpoint SE(3) moves, Ramachandran-informed selection, and clash checks.",
+        "Built AttnPacker/OpenMM workflows for side-chain reconstruction, energy minimization, all-atom assessment, and comparative benchmarking of geometric and generative protein samplers.",
+        "Designed AutoCLIP, a specification-driven framework that generates PyMOL, VMD, and web interfaces for structural-biology tools; deployed nine tools with testing, CI/CD, and reproducible packaging."
       ]
     },
     {
       "organization": "Johns Hopkins University",
-      "role": "Assistant Research Scientist (Jan.–Jun. 2025); Postdoctoral Researcher (2020–2024)",
+      "roles": [["Assistant Research Scientist", "January 2025 – June 2025"], ["Postdoctoral Researcher", "January 2020 – December 2024"]],
       "period": "Jan. 2020 – Jun. 2025",
-      "location": "T. C. Jenkins Department of Biophysics, Baltimore, Maryland, USA",
-      "supervisor": "Advisor: Margaret E. Johnson",
-      "summary": "Structure-resolved reaction–diffusion models of clathrin and HIV lattices, and parallel simulation with NERDSS.",
+      "location": "Department of Biophysics, Baltimore, Maryland",
       "highlights": [
-        "Developed structure-resolved reaction–diffusion models of adaptor-dependent clathrin lattice stability, predicting a critical nucleus of approximately 25 clathrin under cell-like conditions. First-author study, PLOS Computational Biology, 2022.",
-        "Modeled local remodeling of the immature HIV lattice and identified conditions permitting Gag–Pol encounters while retaining large-scale lattice structure. First-author study, eLife, 2023.",
-        "Led the C++/MPI parallelization of the particle-based reaction–diffusion simulator NERDSS using spatial domain decomposition; assessed accuracy against theory and serial simulations and scaling across up to 96 processors. First-author study, Journal of Computational Chemistry, 2025.",
-        "Co-developed ioNERDSS structure–simulation–analysis workflows. Contributed modeling and simulations to studies of dynamin nanoclusters and secretion-catalyzed protein biomaterials."
+        "Identified the binding-affinity range that lets the immature HIV lattice remodel enough for Gag–Pol encounters, supporting protease dimerization, while retaining its large-scale structure.",
+        "Developed reaction–diffusion models of adaptor-dependent clathrin lattice stability, reproducing experimental kinetics and predicting a critical nucleus of approximately 25 clathrin under cell-like conditions.",
+        "Led the C++/MPI parallelization of the NERDSS reaction–diffusion simulator using spatial domain decomposition, reaching approximately 90× speedup on 96 CPUs for a 20,000-particle benchmark.",
+        "Co-developed ioNERDSS workflows that turn macromolecular structures into self-assembly simulations, benchmarked on 44,000+ structures and assemblies of 3–720 subunits.",
+        "Co-mentored undergraduate and graduate researchers in simulation methods and interpretation of results."
+      ]
+    },
+    {
+      "organization": "Institute of Physics, Chinese Academy of Sciences",
+      "roles": [["Doctoral Researcher", "September 2014 – December 2019"]],
+      "period": "Sep. 2014 – Dec. 2019",
+      "location": "Beijing, China",
+      "highlights": [
+        "Developed theoretical and numerical models of dimeric kinesin motors, combining stochastic simulation, all-atom molecular dynamics, and umbrella sampling to reproduce experimental motility measurements and explain how the two motor heads coordinate."
       ]
     }
   ],
@@ -44,71 +54,12 @@
     {
       "degree": "Ph.D. in Condensed Matter Physics",
       "institution": "Institute of Physics, Chinese Academy of Sciences, Beijing, China",
-      "period": "2014–2019",
-      "detail": "Advisor: Ping Xie. Dissertation on theoretical and numerical models of dimeric kinesin motors."
+      "period": "2014–2019"
     },
     {
       "degree": "B.S. in Physics",
       "institution": "Nankai University, Tianjin, China",
       "period": "2010–2014"
     }
-  ],
-  "focus": [
-    "Biomolecular self-assembly",
-    "Protein conformational sampling",
-    "Reaction–diffusion & kinetic models",
-    "Scientific software & HPC"
-  ],
-  "focusText": "Biomolecular self-assembly and remodeling; protein conformational sampling; stochastic reaction–diffusion and kinetic models; reproducible scientific software and high-performance computing.",
-  "bio": [
-    "I am a computational biophysicist and Research Engineer in the Algorithms–Biology–Structure (ABS) team at Inria Sophia Antipolis, working with Frédéric Cazals. I extend inverse-kinematics sampling in the <a href=\"https://sbl.inria.fr/\">Structural Bioinformatics Library</a> to flexible protein fragments and intrinsically disordered regions, and build AutoCLIP, which generates PyMOL, VMD, and web interfaces for structural-biology tools from one specification.",
-    "From 2020 to 2025 I was a postdoctoral researcher and then Assistant Research Scientist in the T. C. Jenkins Department of Biophysics at Johns Hopkins University with Margaret E. Johnson, modeling clathrin and immature HIV lattices and leading the C++/MPI parallelization of the NERDSS reaction–diffusion simulator. I received my Ph.D. in condensed matter physics from the Institute of Physics, Chinese Academy of Sciences (advisor: Ping Xie), working on models of dimeric kinesin motors, and my B.S. in physics from Nankai University."
-  ],
-  "inPreparation": "Guo, S., Carrière, G., O’Donnell, T., and Cazals, F. Ramachandran-aware inverse-kinematics sampling of protein loops and fragments. In preparation, 2026.",
-  "presentations": {
-    "Oral presentations": [
-      [
-        "2023",
-        "Structure of the HIV immature lattice allows for essential lattice remodeling within budded virions.",
-        "International Conference on Systems Biology, Hartford, Connecticut, USA, October 8–12."
-      ],
-      [
-        "2023",
-        "Mastering structure-resolved reaction–diffusion simulations with NERDSS.",
-        "COMBINE, Farmington, Connecticut, USA, October 5–8."
-      ],
-      [
-        "2022",
-        "Defects within the HIV-1 immature lattice support dynamic remodeling and protease dimerization.",
-        "Cell Bio, Washington, DC, USA, December 3–7."
-      ],
-      [
-        "2020",
-        "Modeling nucleation and kinetics of clathrin assembly by membrane localization.",
-        "APS Mid-Atlantic Section Meeting, virtual, December 4–6."
-      ]
-    ],
-    "Poster presentations": [
-      [
-        "2025",
-        "Integrating the Structural Bioinformatics Library with VMD, PyMOL, and Web Apps.",
-        "Integrative Structural Biology Meeting (BSI), Bordeaux, France, December 15–19."
-      ],
-      [
-        "2024",
-        "Structure of the HIV immature lattice allows for essential lattice remodeling within budded virions.",
-        "Biophysical Society Annual Meeting, Philadelphia, Pennsylvania, USA, February 10–14."
-      ],
-      [
-        "2022",
-        "Large self-assembled clathrin lattices spontaneously disassemble without sufficient adaptor proteins.",
-        "Biophysical Society Annual Meeting, San Francisco, California, USA, February 19–23."
-      ],
-      [
-        "2021",
-        "Self-assembled clathrin lattices spontaneously disassemble without sufficient links to the plasma membrane.",
-        "Stochastic Physics in Biology Gordon Research Conference, Ventura, California, USA, October 10–15."
-      ]
-    ]
-  }
+  ]
 }

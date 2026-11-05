@@ -12,7 +12,6 @@ from __future__ import annotations
 import html
 import json
 import os
-import re
 import shutil
 import sys
 from pathlib import Path
@@ -42,10 +41,6 @@ def load_json(name: str) -> Any:
 
 
 site = load_json('site')
-publications = load_json('publications')
-by_pub = {p['id']: p for p in publications}
-if len(by_pub) != len(publications):
-    raise SystemExit('Publication IDs must be unique.')
 base = Template((SRC / 'templates/base.html').read_text(encoding='utf-8'))
 pages: list[str] = []
 
@@ -72,7 +67,7 @@ def text_link(href: str, label: str) -> str:
     return f'<a class="arrow" href="{e(link(href))}">{e(label)}</a>'
 
 
-NAV = [('Home', '/'), ('Publications', '/publications/'), ('CV', '/cv/')]
+NAV = [('Summary', '/#summary'), ('Experience', '/#experience'), ('Education', '/#education'), ('Contact', '/#contact')]
 
 
 def header(active: str) -> str:
@@ -82,21 +77,20 @@ def header(active: str) -> str:
 <nav class="primary-nav" id="primary-navigation" aria-label="Main navigation">{nav}</nav></div></header>'''
 
 
-def social_links(keys=(('scholar', 'Scholar'), ('github', 'GitHub'), ('linkedin', 'LinkedIn'), ('orcid', 'ORCID'))) -> str:
+def social_links(keys=(('linkedin', 'LinkedIn'), ('scholar', 'Google Scholar'))) -> str:
     return ''.join(external(site['social'][k], label) for k, label in keys)
 
 
 def footer() -> str:
-    return f'''<footer class="site-footer"><div class="shell footer-inner"><span>© 2026 Sikao Guo · Computational biophysics &amp; scientific software</span><div class="footer-links"><a href="mailto:{e(site['email'])}">{e(site['email'])}</a>{social_links()}<button class="text-button js-only" type="button" data-drift-toggle aria-pressed="false">Pause background</button></div></div></footer>'''
+    return f'''<footer class="site-footer"><div class="shell footer-inner"><span>© 2026 Sikao Guo · Computational biophysics · molecular modeling &amp; simulation</span><div class="footer-links"><a href="mailto:{e(site['email'])}">{e(site['email'])}</a>{social_links()}<button class="text-button js-only" type="button" data-drift-toggle aria-pressed="false">Pause background</button></div></div></footer>'''
 
 
 def person_schema() -> dict[str, Any]:
     return {'@context':'https://schema.org', '@type':'Person', 'name':site['shortName'],
             'url':f'{SITE_URL}/', 'image':f'{SITE_URL}/assets/sikao-guo-800.webp',
-            'description':site['description'], 'jobTitle':'Research Engineer',
-            'worksFor':{'@type':'Organization','name':'Inria'},
+            'description':site['description'], 'jobTitle':'Computational Biophysicist',
             'sameAs':list(site['social'].values()),
-            'knowsAbout':['Computational biophysics','Protein conformational sampling','Biomolecular self-assembly','Scientific software','High-performance computing']}
+            'knowsAbout':['Computational biophysics','Molecular modeling','Protein conformational sampling','Molecular dynamics','Biomolecular self-assembly','Scientific software']}
 
 
 def write_page(route: str, title: str, body: str, active: str = '', description: str | None = None, body_class: str = '', extra_head: str = '') -> None:
@@ -137,59 +131,17 @@ def intro_strip(title: str, lede: str = '', extra: str = '', crumb: str = '') ->
 
 def topics_strip() -> str:
     topics = ''.join(f'<li>{e(t)}</li>' for t in site['focus'])
-    return f'<div class="intro-strip"><h1 class="sr-only">{e(site["name"])}, {e(site["title"])}</h1><ul class="topics" aria-label="Research focus">{topics}</ul><div class="link-row">{social_links()}<a href="mailto:{e(site["email"])}">Email</a></div></div>'
-
-
-ME = ('Guo, S.-K.', 'Guo, S.')
-
-
-def mark_me(authors: str) -> str:
-    out = e(authors)
-    for name in ME:
-        if name in authors:
-            return out.replace(e(name), f'<span class="me">{e(name)}</span>', 1)
-    return out
-
-
-def publication(pub: dict[str,Any], full: bool = False) -> str:
-    kind = 'preprint' if pub['type'] == 'Preprint' else 'journal'
-    flags = []
-    if kind == 'preprint': flags.append('preprint')
-    if pub.get('firstAuthor'): flags.append('first author')
-    flag_html = (' <span class="flag">· ' + ' · '.join(flags) + '</span>') if flags else ''
-    search = ' '.join([pub['title'],pub['authors'],pub['venue'],str(pub['year']),*pub['topics']])
-    extra = f'<p class="publication-contribution">Contribution: {e(pub["contribution"])}</p>' if full and pub.get('contribution') else ''
-    doi = pub.get('doi')
-    links = external(pub['url'], 'arXiv' if 'arxiv' in pub['url'] else 'DOI') if doi else external(pub['url'], 'Link')
-    if full:
-        links += f'<details class="bibtex"><summary>BibTeX</summary><pre>{e(bibtex(pub))}</pre></details>'
-    return f'''<article class="publication" id="{e(pub['id'])}" data-publication data-type="{kind}" data-year="{pub['year']}" data-search="{e(search)}"><h3 class="publication-title"><a href="{e(pub['url'])}" target="_blank" rel="noopener noreferrer">{e(pub['title'])}</a></h3><p class="publication-authors">{mark_me(pub['authors'])}</p><p class="publication-venue">{e(pub['venue'])} {e(pub['citation'])}, {pub['year']}{flag_html}</p>{extra}<div class="publication-links">{links}</div></article>'''
+    return f'<div class="intro-strip"><h1>{e(site["name"])}</h1><p class="lede">{e(site["title"])}</p><ul class="topics" aria-label="Research focus">{topics}</ul><div class="link-row"><a href="mailto:{e(site["email"])}">{e(site["email"])}</a>{social_links()}</div></div>'
 
 
 def home() -> str:
     s = Sections()
-    bio = ''.join(f'<p>{para}</p>' for para in site['bio'])
-    selected = ''.join(publication(by_pub[key]) for key in ['gui-framework-2026','parallel-nerdss-2025','hiv-2023','clathrin-2022'])
-    pub_links = text_link('/publications/', f'all {len(publications)} publications') + external(site['social']['scholar'], 'Google Scholar')
+    contact = f'<div class="link-row"><a href="mailto:{e(site["email"])}">{e(site["email"])}</a>{social_links()}</div>'
     return f'''<div class="shell">{topics_strip()}
-{s('Short Bio', f'<div class="bio-grid">{portrait(eager=True)}<div class="prose">{bio}<p>{text_link("/cv/","View CV")}</p></div></div>')}
-{s('Selected Publications', f'<div class="publication-list">{selected}</div>', links=pub_links)}
-{s('Contact', f'<div class="prose"><p>I am interested in molecular-modeling methods, biomolecular simulation, and reusable scientific software. Reach me at <a href="mailto:{e(site["email"])}">{e(site["email"])}</a>.</p></div>')}</div>'''
-
-
-def publications_page() -> str:
-    s = Sections()
-    years = sorted({p['year'] for p in publications}, reverse=True)
-    groups = []
-    for y in years:
-        items = [p for p in publications if p['year'] == y]
-        groups.append(f'<details class="year-group" open data-year-group><summary>{y} <span class="year-count" data-year-count>{len(items)} publication{"s" if len(items)!=1 else ""}</span></summary>{"".join(publication(p, True) for p in items)}</details>')
-    journals = sum(p['type'] != 'Preprint' for p in publications)
-    tools = f'<div class="pub-tools"><span data-result-count role="status" aria-live="polite">{len(publications)} publications · {journals} peer-reviewed, {len(publications)-journals} preprints</span><a href="{link("/citations/publications.bib")}">Download BibTeX</a></div>'
-    filters = '''<div class="filters js-only"><label class="field field-search">Search<input type="search" data-publication-search placeholder="Titles, authors, venues" autocomplete="off"></label><label class="field field-select">Type<select data-publication-filter><option value="all">All</option><option value="journal">Peer-reviewed</option><option value="preprint">Preprints</option></select></label></div>'''
-    links = external(site['social']['scholar'], 'Google Scholar') + external(site['social']['orcid'], 'ORCID')
-    body = tools + filters + ''.join(groups) + '<p class="empty-state" data-empty-state hidden>No publications match this search.</p>'
-    return f'<div class="shell">{intro_strip("Publications")}{s("Publications", body, links=links)}</div>'
+{s('Summary', f'<div class="bio-grid">{portrait(eager=True)}<div class="prose"><p>{e(site["summary"])}</p></div></div>', id_='summary')}
+{s('Experience', experience(), id_='experience')}
+{s('Education', education(), id_='education')}
+{s('Contact', contact, id_='contact')}</div>'''
 
 
 def cv_items(rows: list[tuple[str,str,str,list[str]]]) -> str:
@@ -203,44 +155,18 @@ def cv_items(rows: list[tuple[str,str,str,list[str]]]) -> str:
 def experience() -> str:
     rows = []
     for x in site['experience']:
-        sub = f'<p class="cv-sub">{e(x["role"])}</p><p class="cv-sub">{e(x["location"])}</p>' + (f'<p class="cv-sub">{e(x["supervisor"])}</p>' if x.get('supervisor') else '')
+        roles = x['roles']
+        if len(roles) == 1:
+            role_html = f'<p class="cv-sub">{e(roles[0][0])}</p>'
+        else:
+            role_html = ''.join(f'<p class="cv-sub">{e(r)} · {e(d)}</p>' for r, d in roles)
+        sub = role_html + f'<p class="cv-sub">{e(x["location"])}</p>'
         rows.append((x['period'], x['organization'], sub, x['highlights']))
     return cv_items(rows)
 
 
 def education() -> str:
-    return cv_items([(x['period'], x['degree'], f'<p class="cv-sub">{e(x["institution"])}</p>' + (f'<p class="cv-sub">{e(x["detail"])}</p>' if x.get('detail') else ''), []) for x in site['education']])
-
-
-def ref(n: str, pub: dict[str, Any]) -> str:
-    return f'<li><span>{e(n)}</span><span>{mark_me(pub["authors"])} ({pub["year"]}). <a class="ref-title" href="{e(pub["url"])}" target="_blank" rel="noopener noreferrer">{e(pub["title"])}</a>. <span class="ref-venue">{e(pub["venue"])}</span> {e(pub["citation"])}.</span></li>'
-
-
-def cv_page() -> str:
-    s = Sections()
-    journals = [p for p in publications if p['type'] != 'Preprint']
-    preprints = [p for p in publications if p['type'] == 'Preprint']
-    pubs = (f'<h3 class="cv-subhead">Peer-reviewed publications</h3><ol class="ref-list">{"".join(ref(str(i+1), p) for i, p in enumerate(journals))}</ol>'
-            f'<h3 class="cv-subhead">Preprints</h3><ol class="ref-list">{"".join(ref("P"+str(i+1), p) for i, p in enumerate(preprints))}</ol>'
-            f'<h3 class="cv-subhead">Manuscript in preparation</h3><ol class="ref-list"><li><span>M1</span><span>{mark_me(site["inPreparation"])}</span></li></ol>')
-    talks = ''.join(f'<h3 class="cv-subhead">{e(kind)}</h3>' + cv_items([(y, t, f'<p class="cv-sub">{e(v)}</p>', []) for y, t, v in rows]) for kind, rows in site['presentations'].items())
-    contact = f'<div class="link-row"><a href="mailto:{e(site["email"])}">{e(site["email"])}</a>{social_links()}</div>'
-    return f'''<div class="shell cv-content">{intro_strip(site['name'], 'Curriculum vitae', contact)}{s('Research Focus', f'<div class="prose"><p>{e(site["focusText"])}</p></div>')}{s('Research Appointments', experience())}{s('Education', education())}{s('Publications', pubs, links=text_link('/publications/','with BibTeX'))}{s('Presentations', talks)}</div>'''
-
-
-def bibtex(pub: dict[str,Any]) -> str:
-    """Generate minimal citations from supplied metadata without inventing fields."""
-    # Authors are stored CV-style ("Guo, S., Sodt, A. J., and Johnson, M. E."): each name ends with an initial.
-    authors = pub['authors'].replace(', and ', ', ').replace(' and ', ', ')
-    names = [x.strip() for x in re.split(r'(?<=\.),\s+', authors)]
-    author_text = ' and '.join(names)
-    kind='misc' if pub['type']=='Preprint' else 'article'
-    fields={'title':'{'+pub['title']+'}', 'author':author_text, 'year':str(pub['year']), 'url':pub['url']}
-    if kind=='article': fields['journal']=pub['venue']
-    else: fields['note']='Preprint, '+pub['venue']
-    if pub.get('doi'): fields['doi']=pub['doi']
-    rows=',\n'.join(f'  {key} = {{{value}}}' for key,value in fields.items())
-    return f'@{kind}{{{pub["id"]},\n{rows}\n}}\n'
+    return cv_items([(x['period'], x['degree'], f'<p class="cv-sub">{e(x["institution"])}</p>', []) for x in site['education']])
 
 
 def main() -> None:
@@ -253,19 +179,14 @@ def main() -> None:
     for filename in ('styles.css','site.js','init.js'):
         shutil.copyfile(SRC/filename,STAGING/'assets'/filename)
     write_page('',site['title'],home(),body_class='home')
-    write_page('publications/','Publications',publications_page(),active='Publications')
-    write_page('cv/','CV',cv_page(),active='CV',body_class='cv-page')
     write_page('404.html','Page not found','<div class="shell">'+intro_strip('404: not found','This page has moved or does not exist.','<div class="link-row">'+text_link('/','home')+'</div>')+'</div>',extra_head='<meta name="robots" content="noindex">')
-    citations=STAGING/'citations'; citations.mkdir()
-    for pub in publications: (citations/(pub['id']+'.bib')).write_text(bibtex(pub),encoding='utf-8')
-    (citations/'publications.bib').write_text('\n'.join(bibtex(p) for p in publications),encoding='utf-8')
     urls=''.join(f'<url><loc>{xml_escape(SITE_URL+"/"+route)}</loc></url>' for route in pages)
     (STAGING/'sitemap.xml').write_text('<?xml version="1.0" encoding="UTF-8"?><urlset xmlns="http://www.sitemaps.org/schemas/sitemap/0.9">'+urls+'</urlset>')
     (STAGING/'robots.txt').write_text(f'User-agent: *\nAllow: /\nSitemap: {SITE_URL}/sitemap.xml\n')
     (STAGING/'.nojekyll').write_text('')
     if OUT.exists(): shutil.rmtree(OUT)
     STAGING.rename(OUT)
-    print(f'Built {len(pages)} pages + 404, {len(publications)} citations, and local assets in {OUT}')
+    print(f'Built {len(pages)} page(s) + 404 and local assets in {OUT}')
 
 
 if __name__=='__main__':

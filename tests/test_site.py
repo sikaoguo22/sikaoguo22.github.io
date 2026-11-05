@@ -68,19 +68,12 @@ class WebsiteTests(unittest.TestCase):
             for image in doc.images:
                 with self.subTest(page=str(path)):
                     self.assertTrue(image.get('alt'));self.assertTrue(image.get('width'));self.assertTrue(image.get('height'))
-    def test_assets_and_cv_without_downloads(self):
+    def test_assets_without_downloads(self):
         self.assertFalse(list((ROOT/'src/assets').glob('*.pdf')))
         self.assertFalse(list((SITE/'assets').glob('*.pdf')))
-        self.assertNotIn(' download',(SITE/'cv/index.html').read_text())
+        self.assertNotIn(' download',(SITE/'index.html').read_text())
         self.assertTrue((SITE/'assets/social-card.png').is_file())
         self.assertLess((SITE/'assets/sikao-guo-480.webp').stat().st_size,70000)
-    def test_publication_fidelity(self):
-        pubs=json.loads((ROOT/'content/publications.json').read_text())
-        html=(SITE/'publications/index.html').read_text()
-        self.assertEqual(sum(p['type']=='Preprint' for p in pubs),2)
-        self.assertFalse(next(p for p in pubs if p['id']=='ionerdss-2026')['firstAuthor'])
-        self.assertEqual(html.count('data-publication data-type='),len(pubs))
-        for pub in pubs:self.assertTrue((SITE/'citations'/f'{pub["id"]}.bib').is_file())
     def test_no_external_runtime_dependencies(self):
         for path,doc in self.docs.items():
             for tag,key,value in doc.links:
@@ -112,30 +105,21 @@ class WebsiteTests(unittest.TestCase):
             for bg in ('bg','surface'):
                 with self.subTest(token=fg,background=bg):
                     self.assertGreaterEqual(contrast(theme[fg],theme[bg]),4.5)
-    def test_cv_matches_source(self):
-        cv=(SITE/'cv/index.html').read_text()
-        pubs=json.loads((ROOT/'content/publications.json').read_text())
-        self.assertEqual(len(pubs),20)
-        self.assertEqual(cv.count('<li><span>'),21)
-        for text in ('Frédéric Cazals','Margaret E. Johnson','Ping Xie','Gordon Research Conference'):
-            self.assertIn(text,cv)
-        self.assertNotIn('443',cv)
-        self.assertTrue((SITE/'citations/publications.bib').is_file())
-        self.assertEqual((SITE/'citations/publications.bib').read_text().count('@'),20)
     def test_pages_and_navigation(self):
-        self.assertEqual(sorted(str(p.relative_to(SITE)) for p in self.files),['404.html','cv/index.html','index.html','publications/index.html'])
+        self.assertEqual(sorted(str(p.relative_to(SITE)) for p in self.files),['404.html','index.html'])
+        self.assertFalse((SITE/'citations').exists())
         home=(SITE/'index.html').read_text()
         nav=re.search(r'<nav class="primary-nav".*?</nav>',home,re.S).group(0)
-        self.assertEqual(re.findall(r'>([^<]+)</a>',nav),['Home','Publications','CV'])
-    def test_homepage_sections(self):
+        self.assertEqual(re.findall(r'>([^<]+)</a>',nav),['Summary','Experience','Education','Contact'])
+    def test_homepage_matches_resume(self):
         home=(SITE/'index.html').read_text()
-        self.assertEqual(re.findall(r'<span class="section-number">\d+</span><h2>([^<]+)</h2>',home),['Short Bio','Selected Publications','Contact'])
-        self.assertIn('Algorithms–Biology–Structure (ABS) team',home)
-        self.assertNotIn('team.inria.fr/abs',home)
-    def test_cv_and_publications_sections(self):
-        cv=(SITE/'cv/index.html').read_text()
-        self.assertNotIn('Teaching, Mentoring',cv)
-        self.assertNotIn('My name is underlined',(SITE/'publications/index.html').read_text())
+        self.assertEqual(re.findall(r'<span class="section-number">\d+</span><h2>([^<]+)</h2>',home),['Summary','Experience','Education','Contact'])
+        site=json.loads((ROOT/'content/site.json').read_text())
+        self.assertEqual(home.count('class="cv-item"'),len(site['experience'])+len(site['education']))
+        for text in ('Computational Biophysicist','Algorithms–Biology–Structure (ABS) team','AutoCLIP','90× speedup on 96 CPUs','44,000+ structures','dimeric kinesin motors','Nankai University'):
+            self.assertIn(text,home)
+        for gone in ('Publications','Presentations','ORCID','github.com','Frédéric Cazals','Margaret E. Johnson','Ping Xie'):
+            self.assertNotIn(gone,home)
 
 
 if __name__=='__main__':unittest.main()
